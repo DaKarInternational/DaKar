@@ -31,6 +31,11 @@ public class AnnotationController {
                 .map(this::journeyToResource);
     }
 
+    /**
+     * https://exampledriven.wordpress.com/2015/11/13/spring-hateoas-example/
+     * @param journey
+     * @return
+     */
     private Resource<Journey> journeyToResource(Journey journey) {
 //        Link invoiceLink = linkTo(methodOn(AnnotationController.class).routeWithAnnotationHateoas(journey.getId()+"")).withRel("invoice");
 
