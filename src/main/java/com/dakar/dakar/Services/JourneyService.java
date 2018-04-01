@@ -2,16 +2,14 @@ package com.dakar.dakar.Services;
 
 import com.dakar.dakar.Models.Journey;
 import com.dakar.dakar.Repositories.JourneyRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
+@Slf4j
 public class JourneyService {
-
-    private static final Logger log = LoggerFactory.getLogger(JourneyService.class);
 
     @Autowired
     private JourneyRepository journeyRepository;
