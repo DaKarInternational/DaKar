@@ -9,3 +9,6 @@ http://localhost:8080/test2/3
 
 Annotation controller -> hatoas w/ generics:
 http://localhost:8080/test3/3
+
+Annotation controller -> GraphQL:
+http://localhost:8080/graphql
