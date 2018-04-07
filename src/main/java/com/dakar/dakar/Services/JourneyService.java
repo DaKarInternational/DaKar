@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class JourneyService {
@@ -15,29 +17,34 @@ public class JourneyService {
     private JourneyRepository journeyRepository;
 
     public Mono<Journey> findByCountryNameWithJPA(String countryName) {
-
-        // save a couple of Journey in H2DB
-        journeyRepository.save(new Journey("Jack", "Bauer"));
-        journeyRepository.save(new Journey("Chloe", "O'Brian"));
-        journeyRepository.save(new Journey("afghanistan", "Bauer"));
-        journeyRepository.save(new Journey("David", "Palmer"));
-        journeyRepository.save(new Journey("Michelle", "Dessler"));
-
+        insertSomeJourneys();
         return Mono.just(journeyRepository.findFirstByCountry(countryName))
                 .map(it -> {log.debug(it.toString());return it;});
     }
 
     public Mono<Journey> findByIdWithJPA(String id) {
+        insertSomeJourneys();
+        return Mono.just(journeyRepository.findFirstById(Integer.parseInt(id)))
+                .map(it -> {
+                    log.debug(it.toString());
+                    return it;
+                });
+    }
 
-        // save a couple of Journey in H2DB
+    public List<Journey> allJourney() {
+        insertSomeJourneys();
+        return this.journeyRepository.findAll();
+    }
+
+    /**
+     * save a couple of Journey in H2DB
+     */
+    private void insertSomeJourneys() {
         journeyRepository.save(new Journey("Jack", "Bauer"));
         journeyRepository.save(new Journey("Chloe", "O'Brian"));
         journeyRepository.save(new Journey("afghanistan", "Bauer"));
         journeyRepository.save(new Journey("David", "Palmer"));
         journeyRepository.save(new Journey("Michelle", "Dessler"));
-
-        return Mono.just(journeyRepository.findFirstById(Integer.parseInt(id)))
-                .map(it -> {log.debug(it.toString());return it;});
     }
 }
 

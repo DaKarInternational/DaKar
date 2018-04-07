@@ -1,0 +1,9 @@
+type Query {
+    allJourney: [Journey!]
+}
+
+type Journey {
+    id: ID!
+    country: String!
+    price: String!
+}

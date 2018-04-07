@@ -44,6 +44,20 @@
 			<version>1.16.8</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.graphql-java</groupId>
+			<artifactId>graphql-java-tools</artifactId>
+			<version>4.3.0</version>
+		</dependency>
+		<!--if we wanna use the subscriptions-->
+		<!--https://github.com/creactiviti/spring-boot-starter-graphql-->
+<!--		<dependency>
+			<groupId>com.creactiviti</groupId>
+			<artifactId>spring-boot-starter-graphql</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>-->
+
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -69,6 +83,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
 </project>
