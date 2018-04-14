@@ -21,6 +21,8 @@ public class Journey {
 
     private String country;
     private String price;
+    private String destination;
+    private String owner;
 
     public Journey(String country, String price) {
         this.country = country;
