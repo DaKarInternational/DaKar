@@ -1,4 +1,4 @@
-package com.dakar.dakar;
+package com.dakar.dakar.junit;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,5 +12,4 @@ public class DakarApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
 }
