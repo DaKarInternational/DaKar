@@ -13,7 +13,7 @@ public class JourneyResourceAssembler  extends ResourceAssemblerSupport<Journey,
 
     @Override
     public JourneyResource toResource(Journey journey) {
-        JourneyResource resource = createResourceWithId(journey.getId(), journey);
+        JourneyResource resource = createResourceWithId(journey.getDestination(), journey);
         resource.setJourney(journey);
         return resource;
     }
