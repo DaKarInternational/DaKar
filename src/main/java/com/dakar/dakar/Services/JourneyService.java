@@ -22,13 +22,9 @@ public class JourneyService {
                 .map(it -> {log.debug(it.toString());return it;});
     }
 
-    public Mono<Journey> findByIdWithJPA(String id) {
+    public Mono<Journey> findByDestinationWithMongoRepo(String destination) {
         insertSomeJourneys();
-        return Mono.just(journeyRepository.findFirstById(Integer.parseInt(id)))
-                .map(it -> {
-                    log.debug(it.toString());
-                    return it;
-                });
+        return Mono.just(this.journeyRepository.findFirstByDestination(destination));
     }
 
     public List<Journey> allJourney() {
@@ -40,11 +36,11 @@ public class JourneyService {
      * save a couple of Journey in H2DB
      */
     private void insertSomeJourneys() {
-        journeyRepository.save(new Journey("Jack", "Bauer"));
-        journeyRepository.save(new Journey("Chloe", "O'Brian"));
-        journeyRepository.save(new Journey("afghanistan", "Bauer"));
-        journeyRepository.save(new Journey("David", "Palmer"));
-        journeyRepository.save(new Journey("Michelle", "Dessler"));
+        journeyRepository.save(new Journey("Jack", "Bauer","afghanistan"));
+        journeyRepository.save(new Journey("Chloe", "O'Brian", "afghanistan"));
+        journeyRepository.save(new Journey("afghanistan", "Bauer","afghanistan"));
+        journeyRepository.save(new Journey("David", "Palmer","afghanistan"));
+        journeyRepository.save(new Journey("Michelle", "Dessler","afghanistan"));
     }
 }
 

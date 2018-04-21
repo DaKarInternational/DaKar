@@ -1,0 +1,21 @@
+version: '3'
+services:
+  mongo:
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"
+    container_name: "mongo-dakar"
+    networks:
+      - dakar-network
+  app:
+    image: "dakar/dakar:latest"
+    ports:
+     - "8080:8080"
+    container_name: 'app-dakar'
+    depends_on:
+     - "mongo"
+    networks:
+      - dakar-network
+networks:
+    dakar-network:
+        driver: bridge

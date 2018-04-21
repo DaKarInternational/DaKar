@@ -3,7 +3,6 @@ type Query {
 }
 
 type Journey {
-    id: ID!
     country: String!
     price: String!
 }
