@@ -26,16 +26,16 @@ public class AnnotationController {
     @Autowired
     private JourneyService journeyService;
 
-    @RequestMapping("/test2/{id}")
-    Mono<JourneyResource> routeWithAnnotationHateoasWithAssembler(@PathVariable(value = "id") String id){
+    @RequestMapping("/test2/{destination}")
+    Mono<JourneyResource> routeWithAnnotationHateoasWithAssembler(@PathVariable(value = "destination") String destination){
         JourneyResourceAssembler assembler = new JourneyResourceAssembler();
-        return journeyService.findByIdWithJPA(id)
+        return journeyService.findByDestinationWithMongoRepo(destination)
                 .map(assembler::toResource);
     }
 
-    @RequestMapping(value = "/test3/{id}", produces = MediaTypes.ALPS_JSON_VALUE)
-    Mono<Resource<Journey>> routeWithAnnotationHateoasWithoutAssembler(@PathVariable(value = "id") String id){
-        return journeyService.findByIdWithJPA(id)
+    @RequestMapping(value = "/test3/{destination}", produces = MediaTypes.ALPS_JSON_VALUE)
+    Mono<Resource<Journey>> routeWithAnnotationHateoasWithoutAssembler(@PathVariable(value = "destination") String destination){
+        return journeyService.findByDestinationWithMongoRepo(destination)
                 .map(this::journeyToResource);
     }
 
