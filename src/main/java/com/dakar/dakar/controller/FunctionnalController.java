@@ -1,7 +1,7 @@
-package com.dakar.dakar.Controller;
+package com.dakar.dakar.controller;
 
-import com.dakar.dakar.Models.Journey;
-import com.dakar.dakar.Services.JourneyService;
+import com.dakar.dakar.models.Journey;
+import com.dakar.dakar.services.JourneyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package com.dakar.dakar.cucumber;
+package com.dakar.dakar.acceptance;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
@@ -10,8 +10,8 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        glue = {"com.dakar.dakar.cucumber.steps"},
-        features = {"classpath:cucumber/features"}
+        glue = {"com.dakar.dakar.acceptance.steps"},
+        features = {"classpath:acceptance/features"}
 )
-public class CucumberMain {
+public class DakarApplicationAcceptanceTest {
 }

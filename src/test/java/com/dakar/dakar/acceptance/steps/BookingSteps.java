@@ -1,6 +1,6 @@
-package com.dakar.dakar.cucumber.steps;
+package com.dakar.dakar.acceptance.steps;
 
-import com.dakar.dakar.Models.Journey;
+import com.dakar.dakar.models.Journey;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

@@ -1,12 +1,12 @@
-package com.dakar.dakar.Controller;
+package com.dakar.dakar.controller;
 
 import com.coxautodev.graphql.tools.SchemaParser;
-import com.dakar.dakar.Models.Journey;
-import com.dakar.dakar.Resolvers.JourneyResolver;
-import com.dakar.dakar.Resolvers.QueryResolver;
-import com.dakar.dakar.ResourceAssembler.JourneyResourceAssembler;
-import com.dakar.dakar.Resources.JourneyResource;
-import com.dakar.dakar.Services.JourneyService;
+import com.dakar.dakar.models.Journey;
+import com.dakar.dakar.resolvers.JourneyResolver;
+import com.dakar.dakar.resolvers.QueryResolver;
+import com.dakar.dakar.resourceAssembler.JourneyResourceAssembler;
+import com.dakar.dakar.resources.JourneyResource;
+import com.dakar.dakar.services.JourneyService;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
@@ -42,7 +42,7 @@ public class AnnotationController {
     @RequestMapping(value = "/graphql")
     Mono<String> routeWithAnnotationHateoasAndGraphQL()  {
         GraphQLSchema graphQLSchema = SchemaParser.newParser()
-                .file("GraphQLSchemas/journey.graphqls")
+                .file("graphQLSchemas/journey.graphqls")
                 .resolvers(new QueryResolver(journeyService), new JourneyResolver())
                 .build()
                 .makeExecutableSchema();

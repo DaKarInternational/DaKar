@@ -1,8 +1,8 @@
-package com.dakar.dakar.Resolvers;
+package com.dakar.dakar.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.dakar.dakar.Models.Journey;
-import com.dakar.dakar.Services.JourneyService;
+import com.dakar.dakar.models.Journey;
+import com.dakar.dakar.services.JourneyService;
 
 import java.util.List;
 
