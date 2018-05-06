@@ -1,7 +1,7 @@
-package com.dakar.dakar.Services;
+package com.dakar.dakar.services;
 
-import com.dakar.dakar.Models.Journey;
-import com.dakar.dakar.Repositories.JourneyRepository;
+import com.dakar.dakar.models.Journey;
+import com.dakar.dakar.repositories.JourneyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

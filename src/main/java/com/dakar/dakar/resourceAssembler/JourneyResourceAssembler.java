@@ -1,8 +1,8 @@
-package com.dakar.dakar.ResourceAssembler;
+package com.dakar.dakar.resourceAssembler;
 
-import com.dakar.dakar.Controller.AnnotationController;
-import com.dakar.dakar.Models.Journey;
-import com.dakar.dakar.Resources.JourneyResource;
+import com.dakar.dakar.controller.AnnotationController;
+import com.dakar.dakar.models.Journey;
+import com.dakar.dakar.resources.JourneyResource;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
 public class JourneyResourceAssembler  extends ResourceAssemblerSupport<Journey, JourneyResource> {

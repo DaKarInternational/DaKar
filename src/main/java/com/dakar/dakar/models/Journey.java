@@ -1,4 +1,4 @@
-package com.dakar.dakar.Models;
+package com.dakar.dakar.models;
 
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;

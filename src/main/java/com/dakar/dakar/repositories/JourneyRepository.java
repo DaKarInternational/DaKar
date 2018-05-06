@@ -1,6 +1,6 @@
-package com.dakar.dakar.Repositories;
+package com.dakar.dakar.repositories;
 
-import com.dakar.dakar.Models.Journey;
+import com.dakar.dakar.models.Journey;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
