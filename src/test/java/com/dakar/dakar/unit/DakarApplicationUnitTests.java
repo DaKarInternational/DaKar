@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -34,8 +35,17 @@ public class DakarApplicationUnitTests {
     }
 
     @Test
+    //stupid test
     public void gotAllJourney() {
         List<Journey> journeyList = journeyService.allJourney();
+        assertNotNull(journeyList);
+    }
+
+    @Test
+    public void insertJourney() {
+        Journey journey = new Journey();
+        Mono<Journey> journeyList = journeyService.insertNewJourney(journey);
+        //TODO : check the business rules instead of just the values
         assertNotNull(journeyList);
     }
 }
