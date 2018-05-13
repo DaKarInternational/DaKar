@@ -1,6 +1,6 @@
-package com.dakar.dakar.Resources;
+package com.dakar.dakar.resources;
 
-import com.dakar.dakar.Models.Journey;
+import com.dakar.dakar.models.Journey;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Getter;
 import lombok.Setter;

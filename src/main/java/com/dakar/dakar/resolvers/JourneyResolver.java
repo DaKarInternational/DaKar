@@ -1,7 +1,7 @@
-package com.dakar.dakar.Resolvers;
+package com.dakar.dakar.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLResolver;
-import com.dakar.dakar.Models.Journey;
+import com.dakar.dakar.models.Journey;
 
 public class JourneyResolver implements GraphQLResolver<Journey> {
 
