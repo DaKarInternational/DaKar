@@ -27,7 +27,7 @@ public class AnnotationController {
     private JourneyService journeyService;
 
     @RequestMapping("/test2/{destination}")
-    Mono<JourneyResource> routeWithAnnotationHateoasWithAssembler(@PathVariable(value = "destination") String destination){
+    Mono<JourneyResource> getJourneyByDestinationWithAssembler(@PathVariable(value = "destination") String destination){
         JourneyResourceAssembler assembler = new JourneyResourceAssembler();
         return journeyService.findByDestinationWithMongoRepo(destination)
                 .map(assembler::toResource);

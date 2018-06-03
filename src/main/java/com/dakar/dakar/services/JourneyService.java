@@ -4,12 +4,14 @@ import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.repositories.JourneyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+@Component
 @Service
 @Slf4j
 public class JourneyService {
@@ -41,11 +43,11 @@ public class JourneyService {
      */
     private void insertSomeJourneys() {
         Flux<Journey> flux = Flux.just(
-                new Journey("Jack", "Bauer", "afghanistan"),
+                new Journey("Jack", "Bauer", "pompei"),
                 new Journey("Chloe", "O'Brian", "afghanistan"),
-                new Journey("afghanistan", "Bauer", "afghanistan"),
-                new Journey("David", "Palmer", "afghanistan"),
-                new Journey("Michelle", "Dessler", "afghanistan"));
+                new Journey("afghanistan", "Bauer", "chicago"),
+                new Journey("David", "Palmer", "dubai"),
+                new Journey("Michelle", "Dessler", "portugal"));
         journeyRepository
                 .insert(flux)
                 .subscribe();
