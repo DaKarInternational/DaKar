@@ -3,6 +3,7 @@ package com.dakar.dakar.resolvers;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.services.JourneyService;
+import com.dakar.dakar.services.interfaces.IJourneyService;
 
 import java.util.List;
 
@@ -16,10 +17,10 @@ import java.util.List;
 public class QueryResolver implements GraphQLQueryResolver {
 
     // no autowire here
-    private JourneyService journeyService;
+    private IJourneyService journeyService;
 
     //instead we use the old fashion
-    public QueryResolver(JourneyService journeyService) {
+    public QueryResolver(IJourneyService journeyService) {
         this.journeyService = journeyService;
     }
 

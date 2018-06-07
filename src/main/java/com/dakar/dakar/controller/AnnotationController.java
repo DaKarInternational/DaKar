@@ -7,6 +7,7 @@ import com.dakar.dakar.resolvers.QueryResolver;
 import com.dakar.dakar.resourceAssembler.JourneyResourceAssembler;
 import com.dakar.dakar.resources.JourneyResource;
 import com.dakar.dakar.services.JourneyService;
+import com.dakar.dakar.services.interfaces.IJourneyService;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
@@ -19,12 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 public class AnnotationController {
 
     @Autowired
-    private JourneyService journeyService;
+    private IJourneyService journeyService;
 
     @RequestMapping("/test2/{destination}")
     Mono<JourneyResource> getJourneyByDestinationWithAssembler(@PathVariable(value = "destination") String destination){
@@ -39,8 +42,13 @@ public class AnnotationController {
                 .map(this::journeyToResource);
     }
 
+    @RequestMapping(value = "/testlist", produces = MediaTypes.ALPS_JSON_VALUE)
+    List<Journey> getAllJourney(){
+        return journeyService.allJourney();
+    }
+
     @RequestMapping(value = "/graphql")
-    Mono<String> routeWithAnnotationHateoasAndGraphQL()  {
+    String routeWithAnnotationHateoasAndGraphQL()  {
         GraphQLSchema graphQLSchema = SchemaParser.newParser()
                 .file("graphQLSchemas/journey.graphqls")
                 .resolvers(new QueryResolver(journeyService), new JourneyResolver())
@@ -49,7 +57,7 @@ public class AnnotationController {
         GraphQL build = GraphQL.newGraphQL(graphQLSchema).build();
         ExecutionResult executionResult = build.execute("{allJourney {country}}");
         log.debug(executionResult.getData().toString());
-        return Mono.just(executionResult.getData().toString());
+        return executionResult.getData().toString();
     }
 
     /**
