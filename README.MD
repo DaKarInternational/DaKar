@@ -12,13 +12,13 @@ docker-compose up
 Functional controller :  
 http://localhost:8080/test1/afghanistan
 
-Annotation controller -> hateoas w/ assembler:  
+Functional controller -> hateoas w/ assembler:  
 http://localhost:8080/test2/afghanistan
 
-Annotation controller -> hatoas w/ generics:  
+Functional controller -> hatoas w/ generics:  
 http://localhost:8080/test3/afghanistan
 
-Annotation controller -> GraphQL:  
+Functional controller -> GraphQL:  
 http://localhost:8080/graphql
 
 
