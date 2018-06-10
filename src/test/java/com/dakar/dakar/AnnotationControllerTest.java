@@ -21,18 +21,21 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 public class AnnotationControllerTest {
 
     @Autowired
-    private IJourneyService userService;
-
-    @Autowired
     private WebTestClient webClient;
 
-
-
     @Test
-    public void testrouteWithAnnotationHateoasWithAssembler() {
-        this.webClient.get().uri("/testlist")
+    public void testRouteWithAnnotationHateoasWithAssembler() {
+        this.webClient.get().uri("/test2/afghanistan")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(Journey.class).isEqualTo(null);
+                .expectBody(Journey.class).isEqualTo(new Journey("Chloe", "O'Brian", "afghanistan"));
+    }
+
+    @Test
+    public void testRouteWithAnnotationHateoasWithoutAssembler() {
+        this.webClient.get().uri("/test3/pompei")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Journey.class).isEqualTo(new Journey("Jack", "Bauer", "pompei"));
     }
 }
