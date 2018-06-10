@@ -24,3 +24,5 @@ http://localhost:8080/graphql
 
 chmod +x graphiql-app-0.7.2-x86_64.AppImage
 
+
+docker-compose ps

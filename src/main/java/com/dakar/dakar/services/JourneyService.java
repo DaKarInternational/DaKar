@@ -5,6 +5,7 @@ import com.dakar.dakar.repositories.JourneyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -36,6 +37,23 @@ public class JourneyService {
         return this.journeyRepository.findAll()
                 .collectList()
                 .block();
+    }
+
+
+    /**
+     * just for debugging purpose
+     * need to be removed and replaced by integration tests
+     */
+    public void fillDbWithDumbData() {
+        Flux<Journey> flux = Flux.just(
+                new Journey("Jack", "Bauer", "afghanistan"),
+                new Journey("Chloe", "O'Brian", "afghanistan"),
+                new Journey("afghanistan", "Bauer", "afghanistan"),
+                new Journey("David", "Palmer", "afghanistan"),
+                new Journey("Michelle", "Dessler", "afghanistan"));
+        journeyRepository
+                .insert(flux)
+                .subscribe();
     }
 }
 

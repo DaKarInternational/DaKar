@@ -1,15 +1,9 @@
 package com.dakar.dakar.controller;
 
-import com.coxautodev.graphql.tools.SchemaParser;
 import com.dakar.dakar.models.Journey;
-import com.dakar.dakar.resolvers.JourneyResolver;
-import com.dakar.dakar.resolvers.QueryResolver;
 import com.dakar.dakar.resourceAssembler.JourneyResourceAssembler;
 import com.dakar.dakar.resources.JourneyResource;
 import com.dakar.dakar.services.JourneyService;
-import graphql.ExecutionResult;
-import graphql.GraphQL;
-import graphql.schema.GraphQLSchema;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
@@ -39,18 +33,6 @@ public class AnnotationController {
                 .map(this::journeyToResource);
     }
 
-    @RequestMapping(value = "/graphql")
-    Mono<String> routeWithAnnotationHateoasAndGraphQL()  {
-        GraphQLSchema graphQLSchema = SchemaParser.newParser()
-                .file("graphQLSchemas/journey.graphqls")
-                .resolvers(new QueryResolver(journeyService), new JourneyResolver())
-                .build()
-                .makeExecutableSchema();
-        GraphQL build = GraphQL.newGraphQL(graphQLSchema).build();
-        ExecutionResult executionResult = build.execute("{allJourney {country}}");
-        log.debug(executionResult.getData().toString());
-        return Mono.just(executionResult.getData().toString());
-    }
 
     /**
      * https://exampledriven.wordpress.com/2015/11/13/spring-hateoas-example/
