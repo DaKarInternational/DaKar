@@ -27,9 +27,10 @@ public class JourneyService {
         return this.journeyRepository.findFirstByDestination(destination);
     }
 
-    public Mono<Journey> insertNewJourney(Journey journey) {
+    public Journey insertNewJourney(Journey journey) {
         //TODO : business checks before insert
-        return this.journeyRepository.insert(journey);
+        return this.journeyRepository.insert(journey)
+                .block();
     }
 
     public List<Journey> allJourney() {

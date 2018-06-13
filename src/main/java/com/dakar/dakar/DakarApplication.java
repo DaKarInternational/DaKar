@@ -2,6 +2,7 @@ package com.dakar.dakar;
 
 import com.coxautodev.graphql.tools.SchemaParser;
 import com.dakar.dakar.resolvers.JourneyResolver;
+import com.dakar.dakar.resolvers.MutationResolver;
 import com.dakar.dakar.resolvers.QueryResolver;
 import com.dakar.dakar.services.JourneyService;
 import graphql.GraphQL;
@@ -28,7 +29,7 @@ public class DakarApplication {
         journeyService.fillDbWithDumbData();
         GraphQLSchema graphQLSchema = SchemaParser.newParser()
                 .file("graphQLSchemas/journey.graphqls")
-                .resolvers(new QueryResolver(journeyService), new JourneyResolver())
+                .resolvers(new QueryResolver(journeyService), new JourneyResolver(), new MutationResolver(journeyService))
                 .build()
                 .makeExecutableSchema();
         return GraphQL.newGraphQL(graphQLSchema).build();
