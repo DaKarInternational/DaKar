@@ -15,9 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public class AnnotationController {
     private IJourneyService journeyService;
 
     @RequestMapping("/test2/{destination}")
-    Mono<JourneyResource> getJourneyByDestinationWithAssembler(@PathVariable(value = "destination") String destination){
+    Mono<JourneyResource> routeWithAnnotationHateoasWithAssembler(@PathVariable(value = "destination") String destination){
         JourneyResourceAssembler assembler = new JourneyResourceAssembler();
         return journeyService.findByDestinationWithMongoRepo(destination)
                 .map(assembler::toResource);
@@ -42,9 +41,19 @@ public class AnnotationController {
                 .map(this::journeyToResource);
     }
 
-    @RequestMapping(value = "/testlist", produces = MediaTypes.ALPS_JSON_VALUE)
+    @RequestMapping(value = "/allJourney")
     List<Journey> getAllJourney(){
         return journeyService.allJourney();
+    }
+
+    @RequestMapping(value = "/allJourneyFlux")
+    Flux<Journey> getAllJourneyAsFlux(){
+        return journeyService.allJourneyAsFlux();
+    }
+
+    @RequestMapping(value = "/journey", method = RequestMethod.POST)
+    Mono<Journey> saveJourney(@RequestBody Mono<Journey> journey){
+        return journeyService.saveJourney(journey);
     }
 
     @RequestMapping(value = "/graphql")

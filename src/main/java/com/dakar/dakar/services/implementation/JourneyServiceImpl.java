@@ -42,6 +42,19 @@ public class JourneyServiceImpl implements IJourneyService {
                 .block();
     }
 
+    @Override
+    public Flux<Journey> allJourneyAsFlux() {
+        insertSomeJourneys();
+        // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
+        return this.journeyRepository.findAll();
+    }
+
+    @Override
+    public Mono<Journey> saveJourney(Mono<Journey> journey) {
+        return this.journeyRepository.save(journey.block());
+    }
+
+
     /**
      * save a couple of Journey in the mongo testContainer
      */
