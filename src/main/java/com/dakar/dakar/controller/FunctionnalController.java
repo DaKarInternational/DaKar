@@ -4,7 +4,7 @@ import com.dakar.dakar.models.GraphQLParameter;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.resourceAssembler.JourneyResourceAssembler;
 import com.dakar.dakar.resources.JourneyResource;
-import com.dakar.dakar.services.JourneyService;
+import com.dakar.dakar.services.interfaces.IJourneyService;
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
@@ -29,7 +29,7 @@ import static reactor.core.publisher.Mono.fromFuture;
 public class FunctionnalController {
 
     @Autowired
-    private JourneyService journeyService;
+    private IJourneyService journeyService;
 
     private MediaType GraphQLMediaType = MediaType.parseMediaType("application/json");
 

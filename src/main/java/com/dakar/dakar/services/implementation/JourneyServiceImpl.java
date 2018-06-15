@@ -67,11 +67,11 @@ public class JourneyServiceImpl implements IJourneyService {
      */
     public void fillDbWithDumbData() {
         Flux<Journey> flux = Flux.just(
-                new Journey("Jack", "Bauer", "afghanistan"),
+                new Journey("Jack", "Bauer", "Pompei"),
                 new Journey("Chloe", "O'Brian", "afghanistan"),
-                new Journey("afghanistan", "Bauer", "afghanistan"),
-                new Journey("David", "Palmer", "afghanistan"),
-                new Journey("Michelle", "Dessler", "afghanistan"));
+                new Journey("afghanistan", "Bauer", "Rome"),
+                new Journey("David", "Palmer", "Dubai"),
+                new Journey("Michelle", "Dessler", "Singapour"));
         journeyRepository
                 .insert(flux)
                 .subscribe();

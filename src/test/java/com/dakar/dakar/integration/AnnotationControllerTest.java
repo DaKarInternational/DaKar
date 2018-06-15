@@ -19,6 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RunWith(SpringRunner.class)
+@AutoConfigureWebTestClient(timeout = "36000")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AnnotationControllerTest extends AbstractIntegrationTest{
 
@@ -42,10 +43,10 @@ public class AnnotationControllerTest extends AbstractIntegrationTest{
 
     @Test
     public void testRouteWithAnnotationHateoasWithoutAssembler() {
-        this.webClient.get().uri("/test3/pompei")
+        this.webClient.get().uri("/test3/Pompei")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(Journey.class).isEqualTo(new Journey("Jack", "Bauer", "pompei"));
+                .expectBody(Journey.class).isEqualTo(new Journey("Jack", "Bauer", "Pompei"));
     }
 
     @Test

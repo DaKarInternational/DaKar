@@ -49,12 +49,12 @@ public class DakarApplicationIntegrationTests extends AbstractIntegrationTest {
     }
 
     public void insertJourney() {
-        Journey journey = new Journey();
-        //TODO : use the builder pattern to set detination 
-        Mono<Journey> journeyList = journeyService.insertNewJourney(journey);
-        Mono<Journey> journeyFetched = journeyService.findByDestinationWithMongoRepo("testDestination");
-        assertNotNull(journeyList);
-        //TODO : check if there are best practices to do tests in reactive 
-        assertNotNull(journeyFetched);
+//        Journey journey = new Journey();
+//        //TODO : use the builder pattern to set detination
+//        Mono<Journey> journeyList = journeyService.insertNewJourney(journey);
+//        Mono<Journey> journeyFetched = journeyService.findByDestinationWithMongoRepo("testDestination");
+//        assertNotNull(journeyList);
+//        //TODO : check if there are best practices to do tests in reactive
+//        assertNotNull(journeyFetched);
     }
 }
