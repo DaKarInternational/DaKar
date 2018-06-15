@@ -24,8 +24,10 @@ public class QueryResolver implements GraphQLQueryResolver {
     }
 
     /**
-     * Here we'll gonna call our proper service, where we can use Autowire as we want
+     * Here we'll gonna call our proper service, where we can use Autowired as we want
      * @return see if we can't return a Flux there ?
+     * 
+     * for the Flux we will wait for this : https://github.com/graphql-java/graphql-java-tools/issues/103
      */
     public List<Journey> allJourney() {
         return journeyService.allJourney();
