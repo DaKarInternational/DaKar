@@ -2,7 +2,16 @@ type Query {
     allJourney: [Journey!]
 }
 
+input JourneyInput {
+    country: String!
+    price: String!
+}
+
 type Journey {
     country: String!
     price: String!
+}
+
+type Mutation {
+  createJourney(input: JourneyInput): Journey
 }

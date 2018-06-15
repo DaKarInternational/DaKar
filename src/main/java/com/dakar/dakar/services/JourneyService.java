@@ -17,29 +17,35 @@ public class JourneyService {
     @Autowired
     private JourneyRepository journeyRepository;
 
+    //useless
     public Mono<Journey> findByCountryNameWithJPA(String countryName) {
-        insertSomeJourneys();
         return journeyRepository.findFirstByCountry(countryName)
                 .map(it -> {log.debug(it.toString());return it;});
     }
 
     public Mono<Journey> findByDestinationWithMongoRepo(String destination) {
-        insertSomeJourneys();
         return this.journeyRepository.findFirstByDestination(destination);
     }
 
+    public Journey insertNewJourney(Journey journey) {
+        //TODO : business checks before insert
+        return this.journeyRepository.insert(journey)
+                .block();
+    }
+
     public List<Journey> allJourney() {
-        insertSomeJourneys();
         // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
         return this.journeyRepository.findAll()
                 .collectList()
                 .block();
     }
 
+
     /**
-     * save a couple of Journey in the mongo testContainer
+     * just for debugging purpose
+     * need to be removed and replaced by integration tests
      */
-    private void insertSomeJourneys() {
+    public void fillDbWithDumbData() {
         Flux<Journey> flux = Flux.just(
                 new Journey("Jack", "Bauer", "afghanistan"),
                 new Journey("Chloe", "O'Brian", "afghanistan"),
