@@ -6,7 +6,6 @@ import com.dakar.dakar.resolvers.JourneyResolver;
 import com.dakar.dakar.resolvers.QueryResolver;
 import com.dakar.dakar.resourceAssembler.JourneyResourceAssembler;
 import com.dakar.dakar.resources.JourneyResource;
-import com.dakar.dakar.services.JourneyService;
 import com.dakar.dakar.services.interfaces.IJourneyService;
 import graphql.ExecutionResult;
 import graphql.GraphQL;

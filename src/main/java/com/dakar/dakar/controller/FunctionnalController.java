@@ -1,7 +1,6 @@
 package com.dakar.dakar.controller;
 
 import com.dakar.dakar.models.Journey;
-import com.dakar.dakar.services.JourneyService;
 import com.dakar.dakar.services.interfaces.IJourneyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

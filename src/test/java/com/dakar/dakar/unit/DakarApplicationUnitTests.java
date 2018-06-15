@@ -2,7 +2,7 @@ package com.dakar.dakar.unit;
 
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.repositories.JourneyRepository;
-import com.dakar.dakar.services.JourneyService;
+import com.dakar.dakar.services.interfaces.IJourneyService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 public class DakarApplicationUnitTests {
 
     @InjectMocks
-    private JourneyService journeyService;
+    private IJourneyService journeyService;
 
     @Mock
     private JourneyRepository journeyRepository;

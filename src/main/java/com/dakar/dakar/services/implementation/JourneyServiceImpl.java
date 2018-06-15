@@ -12,7 +12,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-@Component
 @Service
 @Slf4j
 public class JourneyServiceImpl implements IJourneyService {

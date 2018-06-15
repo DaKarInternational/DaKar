@@ -3,8 +3,6 @@ package com.dakar.dakar.models;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Objects;
-
 @Getter
 @Setter
 @NoArgsConstructor
