@@ -57,7 +57,7 @@ public class AnnotationController {
     }
 
     @RequestMapping(value = "/graphql")
-    String routeWithAnnotationHateoasAndGraphQL()  {
+    Mono<String> routeWithAnnotationHateoasAndGraphQL()  {
         GraphQLSchema graphQLSchema = SchemaParser.newParser()
                 .file("graphQLSchemas/journey.graphqls")
                 .resolvers(new QueryResolver(journeyService), new JourneyResolver())
@@ -66,7 +66,7 @@ public class AnnotationController {
         GraphQL build = GraphQL.newGraphQL(graphQLSchema).build();
         ExecutionResult executionResult = build.execute("{allJourney {country}}");
         log.debug(executionResult.getData().toString());
-        return executionResult.getData().toString();
+        return Mono.just(executionResult.getData().toString());
     }
 
     /**
