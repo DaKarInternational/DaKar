@@ -19,22 +19,29 @@ public class JourneyServiceImpl implements IJourneyService {
     @Autowired
     private JourneyRepository journeyRepository;
 
+    //useless
     @Override
     public Mono<Journey> findByCountryNameWithJPA(String countryName) {
-        insertSomeJourneys();
+        fillDbWithDumbData();
         return journeyRepository.findFirstByCountry(countryName)
                 .map(it -> {log.debug(it.toString());return it;});
     }
 
     @Override
     public Mono<Journey> findByDestinationWithMongoRepo(String destination) {
-        insertSomeJourneys();
+        fillDbWithDumbData();
         return this.journeyRepository.findFirstByDestination(destination);
+    }
+
+    public Journey insertNewJourney(Journey journey) {
+        //TODO : business checks before insert
+        return this.journeyRepository.insert(journey)
+                .block();
     }
 
     @Override
     public List<Journey> allJourney() {
-        insertSomeJourneys();
+        fillDbWithDumbData();
         // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
         return this.journeyRepository.findAll()
                 .collectList()
@@ -43,7 +50,7 @@ public class JourneyServiceImpl implements IJourneyService {
 
     @Override
     public Flux<Journey> allJourneyAsFlux() {
-        insertSomeJourneys();
+        fillDbWithDumbData();
         // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
         return this.journeyRepository.findAll();
     }
@@ -55,15 +62,16 @@ public class JourneyServiceImpl implements IJourneyService {
 
 
     /**
-     * save a couple of Journey in the mongo testContainer
+     * just for debugging purpose
+     * need to be removed and replaced by integration tests
      */
-    private void insertSomeJourneys() {
+    public void fillDbWithDumbData() {
         Flux<Journey> flux = Flux.just(
-                new Journey("Jack", "Bauer", "pompei"),
+                new Journey("Jack", "Bauer", "afghanistan"),
                 new Journey("Chloe", "O'Brian", "afghanistan"),
-                new Journey("afghanistan", "Bauer", "chicago"),
-                new Journey("David", "Palmer", "dubai"),
-                new Journey("Michelle", "Dessler", "portugal"));
+                new Journey("afghanistan", "Bauer", "afghanistan"),
+                new Journey("David", "Palmer", "afghanistan"),
+                new Journey("Michelle", "Dessler", "afghanistan"));
         journeyRepository
                 .insert(flux)
                 .subscribe();

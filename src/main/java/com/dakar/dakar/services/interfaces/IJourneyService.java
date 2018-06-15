@@ -16,4 +16,8 @@ public interface IJourneyService {
     Flux<Journey> allJourneyAsFlux();
 
     Mono<Journey> saveJourney(Mono<Journey> journey);
+
+    Journey insertNewJourney(Journey journey);
+
+    void fillDbWithDumbData();
 }

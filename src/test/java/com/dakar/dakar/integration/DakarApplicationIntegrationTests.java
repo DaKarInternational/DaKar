@@ -2,7 +2,7 @@ package com.dakar.dakar.integration;
 
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.repositories.JourneyRepository;
-import com.dakar.dakar.services.JourneyService;
+import com.dakar.dakar.services.interfaces.IJourneyService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 public class DakarApplicationIntegrationTests extends AbstractIntegrationTest {
 
     @Autowired
-    private JourneyService journeyService;
+    private IJourneyService journeyService;
 
     @Autowired
     private JourneyRepository journeyRepository;
