@@ -33,7 +33,7 @@ public class JourneyServiceImpl implements IJourneyService {
         return this.journeyRepository.findFirstByDestination(destination);
     }
 
-    public Journey insertNewJourney(Journey journey) {
+    public Journey insertJourney(Journey journey) {
         //TODO : business checks before insert
         return this.journeyRepository.insert(journey)
                 .block();

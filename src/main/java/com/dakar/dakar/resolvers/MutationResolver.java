@@ -19,7 +19,7 @@ public class MutationResolver implements GraphQLMutationResolver {
         Journey journeyCreated = new Journey();
         journeyCreated.setDestination(journeyInput.getDestination());
         journeyCreated.setPrice(journeyInput.getPrice());
-        return journeyService.insertNewJourney(journeyCreated);
+        return journeyService.insertJourney(journeyCreated);
     }
 
 }

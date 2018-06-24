@@ -17,7 +17,7 @@ public interface IJourneyService {
 
     Mono<Journey> saveJourney(Mono<Journey> journey);
 
-    Journey insertNewJourney(Journey journey);
+    Journey insertJourney(Journey journey);
 
     void fillDbWithDumbData();
 }
