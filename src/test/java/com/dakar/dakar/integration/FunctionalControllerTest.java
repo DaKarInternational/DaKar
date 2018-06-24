@@ -19,26 +19,26 @@ public class FunctionalControllerTest extends AbstractIntegrationTest{
 
     @Test
     public void testRoutes() {
-        this.webClient.get().uri("/test1/Chloe")
+        this.webClient.get().uri("/test1/Pompei")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(Journey.class).isEqualTo(new Journey("Chloe", "O'Brian", "afghanistan"));
+                .expectBody(Journey.class).isEqualTo(new Journey("Pompei", "100"));
     }
 
     @Test
     public void testRouteWithAnnotationHateoasWithAssembler() {
-        this.webClient.get().uri("/test2/Pompei")
+        this.webClient.get().uri("/test2/Afghanistan")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(Journey.class).isEqualTo(new Journey("Jack", "Bauer", "Pompei"));
+                .expectBody(Journey.class).isEqualTo(new Journey("Afghanistan", "540"));
     }
 
     @Test
     public void testRouteWithAnnotationHateoasWithoutAssembler() {
-        this.webClient.get().uri("/test3/Pompei")
+        this.webClient.get().uri("/test3/Singapour")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(Journey.class).isEqualTo(new Journey("Jack", "Bauer", "Pompei"));
+                .expectBody(Journey.class).isEqualTo(new Journey("Singapour", "345"));
     }
 
 }

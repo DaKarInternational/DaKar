@@ -38,8 +38,8 @@ public class FunctionnalController {
 
     @Bean
     RouterFunction<?> routes() {
-        return route(RequestPredicates.GET("/test1/{countryName}"), request ->
-                ok().body(journeyService.findByCountryNameWithJPA(request.pathVariable("countryName")), Journey.class));
+        return route(RequestPredicates.GET("/test1/{destination}"), request ->
+                ok().body(journeyService.findByDestinationWithJPA(request.pathVariable("destination")), Journey.class));
     }
 
     /*
@@ -94,7 +94,7 @@ public class FunctionnalController {
 
     @Bean
     RouterFunction<?> routeWithAnnotationHateoasAndGraphQL() {
-        ExecutionResult executionResult = this.graphQL.execute("{allJourney {country}}");
+        ExecutionResult executionResult = this.graphQL.execute("{allJourney {destination}}");
         log.debug(executionResult.getData().toString());
         return route(RequestPredicates.GET("/graphql"), request ->
                 ok().body(Mono.just(executionResult.getData().toString()), String.class));

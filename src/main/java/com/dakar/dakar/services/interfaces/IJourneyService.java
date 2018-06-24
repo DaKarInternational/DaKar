@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 public interface IJourneyService {
-    Mono<Journey> findByCountryNameWithJPA(String countryName);
+    Mono<Journey> findByDestinationWithJPA(String countryName);
 
     Mono<Journey> findByDestinationWithMongoRepo(String destination);
 

@@ -21,9 +21,9 @@ public class JourneyServiceImpl implements IJourneyService {
 
     //useless
     @Override
-    public Mono<Journey> findByCountryNameWithJPA(String countryName) {
+    public Mono<Journey> findByDestinationWithJPA(String destination) {
         fillDbWithDumbData();
-        return journeyRepository.findFirstByCountry(countryName)
+        return journeyRepository.findFirstByDestination(destination)
                 .map(it -> {log.debug(it.toString());return it;});
     }
 
@@ -67,11 +67,11 @@ public class JourneyServiceImpl implements IJourneyService {
      */
     public void fillDbWithDumbData() {
         Flux<Journey> flux = Flux.just(
-                new Journey("Jack", "Bauer", "Pompei"),
-                new Journey("Chloe", "O'Brian", "afghanistan"),
-                new Journey("afghanistan", "Bauer", "Rome"),
-                new Journey("David", "Palmer", "Dubai"),
-                new Journey("Michelle", "Dessler", "Singapour"));
+                new Journey("Pompei", "100"),
+                new Journey("Afghanistan", "540"),
+                new Journey("Rome", "234"),
+                new Journey("Dubai", "109"),
+                new Journey("Singapour", "345"));
         journeyRepository
                 .insert(flux)
                 .subscribe();

@@ -31,11 +31,11 @@ public class DakarApplicationIntegrationTests extends AbstractIntegrationTest {
     @Before
     public void fillDbWithDumbData() {
         Flux<Journey> flux = Flux.just(
-                new Journey("Jack", "Bauer", "afghanistan"),
-                new Journey("Chloe", "O'Brian", "afghanistan"),
-                new Journey("afghanistan", "Bauer", "afghanistan"),
-                new Journey("David", "Palmer", "afghanistan"),
-                new Journey("Michelle", "Dessler", "afghanistan"));
+                new Journey("Pompei", "100"),
+                new Journey("Afghanistan", "540"),
+                new Journey("Rome", "234"),
+                new Journey("Dubai", "109"),
+                new Journey("Singapour", "450"));
         journeyRepository
                 .insert(flux)
                 .subscribe();

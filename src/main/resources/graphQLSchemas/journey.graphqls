@@ -3,12 +3,12 @@ type Query {
 }
 
 input JourneyInput {
-    country: String!
+    destination: String!
     price: String!
 }
 
 type Journey {
-    country: String!
+    destination: String!
     price: String!
 }
 
