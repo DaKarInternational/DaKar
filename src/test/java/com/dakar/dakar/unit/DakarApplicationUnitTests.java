@@ -44,9 +44,9 @@ public class DakarApplicationUnitTests {
 
     @Test
     public void insertJourney() {
-//        Journey journey = new Journey();
-//        Mono<Journey> journeyList = journeyService.insertNewJourney(journey);
-//        //TODO : check the business rules instead of just the values
-//        assertNotNull(journeyList);
+        Journey journey = new Journey("Alger", "100");
+        journey = journeyService.insertJourney(journey);
+        //TODO : check the business rules instead of just the values
+        assertNotNull(journey);
     }
 }
