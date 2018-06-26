@@ -22,14 +22,12 @@ public class JourneyServiceImpl implements IJourneyService {
     //useless
     @Override
     public Mono<Journey> findByDestinationWithJPA(String destination) {
-        fillDbWithDumbData();
         return journeyRepository.findFirstByDestination(destination)
                 .map(it -> {log.debug(it.toString());return it;});
     }
 
     @Override
     public Mono<Journey> findByDestinationWithMongoRepo(String destination) {
-        fillDbWithDumbData();
         return this.journeyRepository.findFirstByDestination(destination);
     }
 
@@ -41,7 +39,6 @@ public class JourneyServiceImpl implements IJourneyService {
 
     @Override
     public List<Journey> allJourney() {
-        fillDbWithDumbData();
         // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
         return this.journeyRepository.findAll()
                 .collectList()
@@ -50,7 +47,6 @@ public class JourneyServiceImpl implements IJourneyService {
 
     @Override
     public Flux<Journey> allJourneyAsFlux() {
-        fillDbWithDumbData();
         // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
         return this.journeyRepository.findAll();
     }
