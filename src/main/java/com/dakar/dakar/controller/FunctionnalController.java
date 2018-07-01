@@ -39,7 +39,6 @@ public class FunctionnalController {
 
     @Bean
     RouterFunction<?> routes() {
-        journeyService.fillDbWithDumbData();
         return route(RequestPredicates.GET("/test1/{destination}"), request ->
                 ok().body(journeyService.findByDestinationWithJPA(request.pathVariable("destination")), Journey.class));
     }
@@ -80,7 +79,6 @@ public class FunctionnalController {
 
     @Bean
     RouterFunction<?> routeWithAnnotationHateoasWithAssembler() {
-        journeyService.fillDbWithDumbData();
         JourneyResourceAssembler assembler = new JourneyResourceAssembler();
         return route(RequestPredicates.GET("/test2/{destination}"), request ->
                 ok().body(journeyService.findByDestinationWithMongoRepo(request.pathVariable("destination"))
@@ -89,7 +87,6 @@ public class FunctionnalController {
 
     @Bean
     RouterFunction<?> routeWithAnnotationHateoasWithoutAssembler() {
-        journeyService.fillDbWithDumbData();
         return route(RequestPredicates.GET("/test3/{destination}"), request ->
                 ok().contentType(MediaType.APPLICATION_JSON).body(journeyService.findByDestinationWithMongoRepo(request.pathVariable("destination"))
                         .map(this::journeyToResource), Resource.class));

@@ -56,21 +56,5 @@ public class JourneyServiceImpl implements IJourneyService {
         return this.journeyRepository.save(journey.block());
     }
 
-
-    /**
-     * just for debugging purpose
-     * need to be removed and replaced by integration tests
-     */
-    public void fillDbWithDumbData() {
-        Flux<Journey> flux = Flux.just(
-                new Journey("Pompei", "100"),
-                new Journey("Afghanistan", "540"),
-                new Journey("Rome", "234"),
-                new Journey("Dubai", "109"),
-                new Journey("Singapour", "345"));
-        journeyRepository
-                .insert(flux)
-                .subscribe();
-    }
 }
 

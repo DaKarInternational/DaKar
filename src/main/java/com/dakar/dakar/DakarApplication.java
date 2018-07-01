@@ -26,7 +26,6 @@ public class DakarApplication {
 
     @Bean
     public GraphQL buildGraphQL() {
-        journeyService.fillDbWithDumbData();
         GraphQLSchema graphQLSchema = SchemaParser.newParser()
                 .file("graphQLSchemas/journey.graphqls")
                 .resolvers(new QueryResolver(journeyService), new JourneyResolver(), new MutationResolver(journeyService))

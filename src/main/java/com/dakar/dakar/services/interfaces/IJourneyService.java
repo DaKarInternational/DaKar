@@ -18,6 +18,4 @@ public interface IJourneyService {
     Mono<Journey> saveJourney(Mono<Journey> journey);
 
     Journey insertJourney(Journey journey);
-
-    void fillDbWithDumbData();
 }
