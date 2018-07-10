@@ -1,10 +1,11 @@
 version: '3'
 services:
-  mongo:
-    image: "mongo:latest"
+  couch:
+    image: "couchbase:latest"
     ports:
-      - "27017:27017"
-    container_name: "mongo-dakar"
+      - "8091-8094:8091-8094"
+      - "11210-11211:11210-11211"
+    container_name: "couch-dakar"
     networks:
       - dakar-network
   app:

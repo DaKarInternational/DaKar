@@ -26,7 +26,7 @@ import static reactor.core.publisher.Mono.fromFuture;
 
 @Slf4j
 @Controller
-public class FunctionnalController {
+public class FunctionalController {
 
     @Autowired
     private JourneyService journeyService;
@@ -40,6 +40,14 @@ public class FunctionnalController {
     RouterFunction<?> routes() {
         return route(RequestPredicates.GET("/test1/{countryName}"), request ->
                 ok().body(journeyService.findByCountryNameWithJPA(request.pathVariable("countryName")), Journey.class));
+    }
+
+    @Bean
+    RouterFunction<?> routeForCouch() {
+        return route(RequestPredicates.GET("/test5"), request -> {
+            journeyService.insertNewJourneyInCouchbase(Mono.just(new Journey("afghanistan", "", "afghanistan")));
+            return ok().body(Mono.just("OK"), String.class);
+        });
     }
 
     /*
@@ -91,7 +99,6 @@ public class FunctionnalController {
                         .map(this::journeyToResource), Resource.class));
     }
 
-
     @Bean
     RouterFunction<?> routeWithAnnotationHateoasAndGraphQL() {
         ExecutionResult executionResult = this.graphQL.execute("{allJourney {country}}");
@@ -109,7 +116,7 @@ public class FunctionnalController {
     private Resource<Journey> journeyToResource(Journey journey) {
 
         //TODO: code the links in order to have a proper HATEOAS Restful API
-//                Link invoiceLink = linkTo(methodOn(FunctionnalController.class).routeWithAnnotationHateoas(journey.getId()+"")).withRel("invoice");
+//                Link invoiceLink = linkTo(methodOn(FunctionalController.class).routeWithAnnotationHateoas(journey.getId()+"")).withRel("invoice");
 
 //        Link allInvoiceLink = entityLinks.linkToCollectionResource(Invoice.class).withRel("all-invoice");
 //        Link invoiceLink = linkTo(methodOn(InvoiceController.class).getInvoiceByCustomerId(customer.getId())).withRel("invoice");

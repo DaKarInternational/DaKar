@@ -11,12 +11,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.reactivestreams.Publisher;
 import org.springframework.boot.test.context.SpringBootTest;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @Slf4j
 @RunWith(MockitoJUnitRunner.class)
@@ -37,15 +41,19 @@ public class DakarApplicationUnitTests {
     @Test
     //stupid test
     public void gotAllJourney() {
-        List<Journey> journeyList = journeyService.allJourney();
+        when(journeyRepository.findAll()).thenReturn(Flux.just(new Journey()));
+
+        List<Journey> journeyList = journeyService.allJourney().collectList().block();
         assertNotNull(journeyList);
     }
 
     @Test
     public void insertJourney() {
-        Journey journey = new Journey();
-        Mono<Journey> journeyList = journeyService.insertNewJourney(journey);
+        when(journeyRepository.saveAll((Publisher<Journey>) any())).thenReturn(Flux.just(new Journey("", "", "")));
+
+        Mono<Journey> journeyMono = Mono.just(new Journey("", "", ""));
+        Mono<Journey> journeyInserted = journeyService.insertNewJourneyInCouchbase(journeyMono);
         //TODO : check the business rules instead of just the values
-        assertNotNull(journeyList);
+        assertNotNull(journeyInserted);
     }
 }

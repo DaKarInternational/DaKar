@@ -9,6 +9,9 @@ mvnw dockerfile:build
 docker-compose up  
 
 
+Functional controller   
+http://localhost:8080/test5/  
+
 Functional controller :  
 http://localhost:8080/test1/afghanistan
 
@@ -21,6 +24,8 @@ http://localhost:8080/test3/afghanistan
 Functional controller -> GraphQL:  
 http://localhost:8080/graphql
 
+Couchbase:  
+http://localhost:8091/  
 
 chmod +x graphiql-app-0.7.2-x86_64.AppImage
 

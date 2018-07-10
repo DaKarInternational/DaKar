@@ -30,6 +30,6 @@ public class QueryResolver implements GraphQLQueryResolver {
      * for the Flux we will wait for this : https://github.com/graphql-java/graphql-java-tools/issues/103
      */
     public List<Journey> allJourney() {
-        return journeyService.allJourney();
+        return journeyService.allJourney().collectList().block();
     }
 }

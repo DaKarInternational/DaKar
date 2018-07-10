@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 @Service
 @Slf4j
 public class JourneyService {
@@ -27,22 +25,29 @@ public class JourneyService {
         return this.journeyRepository.findFirstByDestination(destination);
     }
 
-    public Journey insertNewJourney(Journey journey) {
+    public Flux<Journey> insertNewJourneyMongo(Mono<Journey> journey) {
         //TODO : business checks before insert
-        return this.journeyRepository.insert(journey)
-                .block();
+        return this.journeyRepository.saveAll(journey);
     }
 
-    public List<Journey> allJourney() {
+    public Flux<Journey> allJourney() {
         // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
-        return this.journeyRepository.findAll()
-                .collectList()
-                .block();
+        return this.journeyRepository.findAll();
     }
 
+    public Mono<Journey> insertNewJourneyInCouchbase(Mono<Journey> journey) {
+        //TODO : business checks before insert
+        this.journeyRepository.saveAll(journey).subscribe((it) -> log.debug(it.toString()), (it) -> log.debug(it.toString()), () -> log.debug("done"));
+        //TODO: Need to fetch the new journey with the Id
+        return journey;
+    }
 
+    public Mono<Journey> findByCountry(String country) {
+        //TODO : business checks before insert
+        return this.journeyRepository.findFirstByCountry(country);
+    }
     /**
-     * just for debugging purpose
+     * Just for debugging purpose
      * need to be removed and replaced by integration tests
      */
     public void fillDbWithDumbData() {
@@ -53,7 +58,7 @@ public class JourneyService {
                 new Journey("David", "Palmer", "afghanistan"),
                 new Journey("Michelle", "Dessler", "afghanistan"));
         journeyRepository
-                .insert(flux)
+                .saveAll(flux)
                 .subscribe();
     }
 }
