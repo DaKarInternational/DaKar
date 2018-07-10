@@ -9,8 +9,6 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface JourneyRepository extends ReactiveMongoRepository<Journey, Long> {
 
-    Mono<Journey> findFirstByCountry(String countryName);
-
     Flux<Journey> findAll();
 
     Mono<Journey> findFirstByDestination(String destination);

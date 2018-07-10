@@ -9,7 +9,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class JourneyInput {
 
-    private String country;
+    private String destination;
     private String price;
 
 }
