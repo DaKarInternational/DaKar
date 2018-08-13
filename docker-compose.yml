@@ -14,7 +14,7 @@ services:
      - "8080:8080"
     container_name: 'app-dakar'
     depends_on:
-     - "mongo"
+     - "couch"
     networks:
       - dakar-network
 networks:

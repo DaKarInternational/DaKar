@@ -1,4 +1,4 @@
-package com.dakar.dakar.integration;
+package com.dakar.dakar.acceptance;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
@@ -10,6 +10,7 @@ import com.couchbase.client.java.cluster.DefaultBucketSettings;
 import com.couchbase.client.java.env.CouchbaseEnvironment;
 import com.dakar.dakar.acceptance.AbstractCouchBaseTests;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.couchbase.config.CouchbaseConfigurer;
@@ -19,7 +20,7 @@ import javax.annotation.PostConstruct;
 
 @Configuration
 @Primary
-//@ComponentScan(basePackages = "com.dakar.dakar")
+@ComponentScan(basePackages = "com.dakar.dakar")
 public class ConfigTest implements CouchbaseConfigurer {
 
     private static final String clusterUser = "Administrator";

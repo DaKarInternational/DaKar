@@ -3,9 +3,8 @@ package com.dakar.dakar.resolvers;
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.models.JourneyInput;
-import com.dakar.dakar.services.JourneyService;
-import reactor.core.publisher.Mono;
 import com.dakar.dakar.services.interfaces.IJourneyService;
+import reactor.core.publisher.Mono;
 
 public class MutationResolver implements GraphQLMutationResolver {
 
@@ -18,11 +17,9 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     public Journey createJourney(JourneyInput journeyInput) {
-        Journey journeyCreated = new Journey();
+        Journey journeyCreated = new Journey(journeyInput.getPrice(),journeyInput.getDestination());
         Mono<Journey> journeyMono = Mono.just(journeyCreated);
-        journeyCreated.setPrice(journeyInput.getPrice());
-        journeyCreated.setDestination(journeyInput.getCountry());
-        return journeyService.insertNewJourneyMongo(journeyMono).blockFirst();
+        return journeyService.saveJourney(journeyMono).blockFirst();
     }
 
 }

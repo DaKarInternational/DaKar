@@ -5,13 +5,12 @@ import com.dakar.dakar.repositories.JourneyRepository;
 import com.dakar.dakar.services.interfaces.IJourneyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
 @Slf4j
+@Service
 public class JourneyServiceImpl implements IJourneyService {
 
     @Autowired
@@ -20,18 +19,18 @@ public class JourneyServiceImpl implements IJourneyService {
     //useless
     @Override
     public Mono<Journey> findByDestinationWithJPA(String destination) {
+//        journeyRepository.findAll().subscribe(journey -> {log.error(journey.toString());});
+        fillDbWithDumbData();
         return journeyRepository.findFirstByDestination(destination)
-                .map(it -> {log.debug(it.toString());return it;});
+                .map(it -> {
+                    log.debug(it.toString());
+                    return it;
+                });
     }
 
     @Override
     public Mono<Journey> findByDestinationWithMongoRepo(String destination) {
         return this.journeyRepository.findFirstByDestination(destination);
-    }
-
-    public Journey insertJourney(Journey journey) {
-        //TODO : business checks before insert
-        return this.journeyRepository.saveAll(journey);
     }
 
     @Override
@@ -40,15 +39,9 @@ public class JourneyServiceImpl implements IJourneyService {
         return this.journeyRepository.findAll();
     }
 
-    @Override
-    public Flux<Journey> allJourneyAsFlux() {
-        // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
-        return this.journeyRepository.findAll();
-    }
-
     public Mono<Journey> findByCountry(String country) {
         //TODO : business checks before insert
-        return this.journeyRepository.findFirstByCountry(country);
+        return journeyRepository.findFirstByDestination(country);
     }
     /**
      * Just for debugging purpose
@@ -56,19 +49,19 @@ public class JourneyServiceImpl implements IJourneyService {
      */
     public void fillDbWithDumbData() {
         Flux<Journey> flux = Flux.just(
-                new Journey("Jack", "Bauer", "afghanistan"),
-                new Journey("Chloe", "O'Brian", "afghanistan"),
-                new Journey("afghanistan", "Bauer", "afghanistan"),
-                new Journey("David", "Palmer", "afghanistan"),
-                new Journey("Michelle", "Dessler", "afghanistan"));
+                new Journey("Jack", "afghanistan"),
+                new Journey("Chloe", "afghanistan"),
+                new Journey("afghanistan", "afghanistan"),
+                new Journey("David", "afghanistan"),
+                new Journey("Michelle", "afghanistan"));
         journeyRepository
                 .saveAll(flux)
-                .subscribe();
+                .subscribe(journey -> {log.error(journey.toString());});
     }
-    
+
     @Override
-    public Mono<Journey> saveJourney(Mono<Journey> journey) {
-        return this.journeyRepository.save(journey.block());
+    public Flux<Journey> saveJourney(Mono<Journey> journey) {
+        return journeyRepository.saveAll(journey);
     }
 }
 

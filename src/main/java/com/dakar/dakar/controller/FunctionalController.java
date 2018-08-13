@@ -16,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static graphql.ExecutionInput.newExecutionInput;
@@ -46,7 +45,7 @@ public class FunctionalController {
     @Bean
     RouterFunction<?> routeForCouch() {
         return route(RequestPredicates.GET("/test5"), request -> {
-            journeyService.insertNewJourneyInCouchbase(Mono.just(new Journey("afghanistan", "", "afghanistan")));
+            journeyService.saveJourney(Mono.just(new Journey("afghanistan", "afghanistan")));
             return ok().body(Mono.just("OK"), String.class);
         });
     }
