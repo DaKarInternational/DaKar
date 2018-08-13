@@ -11,8 +11,6 @@ import reactor.core.publisher.Mono;
 //@ViewIndexed(designDoc = "journey", viewName = "all")
 public interface JourneyRepository extends ReactiveCouchbaseRepository<Journey, Long> {
 
-    Mono<Journey> findFirstByCountry(String countryName);
-
     Flux<Journey> findAll();
 
     Mono<Journey> findFirstByDestination(String destination);

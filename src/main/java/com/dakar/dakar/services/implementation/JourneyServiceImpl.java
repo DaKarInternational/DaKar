@@ -1,45 +1,49 @@
-package com.dakar.dakar.services;
+package com.dakar.dakar.services.implementation;
 
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.repositories.JourneyRepository;
+import com.dakar.dakar.services.interfaces.IJourneyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
 @Slf4j
-public class JourneyService {
+public class JourneyServiceImpl implements IJourneyService {
 
     @Autowired
     private JourneyRepository journeyRepository;
 
     //useless
-    public Mono<Journey> findByCountryNameWithJPA(String countryName) {
-        return journeyRepository.findFirstByCountry(countryName)
+    @Override
+    public Mono<Journey> findByDestinationWithJPA(String destination) {
+        return journeyRepository.findFirstByDestination(destination)
                 .map(it -> {log.debug(it.toString());return it;});
     }
 
+    @Override
     public Mono<Journey> findByDestinationWithMongoRepo(String destination) {
         return this.journeyRepository.findFirstByDestination(destination);
     }
 
-    public Flux<Journey> insertNewJourneyMongo(Mono<Journey> journey) {
+    public Journey insertJourney(Journey journey) {
         //TODO : business checks before insert
         return this.journeyRepository.saveAll(journey);
     }
 
+    @Override
     public Flux<Journey> allJourney() {
         // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
         return this.journeyRepository.findAll();
     }
 
-    public Mono<Journey> insertNewJourneyInCouchbase(Mono<Journey> journey) {
-        //TODO : business checks before insert
-        this.journeyRepository.saveAll(journey).subscribe((it) -> log.debug(it.toString()), (it) -> log.debug(it.toString()), () -> log.debug("done"));
-        //TODO: Need to fetch the new journey with the Id
-        return journey;
+    @Override
+    public Flux<Journey> allJourneyAsFlux() {
+        // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
+        return this.journeyRepository.findAll();
     }
 
     public Mono<Journey> findByCountry(String country) {
@@ -60,6 +64,11 @@ public class JourneyService {
         journeyRepository
                 .saveAll(flux)
                 .subscribe();
+    }
+    
+    @Override
+    public Mono<Journey> saveJourney(Mono<Journey> journey) {
+        return this.journeyRepository.save(journey.block());
     }
 }
 

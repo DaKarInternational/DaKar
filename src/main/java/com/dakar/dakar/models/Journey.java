@@ -26,9 +26,8 @@ public class Journey {
     private String owner;
 
     //TODO : builder pattern
-    public Journey(String country, String price, String destination) {
-        this.country = country;
-        this.price = price;
+    public Journey(String destination, String price) {
         this.destination = destination;
+        this.price = price;
     }
 }

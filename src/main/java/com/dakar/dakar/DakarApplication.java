@@ -4,7 +4,7 @@ import com.coxautodev.graphql.tools.SchemaParser;
 import com.dakar.dakar.resolvers.JourneyResolver;
 import com.dakar.dakar.resolvers.MutationResolver;
 import com.dakar.dakar.resolvers.QueryResolver;
-import com.dakar.dakar.services.JourneyService;
+import com.dakar.dakar.services.interfaces.IJourneyService;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import org.springframework.data.couchbase.repository.config.EnableReactiveCouchb
 public class DakarApplication {
 
     @Autowired
-    private JourneyService journeyService;
+    private IJourneyService journeyService;
 
     public static void main(String[] args) {
 		SpringApplication.run(DakarApplication.class, args);
@@ -26,7 +26,6 @@ public class DakarApplication {
 
     @Bean
     public GraphQL buildGraphQL() {
-        journeyService.fillDbWithDumbData();
         GraphQLSchema graphQLSchema = SchemaParser.newParser()
                 .file("graphQLSchemas/journey.graphqls")
                 .resolvers(new QueryResolver(journeyService), new JourneyResolver(), new MutationResolver(journeyService))
