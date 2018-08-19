@@ -1,4 +1,5 @@
 #!/bin/bash
+# based on : https://github.com/arun-gupta/docker-images/blob/master/couchbase/configure-node.sh
 
 set -x # Print commands and their arguments as they are executed.
 set -m # Job control is enabled.
