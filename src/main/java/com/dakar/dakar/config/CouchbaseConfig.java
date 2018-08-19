@@ -1,7 +1,11 @@
 package com.dakar.dakar.config;
 
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.cluster.ClusterInfo;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
+import org.springframework.data.couchbase.config.BeanNames;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +25,21 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
         return Arrays.asList("localhost");
     }
 
+
+//    @Override
+//    @Bean(name = BeanNames.COUCHBASE_CLUSTER_INFO)
+//    public ClusterInfo couchbaseClusterInfo() throws Exception {
+//        return couchbaseCluster().clusterManager("Administrator", getBucketPassword()).info();
+//    }
+//
+//    @Bean(
+//            destroyMethod = "close",
+//            name = {"couchbaseBucket"}
+//    )
+//    public Bucket couchbaseClient() throws Exception {
+//        return this.couchbaseCluster().openBucket(this.getBucketName(), this.getBucketPassword());
+//    } 
+    
     @Override
     protected String getBucketName() {
         return "test";

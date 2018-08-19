@@ -30,4 +30,19 @@ http://localhost:8091/
 chmod +x graphiql-app-0.7.2-x86_64.AppImage
 
 
-docker-compose ps
+
+docker-compose ps  
+docker ps --all
+
+docker build -f Dockerfile.testdb . -t testdb
+docker images
+
+docker-compose up -d couch // to launch only the db
+
+create cluster   
+create bucket  
+create index : 
+
+CREATE PRIMARY INDEX ON `test`  
+
+create user test with password = 'password' 

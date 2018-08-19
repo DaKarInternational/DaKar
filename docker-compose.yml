@@ -1,5 +1,13 @@
 version: '3'
 services:
+  couchtest:
+    image: "testdb:latest"
+    ports:
+      - "8091-8094:8091-8094"
+      - "11210-11211:11210-11211"
+    container_name: "couch-test"
+    networks:
+      - dakar-network
   couch:
     image: "couchbase:latest"
     ports:

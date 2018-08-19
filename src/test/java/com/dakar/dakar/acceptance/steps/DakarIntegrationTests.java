@@ -1,6 +1,5 @@
 package com.dakar.dakar.acceptance.steps;
 
-import com.dakar.dakar.acceptance.AbstractCouchBaseTests;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.services.interfaces.IJourneyService;
 import cucumber.api.java.en.When;
@@ -17,16 +16,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @Slf4j
-//@RunWith(SpringRunner.class)
+@RunWith(SpringRunner.class)
 //@ComponentScan(basePackages = "com.dakar.dakar")
-//@SpringBootTest(/*webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT*/)
-public class DakarIntegrationTests extends AbstractCouchBaseTests{
+@SpringBootTest(/*webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT*/)
+public class DakarIntegrationTests {
 
     @Autowired
     private IJourneyService journeyService;
 
-    @Test
-//    @When("^test$")
+//    @Test
+    @When("^test$")
     public void insertJourneyCouch() {
         journeyService.fillDbWithDumbData();
         //TODO : use the builder pattern to set destination 
