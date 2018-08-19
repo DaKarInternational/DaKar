@@ -39,10 +39,16 @@ docker images
 
 docker-compose up -d couch // to launch only the db
 
+
+To launch the integration tests, either you launch a new container with a couchbase and do all that : 
 create cluster   
 create bucket  
 create index : 
 
 CREATE PRIMARY INDEX ON `test`  
 
-create user test with password = 'password' 
+create user 'test' with password = 'password'  
+
+Or you just :  
+
+docker-compose up -d couchtest  
