@@ -1,11 +1,8 @@
 package com.dakar.dakar.config;
 
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.cluster.ClusterInfo;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
-import org.springframework.data.couchbase.config.BeanNames;
+import org.springframework.data.couchbase.repository.config.EnableReactiveCouchbaseRepositories;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +15,7 @@ import java.util.List;
  * We can also load the config from custom properties: https://dzone.com/articles/getting-started-couchbase-and
  */
 @Configuration
+@EnableReactiveCouchbaseRepositories
 public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
@@ -39,7 +37,23 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 //    public Bucket couchbaseClient() throws Exception {
 //        return this.couchbaseCluster().openBucket(this.getBucketName(), this.getBucketPassword());
 //    } 
-    
+
+//    @Bean(
+//            name = {"couchbaseCustomConversions"}
+//    )
+//    public CustomConversions customConversions() {
+//        return super.customConversions();
+//    }
+//
+//    
+//    @Bean(
+//            name = {"couchbaseIndexManager"}
+//    )
+//    @Override
+//    public IndexManager indexManager() {
+//        return new IndexManager(true, true, false);
+//    }
+
     @Override
     protected String getBucketName() {
         return "test";

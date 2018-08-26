@@ -9,8 +9,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
-//@N1qlPrimaryIndexed
-//@ViewIndexed(designDoc = "journey", viewName = "all")
+@N1qlPrimaryIndexed
+@ViewIndexed(designDoc = "journey", viewName = "all")
 public interface JourneyRepository extends ReactiveCouchbaseRepository<Journey, Long> {
 
     Flux<Journey> findAll();

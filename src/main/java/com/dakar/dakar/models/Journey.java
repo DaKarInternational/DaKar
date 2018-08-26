@@ -8,7 +8,7 @@ import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
-    //TODO : builder pattern
+    //TODO : builder pattern or static factory
 @Data
 @Document
 public class Journey {

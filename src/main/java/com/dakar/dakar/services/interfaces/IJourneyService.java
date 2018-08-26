@@ -5,16 +5,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IJourneyService {
-    Mono<Journey> findByDestinationWithJPA(String countryName);
-
-    Mono<Journey> findByDestinationWithMongoRepo(String destination);
+    Mono<Journey> findByDestination(String countryName);
 
     Flux<Journey> allJourney();
 
     Flux<Journey> saveJourney(Mono<Journey> journey);
 
     void fillDbWithDumbData();
-
-    public Mono<Journey> findByCountry(String country);
-
 }

@@ -54,8 +54,8 @@ public class BookingSteps {
 				.subscribe(journey -> {
 					log.error(journey.toString());
 				});
-		assertNotNull(journeyService.findByCountry("afghanistan").block());
-		assertEquals(journeyService.findByCountry("afghanistan").block().getDestination(), "afghanistan");
+		assertNotNull(journeyService.findByDestination("afghanistan").block());
+		assertEquals(journeyService.findByDestination("afghanistan").block().getDestination(), "afghanistan");
 		//TODO : check if there are best practices to do tests in reactive 
 	}
 	

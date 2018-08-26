@@ -16,11 +16,10 @@ public class JourneyServiceImpl implements IJourneyService {
     @Autowired
     private JourneyRepository journeyRepository;
 
-    //useless
     @Override
-    public Mono<Journey> findByDestinationWithJPA(String destination) {
+    public Mono<Journey> findByDestination(String destination) {
 //        journeyRepository.findAll().subscribe(journey -> {log.error(journey.toString());});
-        fillDbWithDumbData();
+        //TODO : business checks before insert
         return journeyRepository.findFirstByDestination(destination)
                 .map(it -> {
                     log.debug(it.toString());
@@ -28,21 +27,16 @@ public class JourneyServiceImpl implements IJourneyService {
                 });
     }
 
-    @Override
-    public Mono<Journey> findByDestinationWithMongoRepo(String destination) {
-        return this.journeyRepository.findFirstByDestination(destination);
-    }
-
+    /**
+     * we should never do this kind of requests
+     * @return
+     */
     @Override
     public Flux<Journey> allJourney() {
         // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
         return this.journeyRepository.findAll();
     }
 
-    public Mono<Journey> findByCountry(String country) {
-        //TODO : business checks before insert
-        return journeyRepository.findFirstByDestination(country);
-    }
     /**
      * Just for debugging purpose
      * need to be removed and replaced by integration tests
@@ -64,4 +58,3 @@ public class JourneyServiceImpl implements IJourneyService {
         return journeyRepository.saveAll(journey);
     }
 }
-
