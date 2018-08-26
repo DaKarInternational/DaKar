@@ -16,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static graphql.ExecutionInput.newExecutionInput;
@@ -27,30 +26,57 @@ import static reactor.core.publisher.Mono.fromFuture;
 
 @Slf4j
 @Controller
-public class FunctionnalController {
-
-    @Autowired
-    private IJourneyService journeyService;
+public class FunctionalController {
 
     private MediaType GraphQLMediaType = MediaType.parseMediaType("application/json");
 
     @Autowired
+    private IJourneyService journeyService;
+
+    @Autowired
     private GraphQL graphQL;
 
+    /**
+     * DEMO
+     * classic endpoint returning a Mono<Journey>
+     */
     @Bean
     RouterFunction<?> routes() {
         return route(RequestPredicates.GET("/test1/{destination}"), request ->
-                ok().body(journeyService.findByDestinationWithJPA(request.pathVariable("destination")), Journey.class));
+                ok().body(journeyService.findByDestination(request.pathVariable("destination")), Journey.class));
     }
 
-    /*
-    translation from there (without the GET method): 
-    https://github.com/geowarin/graphql-webflux/blob/master/src/main/kotlin/com/geowarin/graphql/Routes.kt
+/*    @Bean
+    RouterFunction<?> routesBis() {
+        RouterFunction<?> routerFunction = route(RequestPredicates.GET("/test6/{destination}"), request ->
+                ok().body(journeyService.findByDestination(request.pathVariable("destination")), Journey.class));
+       routerFunction.a  route(RequestPredicates.GET("/test1/{destination}"), request ->
+                ok().body(journeyService.findByDestination(request.pathVariable("destination")), Journey.class));
+        return route
+    }*/
+
+    /**
+     * DEMO
+     * classic save endpoint returning the new Journey in a Flux
+     */
+    @Bean
+    RouterFunction<?> routeForCouch() {
+        return route(RequestPredicates.POST("/test5"), request ->
+                ok().body(journeyService.saveJourney(Mono.just(new Journey("afghanistan", "afghanistan"))), Journey.class));
+    }
+
+    /**
+     * The GraphQL POST endpoint 
+     * 
+     * translated from there (without the GET method): 
+     * https://github.com/geowarin/graphql-webflux/blob/master/src/main/kotlin/com/geowarin/graphql/Routes.kt
      */
     @Bean
     RouterFunction<?> routesGraphQl() {
         // some working queries :
-        // {allJourney {country}}
+        
+        // {allJourney {destination}}
+        
         /*
         mutation {
           createJourney(input: {price: "tt", country: "tt"}) {
@@ -77,27 +103,38 @@ public class FunctionnalController {
         });
     }
 
+    /**
+     * DEMO
+     * first way to map a Journey into a Hatoas Resource
+     */
     @Bean
     RouterFunction<?> routeWithAnnotationHateoasWithAssembler() {
         JourneyResourceAssembler assembler = new JourneyResourceAssembler();
         return route(RequestPredicates.GET("/test2/{destination}"), request ->
-                ok().body(journeyService.findByDestinationWithMongoRepo(request.pathVariable("destination"))
+                ok().body(journeyService.findByDestination(request.pathVariable("destination"))
                         .map(assembler::toResource), JourneyResource.class));
     }
 
+    /**
+     * DEMO
+     * second way to map a Journey into a Hatoas Resource
+     */
     @Bean
     RouterFunction<?> routeWithAnnotationHateoasWithoutAssembler() {
         return route(RequestPredicates.GET("/test3/{destination}"), request ->
-                ok().contentType(MediaType.APPLICATION_JSON).body(journeyService.findByDestinationWithMongoRepo(request.pathVariable("destination"))
+                ok().contentType(MediaType.APPLICATION_JSON).body(journeyService.findByDestination(request.pathVariable("destination"))
                         .map(this::journeyToResource), Resource.class));
     }
 
-
+    /**
+     * DEMO
+     * This way you can transform a Graphql request into a classic endpoint
+     */
     @Bean
-    RouterFunction<?> routeWithAnnotationHateoasAndGraphQL() {
+    RouterFunction<?> routeWithAnnotationAndGraphQL() {
         ExecutionResult executionResult = this.graphQL.execute("{allJourney {destination}}");
         log.debug(executionResult.getData().toString());
-        return route(RequestPredicates.GET("/graphql"), request ->
+        return route(RequestPredicates.GET("/graphqlEndpointTransformed"), request ->
                 ok().body(Mono.just(executionResult.getData().toString()), String.class));
     }
 
@@ -110,7 +147,7 @@ public class FunctionnalController {
     private Resource<Journey> journeyToResource(Journey journey) {
 
         //TODO: code the links in order to have a proper HATEOAS Restful API
-//                Link invoiceLink = linkTo(methodOn(FunctionnalController.class).routeWithAnnotationHateoas(journey.getId()+"")).withRel("invoice");
+//                Link invoiceLink = linkTo(methodOn(FunctionalController.class).routeWithAnnotationHateoas(journey.getId()+"")).withRel("invoice");
 
 //        Link allInvoiceLink = entityLinks.linkToCollectionResource(Invoice.class).withRel("all-invoice");
 //        Link invoiceLink = linkTo(methodOn(InvoiceController.class).getInvoiceByCustomerId(customer.getId())).withRel("invoice");
