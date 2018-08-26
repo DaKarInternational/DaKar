@@ -14,12 +14,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.couchbase.config.CouchbaseConfigurer;
+import org.springframework.data.couchbase.repository.config.EnableReactiveCouchbaseRepositories;
 import org.testcontainers.couchbase.CouchbaseContainer;
 
 import javax.annotation.PostConstruct;
 
 @Configuration
 @Primary
+@EnableReactiveCouchbaseRepositories
 @ComponentScan(basePackages = "com.dakar.dakar")
 public class ConfigTest implements CouchbaseConfigurer {
 
@@ -28,9 +30,9 @@ public class ConfigTest implements CouchbaseConfigurer {
 
     private CouchbaseContainer couchbaseContainer;
 
+    
     @PostConstruct
     public void init() throws Exception {
-
         couchbaseContainer = AbstractCouchBaseTests.couchbaseContainer;
         BucketSettings settings = DefaultBucketSettings.builder()
                 .enableFlush(true).name("default").quota(100).replicas(0).type(BucketType.COUCHBASE).build();

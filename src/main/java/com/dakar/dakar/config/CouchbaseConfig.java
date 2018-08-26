@@ -2,6 +2,7 @@ package com.dakar.dakar.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
+import org.springframework.data.couchbase.repository.config.EnableReactiveCouchbaseRepositories;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  * We can also load the config from custom properties: https://dzone.com/articles/getting-started-couchbase-and
  */
 @Configuration
+@EnableReactiveCouchbaseRepositories
 public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
