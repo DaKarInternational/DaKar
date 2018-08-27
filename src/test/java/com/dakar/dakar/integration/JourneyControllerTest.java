@@ -3,6 +3,7 @@ package com.dakar.dakar.integration;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,6 @@ public class JourneyControllerTest {
     public void allJourney() {
         ExecutionResult executionResult = this.graphQL.execute("{allJourney {destination}}");
         log.debug(executionResult.getData().toString());
+        Assert.assertTrue(executionResult.getData().toString().contains("afghanistan"));
     }
 }
