@@ -2,7 +2,10 @@ package com.dakar.dakar.models;
 
 import com.couchbase.client.java.repository.annotation.Field;
 import com.couchbase.client.java.repository.annotation.Id;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
@@ -11,6 +14,8 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
     //TODO : builder pattern or static factory
 @Data
 @Document
+@NoArgsConstructor
+@AllArgsConstructor
 public class Journey {
 
     //https://docs.spring.io/spring-data/couchbase/docs/current/reference/html/#couchbase.autokeygeneration.unique

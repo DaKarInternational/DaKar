@@ -19,7 +19,7 @@ public class ReactiveControllerTest {
     private WebTestClient webClient;
 
     /**
-     * find a journey by destination
+     * find a journey by destination using classic method
      */
     @Test
     public void test1ClassicFind() {

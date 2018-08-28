@@ -17,7 +17,7 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     public Journey createJourney(JourneyInput journeyInput) {
-        Journey journeyCreated = new Journey(journeyInput.getPrice(),journeyInput.getDestination());
+        Journey journeyCreated = new Journey(null, "afghanistan", "afghanistan", "");
         Mono<Journey> journeyMono = Mono.just(journeyCreated);
         return journeyService.saveJourney(journeyMono).blockFirst();
     }

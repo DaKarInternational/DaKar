@@ -25,7 +25,7 @@ public class BookingSteps {
 	
 	@Given("^(.*) wants to go to a journey$")
 	public void user_wants_to_go_to_a_journey(String userName) {
-		journey = new Journey("Jack", "afghanistan");
+//		journey = new Journey("Jack", "afghanistan");
 		journey.setOwner(userName);
 	}
 
@@ -47,13 +47,13 @@ public class BookingSteps {
 //	@Test
     @When("^testoo$")
 	public void insertJoddurneyCouch() {
-		journeyService.fillDbWithDumbData();
+//		journeyService.fillDbWithDumbData();
 		//TODO : use the builder pattern to set destination 
-		journeyService
-				.saveJourney(Mono.just(new Journey("afghanistan", "2000")))
-				.subscribe(journey -> {
-					log.error(journey.toString());
-				});
+//		journeyService
+//				.saveJourney(Mono.just(new Journey("afghanistan", "2000")))
+//				.subscribe(journey -> {
+//					log.error(journey.toString());
+//				});
 		assertNotNull(journeyService.findByDestination("afghanistan").block());
 		assertEquals(journeyService.findByDestination("afghanistan").block().getDestination(), "afghanistan");
 		//TODO : check if there are best practices to do tests in reactive 
