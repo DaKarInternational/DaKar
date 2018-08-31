@@ -12,16 +12,19 @@ import java.util.Map;
 @AllArgsConstructor
 @Getter
 @Setter
-public class SimpleExecutionResult implements ExecutionResult {
+/**
+ * TODO : Maybe remove this class
+ */
+public class SimpleExecutionResult<T> implements ExecutionResult {
 
-    private final Object data;
+    private final T data;
     private final List<GraphQLError> errors;
     private final transient boolean dataPresent;
     private final transient Map<Object, Object> extensions;
 
     @Override
-    public <T> T getData() {
-        return (T) this.data;
+    public T getData() {
+        return this.data;
     }
 
     @Override

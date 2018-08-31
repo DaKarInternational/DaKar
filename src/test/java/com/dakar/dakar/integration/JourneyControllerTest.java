@@ -3,23 +3,16 @@ package com.dakar.dakar.integration;
 import com.dakar.dakar.models.GraphQLParameter;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.models.SimpleExecutionResult;
-import graphql.ExecutionResult;
-import graphql.ExecutionResultImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
-import reactor.core.publisher.Mono;
-
-import java.util.HashMap;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -30,21 +23,73 @@ public class JourneyControllerTest {
     private WebTestClient webClient;
 
     /**
-     * create a journey
+     * create a journey with a classic endpoint
      */
-//    @Test
+    @Test
     public void test5ClassicSave() {
         webClient.post().uri("/test5")
                 .exchange()
                 .expectStatus()
                 .isOk()
                 .expectBodyList(Journey.class)
-//                .isEqualTo(new Journey("afghanistan", "345"));
                 .consumeWith(journey -> {
                     Assert.assertEquals(journey.getResponseBody().get(0).getDestination(), "afghanistan");
                 });
     }
-    
+
+    /**
+     * create a journey with GraphQL
+     */
+    @Test
+    public void graphqlSave() {
+        String query = " mutation {\n" +
+                "            createJourney(input:{ price:\"ll\" destination:\"tt\" }){\n" +
+                "                price\n" +
+                "                destination\n" +
+                "            }\n" +
+                "}\n";
+        GraphQLParameter graphQLParameter = new GraphQLParameter();
+        graphQLParameter.setQuery(query);
+        this.webClient.post().uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameter))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(SimpleExecutionResult.class)
+                .consumeWith(journey -> {
+                    Assert.assertTrue(journey.getResponseBody().getData().toString().contains("tt"));
+                });
+    }
+
+    /**
+     * try to create a journey with GraphQL but get an error
+     */
+    @Test
+    public void graphqlErrorOnSave() {
+        //TODO: Maybe fetch the query from a propertie file of something ?
+        String query = " mutation {\n" +
+                "            createJourney(input:{ price:\"ll\" destination:\"tt\" }){\n" +
+                "                price\n" +
+                "                fieldThatDoesNotExist\n" +
+                "            }\n" +
+                "}\n";
+        GraphQLParameter graphQLParameter = new GraphQLParameter();
+//        graphQLParameter.setOperationName("{allJourney}");
+        graphQLParameter.setQuery(query);
+//        graphQLParameter.setVariables(new HashMap<>());
+        this.webClient.post().uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameter))
+                .exchange()
+                .expectStatus()
+                .isOk()
+//                .expectBody(ValidationError.class)
+                .expectBody()
+                .consumeWith(journey -> {
+                    Assert.assertTrue(new String(journey.getResponseBody()).contains("FieldUndefined"));
+                });
+    }
     /**
      * find a journey by destination using graphql
      */
@@ -56,28 +101,19 @@ public class JourneyControllerTest {
                 .expectStatus()
                 .isOk()
                 .expectBodyList(Journey.class)
-//                .isEqualTo(new Journey("afghanistan", "345"));
-//                .expectBody()
                 .consumeWith(journey -> {
-                    Assert.assertEquals(journey.getResponseBody()
-                            .get(0).getDestination()
-                            , "afghanistan");
+                    Assert.assertEquals(journey.getResponseBody().get(0).getDestination(), "afghanistan");
                 });
         
         GraphQLParameter graphQLParameter = new GraphQLParameter();
-//        graphQLParameter.setOperationName("{allJourney}");
         graphQLParameter.setQuery("{allJourney {destination\nprice}}");
-//        graphQLParameter.setVariables(new HashMap<>());
         this.webClient.post().uri("/graphql")
                 .contentType(MediaType.APPLICATION_JSON)
-//                .body(Mono.just(graphQLParameter), GraphQLParameter.class)
                 .body(BodyInserters.fromObject(graphQLParameter))
                 .exchange()
                 .expectStatus()
                 .isOk()
                 .expectBody(SimpleExecutionResult.class)
-//                .hasSize(1)
-//                .expectBody()
                 .consumeWith(journey -> {
                     Assert.assertTrue(journey.getResponseBody().getData().toString().contains("afghanistan"));
                 });
