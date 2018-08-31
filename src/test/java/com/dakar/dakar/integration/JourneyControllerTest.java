@@ -68,6 +68,7 @@ public class JourneyControllerTest {
     @Test
     public void graphqlErrorOnSave() {
         //TODO: Maybe fetch the query from a propertie file of something ?
+        // https://stackoverflow.com/questions/878573/java-multiline-string
         String query = " mutation {\n" +
                 "            createJourney(input:{ price:\"ll\" destination:\"tt\" }){\n" +
                 "                price\n" +
