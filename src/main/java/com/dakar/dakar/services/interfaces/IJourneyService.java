@@ -13,9 +13,13 @@ public interface IJourneyService {
 
     List<Journey> allJourney();
 
+    Journey findById(String id);
+
     Flux<Journey> allJourneyAsFlux();
 
     Mono<Journey> saveJourney(Mono<Journey> journey);
 
     Journey insertJourney(Journey journey);
+
+    Mono<Journey> findByIdWithMongoRepo(String destination);
 }

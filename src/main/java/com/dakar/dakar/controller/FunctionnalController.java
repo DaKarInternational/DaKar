@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import reactor.core.publisher.Flux;
@@ -82,6 +83,14 @@ public class FunctionnalController {
         JourneyResourceAssembler assembler = new JourneyResourceAssembler();
         return route(RequestPredicates.GET("/test2/{destination}"), request ->
                 ok().body(journeyService.findByDestinationWithMongoRepo(request.pathVariable("destination"))
+                        .map(assembler::toResource), JourneyResource.class));
+    }
+
+    @Bean
+    RouterFunction<?> getJourney() {
+        JourneyResourceAssembler assembler = new JourneyResourceAssembler();
+        return route(RequestPredicates.GET("/journey/{destination}"), request ->
+                ok().body(journeyService.findByIdWithMongoRepo(request.pathVariable("destination"))
                         .map(assembler::toResource), JourneyResource.class));
     }
 

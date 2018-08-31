@@ -7,9 +7,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
-public interface JourneyRepository extends ReactiveMongoRepository<Journey, Long> {
+public interface JourneyRepository extends ReactiveMongoRepository<Journey, String> {
 
     Flux<Journey> findAll();
 
     Mono<Journey> findFirstByDestination(String destination);
+
+
 }

@@ -38,11 +38,22 @@ public class JourneyServiceImpl implements IJourneyService {
     }
 
     @Override
+    public Mono<Journey> findByIdWithMongoRepo(String destination) {
+        return this.journeyRepository.findFirstByDestination(destination);
+    }
+
+    @Override
     public List<Journey> allJourney() {
         // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
         return this.journeyRepository.findAll()
                 .collectList()
                 .block();
+    }
+
+    @Override
+    public Journey findById(String id) {
+        // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
+        return this.journeyRepository.findById(id).block();
     }
 
     @Override

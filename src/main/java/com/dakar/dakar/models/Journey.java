@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Journey {
 
+    private String id;
     private String destination;
     private String price;
     private String owner;
