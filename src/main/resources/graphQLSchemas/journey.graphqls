@@ -1,5 +1,6 @@
 type Query {
     allJourney: [Journey!]
+    findJourneyById(id: String!): Journey
 }
 
 input JourneyInput {
@@ -9,6 +10,7 @@ input JourneyInput {
 }
 
 type Journey {
+    id: ID!
     destination: String!
     price: String
     owner: String
@@ -16,4 +18,9 @@ type Journey {
 
 type Mutation {
   createJourney(input: JourneyInput): Journey
+}
+
+schema{
+    query: Query
+    mutation: Mutation
 }

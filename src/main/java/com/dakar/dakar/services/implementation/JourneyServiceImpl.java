@@ -57,4 +57,10 @@ public class JourneyServiceImpl implements IJourneyService {
     public Flux<Journey> saveJourney(Mono<Journey> journey) {
         return journeyRepository.saveAll(journey);
     }
+
+    @Override
+    public Mono<Journey> findById(Long id) {
+        // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
+        return this.journeyRepository.findById(id);
+    }
 }

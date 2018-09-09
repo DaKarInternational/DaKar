@@ -32,4 +32,13 @@ public class QueryResolver implements GraphQLQueryResolver {
     public List<Journey> allJourney() {
         return journeyService.allJourney().collectList().block();
     }
+
+    /**
+     * 
+     * @param id
+     * @return
+     */
+    public Journey findJourneyById(Long id){ 
+        return journeyService.findById(id).block();
+    }
 }
