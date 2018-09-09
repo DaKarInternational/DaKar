@@ -11,7 +11,6 @@ import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
-    //TODO : builder pattern or static factory
 @Data
 @Document
 @NoArgsConstructor
@@ -21,7 +20,6 @@ public class Journey {
     //https://docs.spring.io/spring-data/couchbase/docs/current/reference/html/#couchbase.autokeygeneration.unique
     @Id @GeneratedValue(strategy = UNIQUE)
     private String id;
-    @NonNull
     @Field
     private String price;
     @NonNull

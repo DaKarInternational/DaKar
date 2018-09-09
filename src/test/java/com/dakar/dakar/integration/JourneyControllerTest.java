@@ -91,12 +91,15 @@ public class JourneyControllerTest {
                     Assert.assertTrue(new String(journey.getResponseBody()).contains("FieldUndefined"));
                 });
     }
+
     /**
      * find a journey by destination using graphql
      */
     @Test
     public void findAJourneyByDestinationUsingGraphQl() {
 
+        //TODO put this in a setup method
+        //TODO maybe use directly the service for this kind of things ?
         webClient.post().uri("/test5")
                 .exchange()
                 .expectStatus()
