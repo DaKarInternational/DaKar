@@ -29,7 +29,7 @@ public class JourneyServiceImpl implements IJourneyService {
 
     /**
      * we should never do this kind of requests
-     * @return
+     * @return Flux of all Journeys
      */
     @Override
     public Flux<Journey> allJourney() {
@@ -41,7 +41,7 @@ public class JourneyServiceImpl implements IJourneyService {
      * Just for debugging purpose
      * need to be removed and replaced by integration tests
      */
-    public void fillDbWithDumbData() {
+/*    public void fillDbWithDumbData() {
         Flux<Journey> flux = Flux.just(
                 new Journey("Jack", "afghanistan"),
                 new Journey("Chloe", "afghanistan"),
@@ -51,7 +51,7 @@ public class JourneyServiceImpl implements IJourneyService {
         journeyRepository
                 .saveAll(flux)
                 .subscribe(journey -> {log.error(journey.toString());});
-    }
+    }*/
 
     @Override
     public Flux<Journey> saveJourney(Mono<Journey> journey) {

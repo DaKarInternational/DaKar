@@ -3,6 +3,7 @@ package com.dakar.dakar.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 import org.springframework.data.couchbase.repository.config.EnableReactiveCouchbaseRepositories;
+import org.springframework.data.couchbase.repository.support.IndexManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,14 +46,13 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 //        return super.customConversions();
 //    }
 //
-//    
-//    @Bean(
-//            name = {"couchbaseIndexManager"}
-//    )
-//    @Override
-//    public IndexManager indexManager() {
-//        return new IndexManager(true, true, false);
-//    }
+
+    // https://docs.spring.io/spring-data/couchbase/docs/current/reference/html/#couchbase.repository.indexing
+    //this is for dev so it is ok to auto-create indexes
+    @Override
+    public IndexManager indexManager() {
+        return new IndexManager(true, true, true);
+    }
 
     @Override
     protected String getBucketName() {

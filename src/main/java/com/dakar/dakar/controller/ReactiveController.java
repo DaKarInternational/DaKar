@@ -1,11 +1,9 @@
 package com.dakar.dakar.controller;
 
-import com.dakar.dakar.models.GraphQLParameter;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.resourceAssembler.JourneyResourceAssembler;
 import com.dakar.dakar.resources.JourneyResource;
 import com.dakar.dakar.services.interfaces.IJourneyService;
-import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import lombok.extern.slf4j.Slf4j;
@@ -16,17 +14,15 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static graphql.ExecutionInput.newExecutionInput;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
-import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
-import static reactor.core.publisher.Mono.fromFuture;
 
 @Slf4j
 @Controller
-public class FunctionalController {
+public class ReactiveController {
 
     private MediaType GraphQLMediaType = MediaType.parseMediaType("application/json");
 
@@ -41,7 +37,7 @@ public class FunctionalController {
      * classic endpoint returning a Mono<Journey>
      */
     @Bean
-    RouterFunction<?> routes() {
+    RouterFunction<ServerResponse> routes() {
         return route(RequestPredicates.GET("/test1/{destination}"), request ->
                 ok().body(journeyService.findByDestination(request.pathVariable("destination")), Journey.class));
     }
@@ -55,60 +51,13 @@ public class FunctionalController {
         return route
     }*/
 
-    /**
-     * DEMO
-     * classic save endpoint returning the new Journey in a Flux
-     */
-    @Bean
-    RouterFunction<?> routeForCouch() {
-        return route(RequestPredicates.POST("/test5"), request ->
-                ok().body(journeyService.saveJourney(Mono.just(new Journey("afghanistan", "afghanistan"))), Journey.class));
-    }
-
-    /**
-     * The GraphQL POST endpoint 
-     * 
-     * translated from there (without the GET method): 
-     * https://github.com/geowarin/graphql-webflux/blob/master/src/main/kotlin/com/geowarin/graphql/Routes.kt
-     */
-    @Bean
-    RouterFunction<?> routesGraphQl() {
-        // some working queries :
-        
-        // {allJourney {destination}}
-        
-        /*
-        mutation {
-          createJourney(input: {price: "tt", country: "tt"}) {
-            price
-            country
-          }
-        }
-         */
-        return route(RequestPredicates.POST("/graphql"), request -> {
-            if (request.headers().contentType().filter(mediaType -> mediaType.isCompatibleWith(GraphQLMediaType)).isPresent()) {
-                return request.bodyToMono(GraphQLParameter.class)
-                        .flatMap(graphQLParameter -> {
-                            ExecutionInput.Builder executionInput = newExecutionInput()
-                                    .query(graphQLParameter.getQuery())
-                                    .operationName(graphQLParameter.getOperationName())
-                                    .variables(graphQLParameter.getVariables());
-                            return fromFuture(graphQL.executeAsync(executionInput));
-                        })
-                        .flatMap(executionResult -> ok().syncBody(executionResult))
-                        .switchIfEmpty(badRequest().build());
-            } else {
-                return badRequest().build();
-            }
-        });
-    }
 
     /**
      * DEMO
      * first way to map a Journey into a Hatoas Resource
      */
     @Bean
-    RouterFunction<?> routeWithAnnotationHateoasWithAssembler() {
+    RouterFunction<ServerResponse> routeWithAnnotationHateoasWithAssembler() {
         JourneyResourceAssembler assembler = new JourneyResourceAssembler();
         return route(RequestPredicates.GET("/test2/{destination}"), request ->
                 ok().body(journeyService.findByDestination(request.pathVariable("destination"))
@@ -120,7 +69,7 @@ public class FunctionalController {
      * second way to map a Journey into a Hatoas Resource
      */
     @Bean
-    RouterFunction<?> routeWithAnnotationHateoasWithoutAssembler() {
+    RouterFunction<ServerResponse> routeWithAnnotationHateoasWithoutAssembler() {
         return route(RequestPredicates.GET("/test3/{destination}"), request ->
                 ok().contentType(MediaType.APPLICATION_JSON).body(journeyService.findByDestination(request.pathVariable("destination"))
                         .map(this::journeyToResource), Resource.class));
@@ -128,10 +77,20 @@ public class FunctionalController {
 
     /**
      * DEMO
+     * classic save endpoint returning the new Journey in a Flux
+     */
+    @Bean
+    RouterFunction<ServerResponse> routeForCouch() {
+        return route(RequestPredicates.POST("/test5"), request ->
+                ok().body(journeyService.saveJourney(Mono.just(new Journey(null, "afghanistan", "afghanistan", ""))), Journey.class));
+    }
+
+    /**
+     * DEMO
      * This way you can transform a Graphql request into a classic endpoint
      */
     @Bean
-    RouterFunction<?> routeWithAnnotationAndGraphQL() {
+    RouterFunction<ServerResponse> routeWithAnnotationAndGraphQL() {
         ExecutionResult executionResult = this.graphQL.execute("{allJourney {destination}}");
         log.debug(executionResult.getData().toString());
         return route(RequestPredicates.GET("/graphqlEndpointTransformed"), request ->
@@ -147,7 +106,7 @@ public class FunctionalController {
     private Resource<Journey> journeyToResource(Journey journey) {
 
         //TODO: code the links in order to have a proper HATEOAS Restful API
-//                Link invoiceLink = linkTo(methodOn(FunctionalController.class).routeWithAnnotationHateoas(journey.getId()+"")).withRel("invoice");
+//                Link invoiceLink = linkTo(methodOn(ReactiveController.class).routeWithAnnotationHateoas(journey.getId()+"")).withRel("invoice");
 
 //        Link allInvoiceLink = entityLinks.linkToCollectionResource(Invoice.class).withRel("all-invoice");
 //        Link invoiceLink = linkTo(methodOn(InvoiceController.class).getInvoiceByCustomerId(customer.getId())).withRel("invoice");

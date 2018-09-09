@@ -4,12 +4,14 @@ type Query {
 
 input JourneyInput {
     destination: String!
-    price: String!
+    price: String
+    owner: String
 }
 
 type Journey {
     destination: String!
-    price: String!
+    price: String
+    owner: String
 }
 
 type Mutation {
