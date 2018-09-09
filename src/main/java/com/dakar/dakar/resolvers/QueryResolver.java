@@ -2,7 +2,7 @@ package com.dakar.dakar.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.dakar.dakar.models.Journey;
-import com.dakar.dakar.services.JourneyService;
+import com.dakar.dakar.services.interfaces.IJourneyService;
 
 import java.util.List;
 
@@ -15,19 +15,30 @@ import java.util.List;
  */
 public class QueryResolver implements GraphQLQueryResolver {
 
-    // no autowire here
-    private JourneyService journeyService;
+    // no autowire possible here yet
+    private IJourneyService journeyService;
 
     //instead we use the old fashion
-    public QueryResolver(JourneyService journeyService) {
+    public QueryResolver(IJourneyService journeyService) {
         this.journeyService = journeyService;
     }
 
     /**
-     * Here we'll gonna call our proper service, where we can use Autowire as we want
-     * @return see if we can't return a Flux there ?
+     * Here we'll gonna call our proper service, where we can use Autowired as we want
+     * @return see if we can return a Flux there ?
+     * 
+     * for the Flux we will wait for this : https://github.com/graphql-java/graphql-java-tools/issues/103
      */
     public List<Journey> allJourney() {
-        return journeyService.allJourney();
+        return journeyService.allJourney().collectList().block();
+    }
+
+    /**
+     * 
+     * @param id
+     * @return
+     */
+    public Journey findJourneyById(Long id){ 
+        return journeyService.findById(id).block();
     }
 }
