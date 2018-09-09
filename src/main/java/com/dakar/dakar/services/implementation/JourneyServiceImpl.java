@@ -29,7 +29,7 @@ public class JourneyServiceImpl implements IJourneyService {
 
     /**
      * we should never do this kind of requests
-     * @return
+     * @return Flux of all Journeys
      */
     @Override
     public Flux<Journey> allJourney() {

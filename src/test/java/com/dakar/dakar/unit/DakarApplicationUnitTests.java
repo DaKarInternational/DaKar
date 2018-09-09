@@ -41,7 +41,7 @@ public class DakarApplicationUnitTests {
     @Test
     //stupid test
     public void gotAllJourney() {
-//        when(journeyRepository.findAll()).thenReturn(Flux.just(new Journey("Jack", "afghanistan")));
+        when(journeyRepository.findAll()).thenReturn(Flux.just(new Journey()));
 
         List<Journey> journeyList = journeyService.allJourney().collectList().block();
         assertNotNull(journeyList);
@@ -49,13 +49,13 @@ public class DakarApplicationUnitTests {
 
     @Test
     public void insertJourney() {
-//        Journey journey = new Journey("Alger", "100");
-//        Mono<Journey> journeyMono = Mono.just(journey);
-        
-//        when(journeyRepository.saveAll((Publisher<Journey>) any())).thenReturn(Flux.just(journey));
+        Journey journey = new Journey();
+        Mono<Journey> journeyMono = Mono.just(journey);
 
-//        Flux<Journey> journeyInserted = journeyService.saveJourney(journeyMono);
+        when(journeyRepository.saveAll((Publisher<Journey>) any())).thenReturn(Flux.just(journey));
+
+        Flux<Journey> journeyInserted = journeyService.saveJourney(journeyMono);
         //TODO : check the business rules instead of just the values
-//        assertNotNull(journeyInserted);
+        assertNotNull(journeyInserted);
     }
 }
