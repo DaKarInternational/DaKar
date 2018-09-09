@@ -11,7 +11,9 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         glue = {"com.dakar.dakar.acceptance.steps"},
-        features = {"classpath:acceptance/features"}
+        features = {"classpath:acceptance/features"},
+        tags = {"not @ignore"}
 )
-public class DakarApplicationAcceptanceTest {
+public class CucumberMain {
+    //TODO as soon as we have a delete method, then setup a cleanup method that removes unwanted data from db
 }

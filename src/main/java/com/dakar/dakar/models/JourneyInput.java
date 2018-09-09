@@ -11,5 +11,6 @@ public class JourneyInput {
 
     private String destination;
     private String price;
+    private String owner;
 
 }

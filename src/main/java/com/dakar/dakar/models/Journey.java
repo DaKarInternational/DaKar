@@ -1,24 +1,32 @@
 package com.dakar.dakar.models;
 
-import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.couchbase.client.java.repository.annotation.Field;
+import com.couchbase.client.java.repository.annotation.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode
+import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
+
+@Data
 @Document
+@NoArgsConstructor
+@AllArgsConstructor
 public class Journey {
 
+    //https://docs.spring.io/spring-data/couchbase/docs/current/reference/html/#couchbase.autokeygeneration.unique
+    @Id
+    @GeneratedValue(strategy = UNIQUE)
     private String id;
-    private String destination;
+    @Field
     private String price;
+    @NonNull
+    @Field
+    private String destination;
+    @Field
     private String owner;
 
-    //TODO : builder pattern
-    public Journey(String destination, String price) {
-        this.destination = destination;
-        this.price = price;
-    }
 }
