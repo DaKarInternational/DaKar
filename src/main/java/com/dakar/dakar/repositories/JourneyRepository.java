@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 @Repository
 @N1qlPrimaryIndexed
 @ViewIndexed(designDoc = "journey")
-public interface JourneyRepository extends ReactiveCouchbaseRepository<Journey, Long> {
+public interface JourneyRepository extends ReactiveCouchbaseRepository<Journey, String> {
 
     Flux<Journey> findAll();
 

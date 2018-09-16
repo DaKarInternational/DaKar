@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+
+import java.util.function.Consumer;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -111,6 +114,44 @@ public class JourneyControllerTest {
         
         GraphQLParameter graphQLParameter = new GraphQLParameter();
         graphQLParameter.setQuery("{allJourney {destination\nprice}}");
+        this.webClient.post().uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameter))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(SimpleExecutionResult.class)
+                .consumeWith(journey -> {
+                    Assert.assertTrue(journey.getResponseBody().getData().toString().contains("afghanistan"));
+                });
+    }
+
+    /**
+     * find a journey by id using graphql
+     */
+    @Test
+    public void findJourneyByIdUsingGraphQl() {
+
+        // Create a journey
+        Journey journeySaved = webClient.post().uri("/test5")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(Journey.class)
+                .returnResult()
+                .getResponseBody()
+                .get(0);
+
+        // Find it by id
+        String queryFindJourneyById = " query findJourney{\n" +
+                "            findJourneyById(id:\"" + journeySaved.getId() +"\"){\n" +
+                "                id\n" +
+                "                destination\n" +
+                "            }\n" +
+                "}\n";
+
+        GraphQLParameter graphQLParameter = new GraphQLParameter();
+        graphQLParameter.setQuery(queryFindJourneyById);
         this.webClient.post().uri("/graphql")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromObject(graphQLParameter))

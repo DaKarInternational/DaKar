@@ -80,4 +80,5 @@ public class ReactiveControllerTest {
                     Assert.assertEquals(journey.getResponseBody().get(0).getDestination(), "afghanistan");
                 });
     }
+
 }

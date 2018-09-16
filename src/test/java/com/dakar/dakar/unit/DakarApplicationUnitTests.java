@@ -17,8 +17,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -47,6 +49,9 @@ public class DakarApplicationUnitTests {
         assertNotNull(journeyList);
     }
 
+    /**
+     * Should insert a journey
+     */
     @Test
     public void insertJourney() {
         Journey journey = new Journey();
@@ -58,4 +63,58 @@ public class DakarApplicationUnitTests {
         //TODO : check the business rules instead of just the values
         assertNotNull(journeyInserted);
     }
+
+    /**
+     * Should find journey by id
+     */
+    @Test
+    public void findJourneyById() {
+        // Create a journey
+        Journey journey = createDefaultJourney();
+
+        // Save in database
+        saveJourney(journey);
+
+        // Find by id
+        when(journeyRepository.findById(journey.getId())).thenReturn(Mono.just(journey));
+        Journey journeySaved = journeyService.findById(journey.getId()).block();
+        assertTrue(journey.getId().equals(journeySaved.getId()));
+    }
+
+    /**
+     * Should find a journey by destination
+     */
+    @Test
+    public void findJourneyByDestination() {
+        // Create a journey
+        Journey journey = createDefaultJourney();
+
+        // Save in database
+        saveJourney(journey);
+
+        // Find by id
+        when(journeyRepository.findFirstByDestination(journey.getDestination())).thenReturn(Mono.just(journey));
+        Journey journeySaved = journeyService.findByDestination(journey.getDestination()).block();
+        assertTrue(journey.getDestination().equals(journeySaved.getDestination()));
+    }
+
+    public void saveJourney(Journey journey){
+        when(journeyRepository.saveAll((Publisher<Journey>) any())).thenReturn(Flux.just(journey));
+        Mono<Journey> journeyMono = Mono.just(journey);
+        journeyService.saveJourney(journeyMono).blockFirst();
+    }
+
+    /**
+     * Create a default journey
+     * @return journey
+     */
+    public Journey createDefaultJourney(){
+        Journey journey = new Journey();
+        String id = UUID.randomUUID().toString();
+        journey.setId(id);
+        journey.setDestination("Vietnam");
+        journey.setPrice("1200");
+        return journey;
+    }
+
 }
