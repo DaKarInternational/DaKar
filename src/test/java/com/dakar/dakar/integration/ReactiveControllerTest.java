@@ -7,8 +7,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
+
+import java.util.UUID;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -79,6 +83,94 @@ public class ReactiveControllerTest {
                 .consumeWith(journey -> {
                     Assert.assertEquals(journey.getResponseBody().get(0).getDestination(), "afghanistan");
                 });
+    }
+
+    /**
+     * create a journey
+     */
+    @Test
+    public void testSaveJourneyHandler() {
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
+
+        webClient.post().uri("/saveJourneyCouch")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Journey.class);
+    }
+
+    /**
+     * create a journey error
+     */
+    @Test
+    public void testSaveJourneyHandlerError() {
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "", "afghanistan", "o");
+
+        webClient.post().uri("/saveJourneyCouch")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus().isEqualTo(422);
+    }
+
+    /**
+     * create a journey
+     */
+    @Test
+    public void testSaveJourneyJavaxValidator() {
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
+
+        webClient.post().uri("/saveJourneyValidatorJavax")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Journey.class);
+    }
+
+    /**
+     * create a journey error
+     */
+    @Test
+    public void testSaveJourneyJavaxValidatorError() {
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "", "afghanistan", "o");
+
+        webClient.post().uri("/saveJourneyValidatorJavax")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus().isEqualTo(422);
+    }
+
+    /**
+     * create a journey
+     */
+    @Test
+    public void testSaveJourneySpringValidator() {
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
+
+        webClient.post().uri("/saveJourneyValidatorSpring")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Journey.class);
+    }
+
+    /**
+     * create a journey error
+     */
+    @Test
+    public void testSaveJourneySpringValidatorError() {
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
+
+        webClient.post().uri("/saveJourneyValidatorSpring")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Journey.class);
     }
 
 }

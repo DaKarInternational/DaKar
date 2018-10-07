@@ -4,6 +4,7 @@ import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.resourceAssembler.JourneyResourceAssembler;
 import com.dakar.dakar.resources.JourneyResource;
 import com.dakar.dakar.services.interfaces.IJourneyService;
+import com.dakar.dakar.validator.JourneyValidator;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +13,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.reactive.function.server.RequestPredicates;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.reactive.function.server.*;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Validator;
+import java.net.URI;
 import java.util.UUID;
 
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -32,7 +37,21 @@ public class ReactiveController {
     private IJourneyService journeyService;
 
     @Autowired
+    private JourneyValidator journeyValidator;
+
+    @Autowired
+    private Validator validator;
+
+    @Autowired
+    private JourneyHandler journeyHandler;
+
+    @Autowired
     private GraphQL graphQL;
+
+    @InitBinder
+    private void initBinder(WebDataBinder binder) {
+        binder.setValidator(journeyValidator);
+    }
 
     /**
      * DEMO
@@ -86,6 +105,56 @@ public class ReactiveController {
         String id = UUID.randomUUID().toString();
         return route(RequestPredicates.POST("/test5"), request ->
                 ok().body(journeyService.saveJourney(Mono.just(new Journey(id, "afghanistan", "afghanistan", ""))), Journey.class));
+    }
+
+    /**
+     * Save a journey using handler
+     * @return
+     */
+    @Bean
+    RouterFunction<ServerResponse> saveJourney() {
+        return route(RequestPredicates.POST("/saveJourneyCouch"), journeyHandler::saveJourney);
+    }
+
+
+    /**
+     * Save a journey with Javax validator
+     * @return
+     */
+    @Bean
+    RouterFunction<ServerResponse> saveJourneyValidatorJavax() {
+        return route(RequestPredicates.POST("/saveJourneyValidatorJavax"),
+                request -> request.bodyToMono(Journey.class).flatMap(
+                        body -> {
+                            if(validator.validate(body).isEmpty()){
+                                return ok().body(journeyService.saveJourney(Mono.just(body)), Journey.class);
+                            }
+                            return ServerResponse.unprocessableEntity().build();
+                        }
+                )
+
+        );
+    }
+
+    /**
+     * Save a journey with Spring validator
+     * @return
+     */
+    @Bean
+    RouterFunction<ServerResponse> saveJourneyValidatorSpring() {
+        return route(RequestPredicates.POST("/saveJourneyValidatorSpring"),
+                request -> request.bodyToMono(Journey.class).flatMap(
+                        body -> {
+                            Errors errors = new BeanPropertyBindingResult(body, "journey");
+                            this.journeyValidator.validate(body, errors);
+                            if(!errors.hasErrors()){
+                                return ok().body(journeyService.saveJourney(Mono.just(body)), Journey.class);
+                            }
+                            return ServerResponse.unprocessableEntity().build();
+                        }
+                )
+
+        );
     }
 
     /**
