@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @Slf4j
 public class DeleteAJourneySteps {
@@ -22,36 +23,25 @@ public class DeleteAJourneySteps {
     private Journey journey;
 
     @Autowired
-    private WebTestClient webClient;
-
-    @Autowired
     private IJourneyService journeyService;
 
-    @Given("^journey with the following details$")
-    public void journeyWithTheFollowingDetails(DataTable dataTable){
-//        journey = new Journey();
-//        journey.setId("toto");
-//        journey.setDestination("Vietnam");
-//        journey.setOwner("toto");
-//        journeyService.saveJourney(Mono.just(journey));
+
+    @Given("^journey with the following details:$")
+    public void journeyWithTheFollowingDetails(DataTable dataTable) {
         List<Journey> list = dataTable.transpose().asList(Journey.class);
-        list.stream().forEach(System.out::println);
+        journey = list.get(0);
+        journeyService.saveJourney(Mono.just(journey));
     }
 
-//    @When("^(.*) delete this journey (.*)$")
-//    public void usernameDeleteThisJourneyId(String username, String id) throws Throwable {
-//        // Then delete
-//        this.webClient.delete().uri("/deleteJourney/"+ id)
-//                .exchange()
-//                .expectStatus()
-//                .isEqualTo(204);
-//    }
-//
-//    @Then("^The journey (.*) is deleted with (.*) as owner$")
-//    public void journey_is_created(String journeyExpected, String owner) {
-//        assertEquals(journeyExpected, journey.getDestination());
-//        assertEquals(owner, journey.getOwner());
-//    }
+    @When("^Delete this journey$")
+    public void deleteThisJourney(){
+        // Then delete
+        journeyService.deleteJourney(journey.getId());
+    }
 
+    @Then("^The journey is deleted$")
+    public void theJourneyIsDeleted(){
+        assertNull(journeyService.findById(journey.getId()).block());
+    }
 }
 
