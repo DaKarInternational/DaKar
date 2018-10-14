@@ -20,8 +20,10 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -92,10 +94,32 @@ public class DakarApplicationUnitTests {
         // Save in database
         saveJourney(journey);
 
-        // Find by id
+        // Find by destination
         when(journeyRepository.findFirstByDestination(journey.getDestination())).thenReturn(Mono.just(journey));
         Journey journeySaved = journeyService.findByDestination(journey.getDestination()).block();
         assertTrue(journey.getDestination().equals(journeySaved.getDestination()));
+    }
+
+    /**
+     * Should delete journey by id
+     */
+    @Test
+    public void deleteJourneyById() {
+        // Create a journey
+        Journey journey = createDefaultJourney();
+
+        // Save in database
+        saveJourney(journey);
+
+        Mono<Void> journeyVoid;
+
+        // Delete by id
+        when(journeyRepository.deleteById(journey.getId())).thenReturn(Mono.just(journey).then());
+        journeyService.deleteJourney(journey.getId());
+
+        // We check that the journey was deleted
+        when(journeyRepository.findById(journey.getId())).thenReturn(null);
+        assertNull(journeyService.findById(journey.getId()));
     }
 
     public void saveJourney(Journey journey){

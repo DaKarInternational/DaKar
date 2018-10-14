@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
+
+import java.util.UUID;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -79,6 +82,27 @@ public class ReactiveControllerTest {
                 .consumeWith(journey -> {
                     Assert.assertEquals(journey.getResponseBody().get(0).getDestination(), "afghanistan");
                 });
+    }
+
+    /**
+     * Delete a journey
+     */
+    @Test
+    public void deleteJourney() {
+        // Create a journey
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
+        webClient.post().uri("/test5")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Journey.class);
+
+        // Then delete
+        this.webClient.delete().uri("/deleteJourney/"+id)
+                .exchange()
+                .expectStatus()
+                .isEqualTo(204);
     }
 
 }
