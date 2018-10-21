@@ -59,7 +59,7 @@ public class JourneyServiceImpl implements IJourneyService {
     }
 
     @Override
-    public Mono<Journey> findById(Long id) {
+    public Mono<Journey> findById(String id) {
         // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
         return this.journeyRepository.findById(id);
     }
