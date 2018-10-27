@@ -73,7 +73,7 @@ public class DakarApplication {
     }
 
     /**
-     * Permet d'utiliser le resource bundle pour récupérer des messages
+     * MessageSource bean definition so that we can fetch the i18n properties 
      * @return
      */
     @Bean
