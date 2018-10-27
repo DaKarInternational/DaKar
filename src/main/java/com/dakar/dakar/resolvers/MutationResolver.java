@@ -17,7 +17,7 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     /**
-     * Create
+     * Create a Journey
      * @param journeyInput
      * @return
      */
