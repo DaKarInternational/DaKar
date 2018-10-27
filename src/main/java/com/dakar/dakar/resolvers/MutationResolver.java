@@ -19,7 +19,7 @@ public class MutationResolver implements GraphQLMutationResolver {
     /**
      * Create a Journey
      * @param journeyInput
-     * @return
+     * @return The newly created Journey, with an ID affected
      */
     public Journey createJourney(JourneyInput journeyInput) {
         Journey journeyCreated = new Journey(null, journeyInput.getPrice(), journeyInput.getDestination(), "");
