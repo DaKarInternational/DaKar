@@ -80,4 +80,34 @@ public class ReactiveControllerTest {
                     Assert.assertEquals(journey.getResponseBody().get(0).getDestination(), "afghanistan");
                 });
     }
+
+    /**
+     * Test resource bundle i18n : english
+     */
+    @Test
+    public void testi18nEnglish() {
+        this.webClient.get().uri("/welcome/en/Damien")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(String.class)
+                .consumeWith(message -> {
+                    Assert.assertEquals(message.getResponseBody(), "Welcome Damien to DaKar!");
+                });
+    }
+
+    /**
+     * Test resource bundle i18n : french
+     */
+    @Test
+    public void testi18nFrench() {
+        this.webClient.get().uri("/welcome/fr/Karim")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(String.class)
+                .consumeWith(message -> {
+                    Assert.assertEquals(message.getResponseBody(), "Bienvenue Karim chez DaKar!");
+                });
+    }
 }
