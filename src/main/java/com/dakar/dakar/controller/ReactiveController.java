@@ -55,17 +55,15 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeWelcome() {
-        return route(RequestPredicates.GET("/welcome/{locale}/{name}"), request ->
-                {
+        return route(RequestPredicates.GET("/welcome/{locale}/{name}"), request -> {
                     Locale locale;
                     if("fr".equals(request.pathVariable("locale"))){
                         locale = Locale.FRANCE;
                     } else {
-                    else{
                         locale = null;
                     }
                     return ok().body(BodyInserters.fromObject(messageSource.getMessage("message.welcome", new Object [] {request.pathVariable("name")}, locale)));
-                });
+        });
     }
 
 /*    @Bean
