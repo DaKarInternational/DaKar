@@ -97,7 +97,6 @@ public class ReactiveController {
     RouterFunction<ServerResponse> deleteJourney() {
         return route(RequestPredicates.DELETE("/deleteJourney/{id}"), request ->
                 ServerResponse.noContent().build(journeyService.deleteJourney(request.pathVariable("id"))));
-
     }
 
     /**
