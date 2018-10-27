@@ -25,7 +25,6 @@ public class DeleteAJourneySteps {
     @Autowired
     private IJourneyService journeyService;
 
-
     @Given("^journey with the following details:$")
     public void journeyWithTheFollowingDetails(DataTable dataTable) {
         List<Journey> list = dataTable.transpose().asList(Journey.class);
