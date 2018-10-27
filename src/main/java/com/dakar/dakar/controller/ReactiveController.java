@@ -60,7 +60,7 @@ public class ReactiveController {
                     Locale locale;
                     if("fr".equals(request.pathVariable("locale"))){
                         locale = Locale.FRANCE;
-                    }
+                    } else {
                     else{
                         locale = null;
                     }
