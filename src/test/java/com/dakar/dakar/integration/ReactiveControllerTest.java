@@ -95,7 +95,8 @@ public class ReactiveControllerTest {
         webClient.post().uri("/test5")
                 .body(Mono.just(journey), Journey.class)
                 .exchange()
-                .expectStatus().isOk()
+                .expectStatus()
+                .isOk()
                 .expectBodyList(Journey.class);
 
         // Then delete
