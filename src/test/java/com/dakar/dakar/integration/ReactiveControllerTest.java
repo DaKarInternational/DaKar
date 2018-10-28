@@ -23,7 +23,8 @@ public class ReactiveControllerTest {
      */
     @Test
     public void test1ClassicFind() {
-        this.webClient.get().uri("/test1/afghanistan")
+        this.webClient.get()
+                .uri("/test1/afghanistan")
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -38,7 +39,8 @@ public class ReactiveControllerTest {
      */
     @Test
     public void test2HateoasWithAssembler() {
-        this.webClient.get().uri("/test2/afghanistan")
+        this.webClient.get()
+                .uri("/test2/afghanistan")
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -54,7 +56,8 @@ public class ReactiveControllerTest {
      */
     @Test
     public void test3HateoasWithoutAssembler() {
-        this.webClient.get().uri("/test3/afghanistan")
+        this.webClient.get()
+                .uri("/test3/afghanistan")
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -70,7 +73,8 @@ public class ReactiveControllerTest {
      */
     @Test
     public void test5ClassicSave() {
-        this.webClient.post().uri("/test5")
+        this.webClient.post()
+                .uri("/test5")
                 .exchange()
                 .expectStatus()
                 .isOk()

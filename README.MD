@@ -55,3 +55,8 @@ docker-compose up -d couchtest
 
 # make sure that the db is correctly started  
 docker-compose logs couchtest  
+
+
+Javadoc:  
+
+./mvnw javadoc:javadoc

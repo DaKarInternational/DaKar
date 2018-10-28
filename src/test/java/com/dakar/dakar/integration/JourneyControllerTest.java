@@ -50,7 +50,8 @@ public class JourneyControllerTest {
                 "}\n";
         GraphQLParameter graphQLParameter = new GraphQLParameter();
         graphQLParameter.setQuery(query);
-        this.webClient.post().uri("/graphql")
+        this.webClient.post()
+                .uri("/graphql")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromObject(graphQLParameter))
                 .exchange()
@@ -100,7 +101,8 @@ public class JourneyControllerTest {
 
         //TODO put this in a setup method
         //TODO maybe use directly the service for this kind of things ?
-        webClient.post().uri("/test5")
+        webClient.post()
+                .uri("/test5")
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -111,7 +113,8 @@ public class JourneyControllerTest {
         
         GraphQLParameter graphQLParameter = new GraphQLParameter();
         graphQLParameter.setQuery("{allJourney {destination\nprice}}");
-        this.webClient.post().uri("/graphql")
+        this.webClient.post()
+                .uri("/graphql")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromObject(graphQLParameter))
                 .exchange()
