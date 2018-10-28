@@ -20,6 +20,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
@@ -105,8 +106,9 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeForCouch() {
+        String id = UUID.randomUUID().toString();
         return route(RequestPredicates.POST("/test5"), request ->
-                ok().body(journeyService.saveJourney(Mono.just(new Journey(null, "afghanistan", "afghanistan", ""))), Journey.class));
+                ok().body(journeyService.saveJourney(Mono.just(new Journey(id, "afghanistan", "afghanistan", ""))), Journey.class));
     }
 
     /**
