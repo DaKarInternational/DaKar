@@ -172,7 +172,8 @@ public class ReactiveControllerTest {
         webClient.post().uri("/saveJourneyValidatorSpring")
                 .body(Mono.just(journey), Journey.class)
                 .exchange()
-                .expectStatus().isOk()
+                .expectStatus()
+                .isOk()
                 .expectBodyList(Journey.class);
     }
 
