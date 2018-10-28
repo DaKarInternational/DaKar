@@ -86,7 +86,8 @@ public class ReactiveControllerTest {
      */
     @Test
     public void testi18nEnglish() {
-        this.webClient.get().uri("/welcome/en/Damien")
+        this.webClient.get()
+        .uri("/welcome/en/Damien")
                 .exchange()
                 .expectStatus()
                 .isOk()
