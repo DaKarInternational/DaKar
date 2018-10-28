@@ -27,7 +27,7 @@ public class DeleteAJourneySteps {
 
     @Given("^journey with the following details:$")
     public void journeyWithTheFollowingDetails(DataTable dataTable) {
-        List<Journey> list = dataTable.transpose().asList(Journey.class);
+        List<Journey> list = dataTable.asList(Journey.class);
         journey = list.get(0);
         journeyService.saveJourney(Mono.just(journey));
     }
