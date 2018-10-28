@@ -176,5 +176,4 @@ public class ReactiveControllerTest {
                 .isOk()
                 .expectBodyList(Journey.class);
     }
-
 }
