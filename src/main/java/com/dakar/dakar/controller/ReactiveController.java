@@ -8,15 +8,18 @@ import graphql.ExecutionResult;
 import graphql.GraphQL;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import java.util.Locale;
 import java.util.UUID;
 
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -35,6 +38,9 @@ public class ReactiveController {
     @Autowired
     private GraphQL graphQL;
 
+    @Autowired
+    private MessageSource messageSource;
+
     /**
      * DEMO
      * classic endpoint returning a Mono<Journey>
@@ -43,6 +49,23 @@ public class ReactiveController {
     RouterFunction<ServerResponse> routes() {
         return route(RequestPredicates.GET("/test1/{destination}"), request ->
                 ok().body(journeyService.findByDestination(request.pathVariable("destination")), Journey.class));
+    }
+
+    /**
+     * Endpoint pour tester l'i18n
+     * @return
+     */
+    @Bean
+    RouterFunction<ServerResponse> routeWelcome() {
+        return route(RequestPredicates.GET("/welcome/{locale}/{name}"), request -> {
+                    Locale locale;
+                    if("fr".equals(request.pathVariable("locale"))){
+                        locale = Locale.FRANCE;
+                    } else {
+                        locale = null;
+                    }
+                    return ok().body(BodyInserters.fromObject(messageSource.getMessage("message.welcome", new Object [] {request.pathVariable("name")}, locale)));
+        });
     }
 
 /*    @Bean

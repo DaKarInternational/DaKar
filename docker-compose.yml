@@ -9,7 +9,7 @@ services:
     networks:
       - dakar-network
   couch:
-    image: "couchbase:latest"
+    image: "couchbase:5.1.0"
     ports:
       - "8091-8094:8091-8094"
       - "11210-11211:11210-11211"
