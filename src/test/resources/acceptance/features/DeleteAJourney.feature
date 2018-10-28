@@ -10,5 +10,4 @@ Feature: Delete a journey
       |owner        | Dakar                                 |
     When Delete this journey
     Then The journey is deleted
-    Examples:
 
