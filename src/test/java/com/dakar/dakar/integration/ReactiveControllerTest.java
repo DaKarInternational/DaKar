@@ -141,7 +141,8 @@ public class ReactiveControllerTest {
         webClient.post().uri("/saveJourneyValidatorJavax")
                 .body(Mono.just(journey), Journey.class)
                 .exchange()
-                .expectStatus().isEqualTo(422);
+                .expectStatus()
+                .isEqualTo(422);
     }
 
     /**
