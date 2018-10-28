@@ -63,7 +63,7 @@ public class GraphQlController {
                             List<ValidationError> errors = graphQLValidator.validateGraphQL(graphQLParameter);
                             ExecutionInput.Builder executionInput = newExecutionInput();
                             if(errors.size() > 0){
-                                System.out.println("Error");
+                                log.error("erorrs during the validation of the GraphQl Query" +errors);
                             }
                             else{
                                 executionInput = newExecutionInput()
