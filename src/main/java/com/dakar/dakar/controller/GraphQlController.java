@@ -4,6 +4,8 @@ import com.dakar.dakar.models.GraphQLParameter;
 import graphql.ExecutionInput;
 import graphql.GraphQL;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
@@ -27,6 +29,9 @@ public class GraphQlController {
     @Autowired
     private GraphQL graphQL;
 
+    // Logger
+    private static final Logger logger = LogManager.getLogger(GraphQlController.class);
+
     /**
      * The GraphQL POST endpoint 
      * 
@@ -35,6 +40,7 @@ public class GraphQlController {
      */
     @Bean
     RouterFunction<ServerResponse> routesGraphQl() {
+        logger.info("Graphql route");
         // some working queries :
         
         // {allJourney {destination}}

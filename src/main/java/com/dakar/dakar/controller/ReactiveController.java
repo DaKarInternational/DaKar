@@ -20,6 +20,9 @@ import reactor.core.publisher.Mono;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @Slf4j
 @Controller
 public class ReactiveController {
@@ -32,12 +35,17 @@ public class ReactiveController {
     @Autowired
     private GraphQL graphQL;
 
+    // Logger
+    private static final Logger logger = LogManager.getLogger(ReactiveController.class);
+
+
     /**
      * DEMO
      * classic endpoint returning a Mono<Journey>
      */
     @Bean
     RouterFunction<ServerResponse> routes() {
+        logger.info("Finding journey by destination");
         return route(RequestPredicates.GET("/test1/{destination}"), request ->
                 ok().body(journeyService.findByDestination(request.pathVariable("destination")), Journey.class));
     }
@@ -58,6 +66,7 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeWithAnnotationHateoasWithAssembler() {
+        logger.info("Finding journey by destination with assembler");
         JourneyResourceAssembler assembler = new JourneyResourceAssembler();
         return route(RequestPredicates.GET("/test2/{destination}"), request ->
                 ok().body(journeyService.findByDestination(request.pathVariable("destination"))
@@ -70,6 +79,7 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeWithAnnotationHateoasWithoutAssembler() {
+        logger.info("Finding journey by destination without assembler");
         return route(RequestPredicates.GET("/test3/{destination}"), request ->
                 ok().contentType(MediaType.APPLICATION_JSON).body(journeyService.findByDestination(request.pathVariable("destination"))
                         .map(this::journeyToResource), Resource.class));
@@ -81,6 +91,7 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeForCouch() {
+        logger.info("Saving a journey");
         return route(RequestPredicates.POST("/test5"), request ->
                 ok().body(journeyService.saveJourney(Mono.just(new Journey(null, "afghanistan", "afghanistan", ""))), Journey.class));
     }
@@ -91,6 +102,7 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeWithAnnotationAndGraphQL() {
+        logger.info("Finding all journey using graphql");
         ExecutionResult executionResult = this.graphQL.execute("{allJourney {destination}}");
         log.debug(executionResult.getData().toString());
         return route(RequestPredicates.GET("/graphqlEndpointTransformed"), request ->
