@@ -87,12 +87,7 @@ public class JourneyControllerTest {
                 .body(BodyInserters.fromObject(graphQLParameter))
                 .exchange()
                 .expectStatus()
-                .isOk()
-//                .expectBody(ValidationError.class)
-                .expectBody()
-                .consumeWith(journey -> {
-                    Assert.assertTrue(new String(journey.getResponseBody()).contains("FieldUndefined"));
-                });
+                .is5xxServerError();
     }
 
     /**

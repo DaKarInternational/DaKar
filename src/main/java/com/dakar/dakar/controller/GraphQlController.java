@@ -5,6 +5,7 @@ import com.dakar.dakar.validator.GraphQLValidator;
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
+import graphql.GraphQLException;
 import graphql.validation.ValidationError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import static graphql.ExecutionInput.newExecutionInput;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+import static reactor.core.publisher.Mono.error;
 import static reactor.core.publisher.Mono.fromFuture;
 
 @Slf4j
@@ -59,13 +61,16 @@ public class GraphQlController {
         return route(RequestPredicates.POST("/graphql"), request -> {
             if (request.headers().contentType().filter(mediaType -> mediaType.isCompatibleWith(GraphQLMediaType)).isPresent()) {
                 return request.bodyToMono(GraphQLParameter.class)
-                        .flatMap(graphQLParameter -> {
-                            List<ValidationError> errors = graphQLValidator.validateGraphQL(graphQLParameter);
-                            ExecutionInput.Builder executionInput = newExecutionInput();
-                            if(errors.size() > 0){
-                                log.error("erorrs during the validation of the GraphQl Query" +errors);
-                            }
-                            else{
+                        .flatMap((GraphQLParameter graphQLParameter) -> {
+                            String errorMessage = graphQLValidator.validateGraphQL(graphQLParameter);
+                            ExecutionInput.Builder executionInput;
+                            if(errorMessage != null && !"".equals(errorMessage)){
+                                try {
+                                    throw new Exception(errorMessage);
+                                } catch (Exception e){
+                                    throw new GraphQLException(e.getMessage());
+                                }
+                            } else{
                                 executionInput = newExecutionInput()
                                         .query(graphQLParameter.getQuery())
                                         .operationName(graphQLParameter.getOperationName())
