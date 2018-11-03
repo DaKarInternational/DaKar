@@ -29,9 +29,6 @@ public class GraphQlController {
     @Autowired
     private GraphQL graphQL;
 
-    // Logger
-    private static final Logger logger = LogManager.getLogger(GraphQlController.class);
-
     /**
      * The GraphQL POST endpoint 
      * 
@@ -40,7 +37,7 @@ public class GraphQlController {
      */
     @Bean
     RouterFunction<ServerResponse> routesGraphQl() {
-        logger.info("Graphql route");
+        log.info("Graphql route");
         // some working queries :
         
         // {allJourney {destination}}
