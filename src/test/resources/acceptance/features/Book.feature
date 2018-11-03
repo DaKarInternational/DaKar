@@ -17,8 +17,17 @@ Feature: Book a journey
   @ignore
   Scenario Outline: Search by destination and don't find any matches
     Given These journeys have been created
-    When <userName> search a destination: <destination>
+    When <userName> search a journey: <destination>
     Then <userName> find <numbersJourneysFound> destinations matching <destination>
     Examples:
       | userName | destination | numbersJourneysFound |
       | Dakar    | Vietnam     | 2                    |
+
+
+  Scenario Outline: Show a journey
+    Given These journeys have been created
+    When <userName> show a journey: <id>
+    Then <userName> find <numbersJourneysFound> destinations matching <destination>
+    Examples:
+      | userName | id                                   | destination | numbersJourneysFound |
+      | Dakar    | 28356590-332e-43e0-ba7c-50c6a98e41a8 | Vietnam     | 1                    |

@@ -10,7 +10,7 @@ input JourneyInput {
 }
 
 type Journey {
-    id: ID!
+    id: ID
     destination: String!
     price: String
     owner: String

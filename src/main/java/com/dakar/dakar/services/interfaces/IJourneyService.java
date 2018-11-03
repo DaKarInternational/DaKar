@@ -11,7 +11,7 @@ public interface IJourneyService {
 
     Flux<Journey> saveJourney(Mono<Journey> journey);
 
-    Mono<Journey> findById(Long id);
+    Mono<Journey> findById(String id);
         
 //    void fillDbWithDumbData();
 }
