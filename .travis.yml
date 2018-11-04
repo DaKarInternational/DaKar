@@ -15,4 +15,6 @@ before_install:
   - docker-compose down
   - docker-compose up -d couchtest
   - docker-compose logs couchtest
+  - sleep 100
+  - docker-compose logs couchtest
   
