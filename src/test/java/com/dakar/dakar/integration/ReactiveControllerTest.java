@@ -27,7 +27,8 @@ public class ReactiveControllerTest {
      */
     @Test
     public void test1ClassicFind() {
-        this.webClient.get().uri("/test1/afghanistan")
+        this.webClient.get()
+                .uri("/test1/afghanistan")
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -42,7 +43,8 @@ public class ReactiveControllerTest {
      */
     @Test
     public void test2HateoasWithAssembler() {
-        this.webClient.get().uri("/test2/afghanistan")
+        this.webClient.get()
+                .uri("/test2/afghanistan")
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -58,7 +60,8 @@ public class ReactiveControllerTest {
      */
     @Test
     public void test3HateoasWithoutAssembler() {
-        this.webClient.get().uri("/test3/afghanistan")
+        this.webClient.get()
+                .uri("/test3/afghanistan")
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -74,7 +77,8 @@ public class ReactiveControllerTest {
      */
     @Test
     public void test5ClassicSave() {
-        this.webClient.post().uri("/test5")
+        this.webClient.post()
+                .uri("/test5")
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -175,5 +179,58 @@ public class ReactiveControllerTest {
                 .expectStatus()
                 .isOk()
                 .expectBodyList(Journey.class);
+    }
+  
+    /**
+     * Delete a journey
+     */
+    @Test
+    public void deleteJourney() {
+        // Create a journey
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
+        webClient.post().uri("/test5")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(Journey.class);
+
+        // Then delete
+        this.webClient.delete().uri("/deleteJourney/"+id)
+                .exchange()
+                .expectStatus()
+                .isEqualTo(204);
+    }
+  
+    /**
+     * Test resource bundle i18n : english
+     */
+    @Test
+    public void testi18nEnglish() {
+        this.webClient.get()
+        .uri("/welcome/en/Damien")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(String.class)
+                .consumeWith(message -> {
+                    Assert.assertEquals(message.getResponseBody(), "Welcome Damien to DaKar!");
+                });
+    }
+
+    /**
+     * Test resource bundle i18n : french
+     */
+    @Test
+    public void testi18nFrench() {
+        this.webClient.get().uri("/welcome/fr/Karim")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(String.class)
+                .consumeWith(message -> {
+                    Assert.assertEquals(message.getResponseBody(), "Bienvenue Karim chez DaKar!");
+                });
     }
 }

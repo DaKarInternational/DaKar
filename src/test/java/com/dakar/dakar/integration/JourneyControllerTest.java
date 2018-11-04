@@ -53,7 +53,8 @@ public class JourneyControllerTest {
                 "}\n";
         GraphQLParameter graphQLParameter = new GraphQLParameter();
         graphQLParameter.setQuery(query);
-        this.webClient.post().uri("/graphql")
+        this.webClient.post()
+                .uri("/graphql")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromObject(graphQLParameter))
                 .exchange()
@@ -98,7 +99,8 @@ public class JourneyControllerTest {
 
         //TODO put this in a setup method
         //TODO maybe use directly the service for this kind of things ?
-        webClient.post().uri("/test5")
+        webClient.post()
+                .uri("/test5")
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -109,7 +111,8 @@ public class JourneyControllerTest {
         
         GraphQLParameter graphQLParameter = new GraphQLParameter();
         graphQLParameter.setQuery("{allJourney {destination\nprice}}");
-        this.webClient.post().uri("/graphql")
+        this.webClient.post()
+                .uri("/graphql")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromObject(graphQLParameter))
                 .exchange()
@@ -156,6 +159,57 @@ public class JourneyControllerTest {
                 .expectBody(SimpleExecutionResult.class)
                 .consumeWith(journey -> {
                     Assert.assertTrue(journey.getResponseBody().getData().toString().contains("afghanistan"));
+                });
+    }
+
+    /**
+     * delete a journey with GraphQL
+     */
+    @Test
+    public void graphqlDelete() {
+        // Create a journey to delete
+        Journey journeySaved = webClient.post().uri("/test5")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(Journey.class)
+                .returnResult()
+                .getResponseBody()
+                .get(0);
+
+        // Delete a journey
+        String queryDelete = " mutation deleteJourney {\n" +
+                "            deleteJourney(id:\"" + journeySaved.getId() +"\")\n" +
+                "}\n";
+        GraphQLParameter graphQLParameterDelete = new GraphQLParameter();
+        graphQLParameterDelete.setQuery(queryDelete);
+        this.webClient.post().uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameterDelete))
+                .exchange()
+                .expectStatus()
+                .isEqualTo(200);
+
+        // Find it by id to check that it has been removed
+        String queryFindJourneyById = " query findJourney{\n" +
+                "            findJourneyById(id:\"" + journeySaved.getId() +"\"){\n" +
+                "                id\n" +
+                "                destination\n" +
+                "            }\n" +
+                "}\n";
+
+        GraphQLParameter graphQLParameterFind = new GraphQLParameter();
+        graphQLParameterFind.setQuery(queryFindJourneyById);
+        this.webClient.post().uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameterFind))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(SimpleExecutionResult.class)
+                .consumeWith(journey -> {
+                    // Assert.assertFalse(journey.getResponseBody().isDataPresent());
+                    Assert.assertTrue(journey.getResponseBody().getData().toString().contains("findJourneyById=null"));
                 });
     }
 }

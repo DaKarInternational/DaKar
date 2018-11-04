@@ -10,7 +10,9 @@ import graphql.schema.GraphQLSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -20,7 +22,10 @@ import org.springframework.web.cors.reactive.CorsUtils;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import reactor.core.publisher.Mono;
+
+import java.util.Locale;
 
 @SpringBootApplication
 public class DakarApplication {
@@ -66,5 +71,20 @@ public class DakarApplication {
             return chain.filter(ctx);
         };
     }
+
+    /**
+     * MessageSource bean definition so that we can fetch the i18n properties 
+     * @return
+     */
+    @Bean
+    public MessageSource messageSource() {
+        final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasenames("classpath:/messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setCacheSeconds(5);
+        Locale.setDefault(Locale.ENGLISH);
+        return messageSource;
+    }
+
 
 }
