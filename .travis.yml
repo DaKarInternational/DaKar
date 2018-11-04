@@ -6,7 +6,12 @@ services:
   - docker
   
 before_install:
+  - docker-compose ps  
+  - docker ps --all
   - docker build -f Dockerfile.testdb . -t testdb
+  - docker images
+  - sudo netstat -pna | grep 11211
+  - docker ps
   - docker-compose up -d couchtest
   - docker-compose logs couchtest
   
