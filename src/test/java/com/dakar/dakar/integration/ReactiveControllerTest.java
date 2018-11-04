@@ -2,7 +2,9 @@ package com.dakar.dakar.integration;
 
 import com.dakar.dakar.models.Journey;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +23,36 @@ public class ReactiveControllerTest {
     @Autowired
     private WebTestClient webClient;
 
+    private String JOURNEY_ID;
+
+    /**
+     * Step before each test
+     */
+    @Before
+    public void beforeEach(){
+        JOURNEY_ID = UUID.randomUUID().toString();
+    }
+
+    /**
+     * Step after each test
+     */
+    @After
+    public void afterEach(){
+        this.webClient.delete().uri("/deleteJourney/" + JOURNEY_ID)
+                .exchange()
+                .expectStatus()
+                .isEqualTo(204);
+    }
+
     /**
      * find a journey by destination using classic method
      */
     @Test
     public void test1ClassicFind() {
+        // Create a journey
+        createDefaultJourney(JOURNEY_ID, "afghanistan", "1000", "DaKar");
+
+        // Then find it
         this.webClient.get()
                 .uri("/test1/afghanistan")
                 .exchange()
@@ -42,6 +69,10 @@ public class ReactiveControllerTest {
      */
     @Test
     public void test2HateoasWithAssembler() {
+        // Create a journey
+        createDefaultJourney(JOURNEY_ID, "afghanistan", "1000", "DaKar");
+
+        // Then find it
         this.webClient.get()
                 .uri("/test2/afghanistan")
                 .exchange()
@@ -59,6 +90,10 @@ public class ReactiveControllerTest {
      */
     @Test
     public void test3HateoasWithoutAssembler() {
+        // Create a journey
+        createDefaultJourney(JOURNEY_ID, "afghanistan", "1000", "DaKar");
+
+        // Then find it
         this.webClient.get()
                 .uri("/test3/afghanistan")
                 .exchange()
@@ -94,17 +129,9 @@ public class ReactiveControllerTest {
     @Test
     public void deleteJourney() {
         // Create a journey
-        String id = UUID.randomUUID().toString();
-        Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
-        webClient.post().uri("/test5")
-                .body(Mono.just(journey), Journey.class)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBodyList(Journey.class);
-
+        createDefaultJourney(JOURNEY_ID, "afghanistan", "1000", "DaKar");
         // Then delete
-        this.webClient.delete().uri("/deleteJourney/"+id)
+        this.webClient.delete().uri("/deleteJourney/" + JOURNEY_ID)
                 .exchange()
                 .expectStatus()
                 .isEqualTo(204);
@@ -140,4 +167,25 @@ public class ReactiveControllerTest {
                     Assert.assertEquals(message.getResponseBody(), "Bienvenue Karim chez DaKar!");
                 });
     }
+
+    /**
+     * Create a journey for testing
+     * @param id
+     * @param destination
+     * @param price
+     * @param owner
+     */
+    public void createDefaultJourney(String id, String destination, String price, String owner){
+        // Create a journey
+        Journey journey = new Journey(id, price, destination, owner);
+        webClient.post().uri("/test5")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(Journey.class);
+    }
+
+
+
 }
