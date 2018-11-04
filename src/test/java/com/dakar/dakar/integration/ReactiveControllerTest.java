@@ -179,6 +179,31 @@ public class ReactiveControllerTest {
                 .expectStatus()
                 .isOk()
                 .expectBodyList(Journey.class);
+    }
+  
+    /**
+     * Delete a journey
+     */
+    @Test
+    public void deleteJourney() {
+        // Create a journey
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
+        webClient.post().uri("/test5")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(Journey.class);
+
+        // Then delete
+        this.webClient.delete().uri("/deleteJourney/"+id)
+                .exchange()
+                .expectStatus()
+                .isEqualTo(204);
+    }
+  
+    /**
      * Test resource bundle i18n : english
      */
     @Test

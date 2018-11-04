@@ -18,6 +18,7 @@ type Journey {
 
 type Mutation {
   createJourney(input: JourneyInput): Journey
+  deleteJourney(id: ID): ID
 }
 
 schema{
