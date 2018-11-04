@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
+import static org.springframework.web.reactive.function.server.ServerResponse.noContent;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 @Slf4j
@@ -109,6 +110,16 @@ public class ReactiveController {
         String id = UUID.randomUUID().toString();
         return route(RequestPredicates.POST("/test5"), request ->
                 ok().body(journeyService.saveJourney(Mono.just(new Journey(id, "afghanistan", "afghanistan", ""))), Journey.class));
+    }
+
+    /**
+     * DEMO
+     * classic delete endpoint
+     */
+    @Bean
+    RouterFunction<ServerResponse> deleteJourney() {
+        return route(RequestPredicates.DELETE("/deleteJourney/{id}"), request ->
+                ServerResponse.noContent().build(journeyService.deleteJourney(request.pathVariable("id"))));
     }
 
     /**

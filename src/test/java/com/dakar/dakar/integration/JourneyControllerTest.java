@@ -166,4 +166,55 @@ public class JourneyControllerTest {
                     Assert.assertTrue(journey.getResponseBody().getData().toString().contains("afghanistan"));
                 });
     }
+
+    /**
+     * delete a journey with GraphQL
+     */
+    @Test
+    public void graphqlDelete() {
+        // Create a journey to delete
+        Journey journeySaved = webClient.post().uri("/test5")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(Journey.class)
+                .returnResult()
+                .getResponseBody()
+                .get(0);
+
+        // Delete a journey
+        String queryDelete = " mutation deleteJourney {\n" +
+                "            deleteJourney(id:\"" + journeySaved.getId() +"\")\n" +
+                "}\n";
+        GraphQLParameter graphQLParameterDelete = new GraphQLParameter();
+        graphQLParameterDelete.setQuery(queryDelete);
+        this.webClient.post().uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameterDelete))
+                .exchange()
+                .expectStatus()
+                .isEqualTo(200);
+
+        // Find it by id to check that it has been removed
+        String queryFindJourneyById = " query findJourney{\n" +
+                "            findJourneyById(id:\"" + journeySaved.getId() +"\"){\n" +
+                "                id\n" +
+                "                destination\n" +
+                "            }\n" +
+                "}\n";
+
+        GraphQLParameter graphQLParameterFind = new GraphQLParameter();
+        graphQLParameterFind.setQuery(queryFindJourneyById);
+        this.webClient.post().uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameterFind))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(SimpleExecutionResult.class)
+                .consumeWith(journey -> {
+                    // Assert.assertFalse(journey.getResponseBody().isDataPresent());
+                    Assert.assertTrue(journey.getResponseBody().getData().toString().contains("findJourneyById=null"));
+                });
+    }
 }

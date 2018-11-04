@@ -16,10 +16,23 @@ public class MutationResolver implements GraphQLMutationResolver {
         this.journeyService = journeyService;
     }
 
+    /**
+     * Create a Journey
+     * @param journeyInput
+     * @return The newly created Journey, with an ID affected
+     */
     public Journey createJourney(JourneyInput journeyInput) {
         Journey journeyCreated = new Journey(null, journeyInput.getPrice(), journeyInput.getDestination(), "");
         Mono<Journey> journeyMono = Mono.just(journeyCreated);
         return journeyService.saveJourney(journeyMono).blockFirst();
+    }
+
+    /**
+     * Delete a journey
+     * @param id
+     */
+    public void deleteJourney(String id){
+        this.journeyService.deleteJourney(id).block();
     }
 
 }

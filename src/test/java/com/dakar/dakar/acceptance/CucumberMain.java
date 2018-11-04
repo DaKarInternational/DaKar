@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        glue = {"com.dakar.dakar.acceptance.steps"},
+        glue = {"com.dakar.dakar.acceptance.steps", "com.dakar.dakar.acceptance.config"},
         features = {"classpath:acceptance/features"},
         tags = {"not @ignore"}
 )
