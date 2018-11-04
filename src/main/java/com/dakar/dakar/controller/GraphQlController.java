@@ -3,11 +3,10 @@ package com.dakar.dakar.controller;
 import com.dakar.dakar.models.GraphQLParameter;
 import com.dakar.dakar.validator.GraphQLValidator;
 import graphql.ExecutionInput;
-import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.GraphQLException;
-import graphql.validation.ValidationError;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
@@ -16,14 +15,10 @@ import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 import static graphql.ExecutionInput.newExecutionInput;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.badRequest;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
-import static reactor.core.publisher.Mono.error;
 import static reactor.core.publisher.Mono.fromFuture;
 
 @Slf4j
@@ -64,7 +59,7 @@ public class GraphQlController {
                         .flatMap((GraphQLParameter graphQLParameter) -> {
                             String errorMessage = graphQLValidator.validateGraphQL(graphQLParameter);
                             ExecutionInput.Builder executionInput;
-                            if(errorMessage != null && !"".equals(errorMessage)){
+                            if(StringUtils.isNotBlank(errorMessage)){
                                 try {
                                     throw new Exception(errorMessage);
                                 } catch (Exception e){
