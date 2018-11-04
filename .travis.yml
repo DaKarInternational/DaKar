@@ -12,6 +12,7 @@ before_install:
   - docker images
   - sudo netstat -pna | grep 11211
   - docker ps
+  - docker-compose down
   - docker-compose up -d couchtest
   - docker-compose logs couchtest
   

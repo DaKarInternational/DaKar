@@ -34,17 +34,6 @@ public class ReactiveControllerTest {
     }
 
     /**
-     * Step after each test
-     */
-    @After
-    public void afterEach(){
-        this.webClient.delete().uri("/deleteJourney/" + JOURNEY_ID)
-                .exchange()
-                .expectStatus()
-                .isEqualTo(204);
-    }
-
-    /**
      * find a journey by destination using classic method
      */
     @Test
