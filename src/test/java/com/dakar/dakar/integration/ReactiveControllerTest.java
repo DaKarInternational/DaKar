@@ -204,7 +204,7 @@ public class ReactiveControllerTest {
     }
   
     /**
-     * Test resource bundle i18n : english
+     * Test resource bundle i18n : English
      */
     @Test
     public void testi18nEnglish() {
@@ -220,7 +220,7 @@ public class ReactiveControllerTest {
     }
 
     /**
-     * Test resource bundle i18n : french
+     * Test resource bundle i18n : French
      */
     @Test
     public void testi18nFrench() {
