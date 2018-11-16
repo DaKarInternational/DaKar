@@ -6,6 +6,8 @@ import graphql.GraphQL;
 import graphql.GraphQLException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
@@ -36,7 +38,8 @@ public class GraphQlController {
      * https://github.com/geowarin/graphql-webflux/blob/master/src/main/kotlin/com/geowarin/graphql/Routes.kt
      */
     @Bean
-    RouterFunction<ServerResponse> routesGraphQl() throws Exception {
+    RouterFunction<ServerResponse> routesGraphQl() {
+        log.info("Graphql route");
         // some working queries :
 
         // {allJourney {destination}}
