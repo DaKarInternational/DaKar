@@ -1,7 +1,6 @@
 package com.dakar.dakar.controller;
 
 import com.dakar.dakar.models.GraphQLParameter;
-import com.dakar.dakar.validator.GraphQLValidator;
 import graphql.ExecutionInput;
 import graphql.GraphQL;
 import graphql.GraphQLException;
@@ -30,19 +29,16 @@ public class GraphQlController {
     @Autowired
     private GraphQL graphQL;
 
-    @Autowired
-    private GraphQLValidator graphQLValidator;
-
     /**
-     * The GraphQL POST endpoint 
-     * 
-     * translated from there (without the GET method): 
+     * The GraphQL POST endpoint
+     * <p>
+     * translated from there (without the GET method):
      * https://github.com/geowarin/graphql-webflux/blob/master/src/main/kotlin/com/geowarin/graphql/Routes.kt
      */
     @Bean
     RouterFunction<ServerResponse> routesGraphQl() throws Exception {
         // some working queries :
-        
+
         // {allJourney {destination}}
         
         /*
@@ -57,23 +53,23 @@ public class GraphQlController {
             if (request.headers().contentType().filter(mediaType -> mediaType.isCompatibleWith(GraphQLMediaType)).isPresent()) {
                 return request.bodyToMono(GraphQLParameter.class)
                         .flatMap((GraphQLParameter graphQLParameter) -> {
-                            String errorMessage = graphQLValidator.validateGraphQL(graphQLParameter);
                             ExecutionInput.Builder executionInput;
-                            if(StringUtils.isNotBlank(errorMessage)){
-                                try {
-                                    throw new Exception(errorMessage);
-                                } catch (Exception e){
-                                    throw new GraphQLException(e.getMessage());
-                                }
-                            } else{
-                                executionInput = newExecutionInput()
-                                        .query(graphQLParameter.getQuery())
-                                        .operationName(graphQLParameter.getOperationName())
-                                        .variables(graphQLParameter.getVariables());
-                            }
+                            executionInput = newExecutionInput()
+                                    .query(graphQLParameter.getQuery())
+                                    .operationName(graphQLParameter.getOperationName())
+                                    .variables(graphQLParameter.getVariables());
                             return fromFuture(graphQL.executeAsync(executionInput));
                         })
-                        .flatMap(executionResult -> ok().syncBody(executionResult))
+                        .flatMap(executionResult -> {
+                            if(executionResult.getErrors().size() > 0){
+                                String errorMessage = executionResult.getErrors()
+                                        .stream()
+                                        .map(error -> error.getMessage()).reduce("", (a,b) -> a + b);
+                                return ServerResponse.unprocessableEntity().syncBody(errorMessage);
+                            }
+                            return ok().syncBody(executionResult);
+                        })
+                        .onErrorResume(error -> badRequest().build())
                         .switchIfEmpty(badRequest().build());
             } else {
                 return badRequest().build();

@@ -3,6 +3,8 @@ package com.dakar.dakar.integration;
 import com.dakar.dakar.models.GraphQLParameter;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.models.SimpleExecutionResult;
+import graphql.GraphQLError;
+import graphql.validation.ValidationError;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
@@ -73,6 +75,7 @@ public class JourneyControllerTest {
     public void graphqlErrorOnSave() {
         //TODO: Maybe fetch the query from a propertie file of something ?
         // https://stackoverflow.com/questions/878573/java-multiline-string
+        String expectedResponse = "Validation error of type FieldUndefined: Field 'fieldThatDoesNotExist' in type 'Journey' is undefined";
         String query = " mutation {\n" +
                 "            createJourney(input:{ price:\"ll\" destination:\"tt\" }){\n" +
                 "                price\n" +
@@ -88,7 +91,11 @@ public class JourneyControllerTest {
                 .body(BodyInserters.fromObject(graphQLParameter))
                 .exchange()
                 .expectStatus()
-                .is5xxServerError();
+                .is4xxClientError()
+                .expectBody()
+                .consumeWith(response -> {
+                    Assert.assertTrue(new String(response.getResponseBody()).equals(expectedResponse));
+                });
     }
 
     /**
