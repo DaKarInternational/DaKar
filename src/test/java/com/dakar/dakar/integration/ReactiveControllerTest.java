@@ -100,15 +100,17 @@ public class ReactiveControllerTest {
      */
     @Test
     public void test5ClassicSave() {
+        Journey journey = new Journey(JOURNEY_ID, "1000", "afghanistan", "DaKar");
         this.webClient.post()
                 .uri("/test5")
+                .body(Mono.just(journey), Journey.class)
                 .exchange()
                 .expectStatus()
                 .isOk()
                 .expectBodyList(Journey.class)
 //                .isEqualTo(new Journey("afghanistan", "345"));
-                .consumeWith(journey -> {
-                    Assert.assertEquals(journey.getResponseBody().get(0).getDestination(), "afghanistan");
+                .consumeWith(result -> {
+                    Assert.assertEquals(result.getResponseBody().get(0).getDestination(), "afghanistan");
                 });
     }
 
