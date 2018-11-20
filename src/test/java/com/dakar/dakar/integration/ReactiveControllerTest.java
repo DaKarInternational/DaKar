@@ -18,20 +18,7 @@ import java.util.UUID;
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ReactiveControllerTest {
-
-    @Autowired
-    private WebTestClient webClient;
-
-    private String JOURNEY_ID;
-
-    /**
-     * Step before each test
-     */
-    @Before
-    public void beforeEach(){
-        JOURNEY_ID = UUID.randomUUID().toString();
-    }
+public class ReactiveControllerTest extends AbstractControllerTest{
 
     /**
      * find a journey by destination using classic method
@@ -158,25 +145,5 @@ public class ReactiveControllerTest {
                     Assert.assertEquals(message.getResponseBody(), "Bienvenue Karim chez DaKar!");
                 });
     }
-
-    /**
-     * Create a journey for testing
-     * @param id
-     * @param destination
-     * @param price
-     * @param owner
-     */
-    public void createDefaultJourney(String id, String destination, String price, String owner){
-        // Create a journey
-        Journey journey = new Journey(id, price, destination, owner);
-        webClient.post().uri("/test5")
-                .body(Mono.just(journey), Journey.class)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBodyList(Journey.class);
-    }
-
-
 
 }
