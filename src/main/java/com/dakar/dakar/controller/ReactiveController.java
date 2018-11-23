@@ -107,8 +107,11 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeForCouch() {
-        return route(RequestPredicates.POST("/test5"), request ->
-                ok().body(journeyService.saveJourney(request.bodyToMono(Journey.class)), Journey.class));
+        System.out.println("MIAOU");
+        return route(RequestPredicates.POST("/test5"), request -> {
+            Mono<Journey> journey = request.bodyToMono(Journey.class);
+            return ok().body(journeyService.saveJourney(journey), Journey.class);
+        });
     }
 
     /**

@@ -55,7 +55,10 @@ public class JourneyServiceImpl implements IJourneyService {
 
     @Override
     public Flux<Journey> saveJourney(Mono<Journey> journey) {
-        return journeyRepository.saveAll(journey);
+        System.out.println("RONDOUDOU");
+        Flux<Journey> flux = journeyRepository.saveAll(journey);
+        System.out.println("SACHA");
+        return flux;
     }
 
     @Override
