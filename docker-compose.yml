@@ -4,7 +4,7 @@ services:
     image: "testdb:latest"
     ports:
       - "8091-8094:8091-8094"
-      - "11210-11210:11210-11210"
+      - "11210:11210"
     container_name: "couch-test"
     networks:
       - dakar-network
