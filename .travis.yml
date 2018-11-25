@@ -14,7 +14,7 @@ before_install:
   - sudo netstat -pna | grep 11211
   - docker ps
   - docker-compose down
-  - docker-compose up couchtest
+  - docker-compose up -d couchtest
   - docker-compose logs couchtest
   - sleep 100
   - docker-compose logs couchtest
