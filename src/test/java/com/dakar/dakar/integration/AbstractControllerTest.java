@@ -13,8 +13,6 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 @Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AbstractControllerTest {
 
     @Autowired
