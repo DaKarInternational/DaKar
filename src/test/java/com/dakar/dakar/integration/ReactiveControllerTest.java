@@ -21,9 +21,6 @@ import java.util.UUID;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ReactiveControllerTest extends AbstractControllerTest{
 
-    @Autowired
-    private WebTestClient webClient;
-
     /**
      * find a journey by destination using classic method
      */
