@@ -6,6 +6,7 @@ services:
   - docker
   
 before_install:
+  - sudo netstat -pna | grep 11211
   - docker-compose ps  
   - docker ps --all
   - docker build -f Dockerfile.testdb . -t testdb
