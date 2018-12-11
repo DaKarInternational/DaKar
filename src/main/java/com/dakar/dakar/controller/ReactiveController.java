@@ -4,7 +4,6 @@ import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.resourceAssembler.JourneyResourceAssembler;
 import com.dakar.dakar.resources.JourneyResource;
 import com.dakar.dakar.services.interfaces.IJourneyService;
-import com.dakar.dakar.validator.JourneyValidator;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import lombok.extern.slf4j.Slf4j;
@@ -16,24 +15,22 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.reactive.function.server.*;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Validator;
-import java.net.URI;
+
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Mono;
 
 import java.util.Locale;
 import java.util.UUID;
 
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
-import static org.springframework.web.reactive.function.server.ServerResponse.noContent;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 import org.apache.logging.log4j.LogManager;
@@ -49,9 +46,6 @@ public class ReactiveController {
     private IJourneyService journeyService;
 
     @Autowired
-    private JourneyValidator journeyValidator;
-
-    @Autowired
     private Validator validator;
 
     @Autowired
@@ -59,11 +53,6 @@ public class ReactiveController {
 
     @Autowired
     private GraphQL graphQL;
-
-    @InitBinder
-    private void initBinder(WebDataBinder binder) {
-        binder.setValidator(journeyValidator);
-    }
   
     @Autowired
     private MessageSource messageSource;
@@ -182,7 +171,7 @@ public class ReactiveController {
                 request -> request.bodyToMono(Journey.class).flatMap(
                         body -> {
                             Errors errors = new BeanPropertyBindingResult(body, "journey");
-                            this.journeyValidator.validate(body, errors);
+                            validate(body, errors);
                             if(!errors.hasErrors()){
                                 return ok().body(journeyService.saveJourney(Mono.just(body)), Journey.class);
                             }
@@ -233,5 +222,9 @@ public class ReactiveController {
         Resource<Journey> journeyResource = new Resource<>(journey);
         return journeyResource;
 
+    }
+
+    public void validate(Object obj, Errors e) {
+        ValidationUtils.rejectIfEmpty(e, "destination", "La destination doit être renseignée");
     }
 }
