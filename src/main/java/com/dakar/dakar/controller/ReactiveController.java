@@ -26,6 +26,9 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 import static org.springframework.web.reactive.function.server.ServerResponse.noContent;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @Slf4j
 @Controller
 public class ReactiveController {
@@ -47,6 +50,7 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routes() {
+        log.info("Finding journey by destination");
         return route(RequestPredicates.GET("/test1/{destination}"), request ->
                 ok().body(journeyService.findByDestination(request.pathVariable("destination")), Journey.class));
     }
@@ -84,6 +88,7 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeWithAnnotationHateoasWithAssembler() {
+        log.info("Finding journey by destination with assembler");
         JourneyResourceAssembler assembler = new JourneyResourceAssembler();
         return route(RequestPredicates.GET("/test2/{destination}"), request ->
                 ok().body(journeyService.findByDestination(request.pathVariable("destination"))
@@ -96,6 +101,7 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeWithAnnotationHateoasWithoutAssembler() {
+        log.info("Finding journey by destination without assembler");
         return route(RequestPredicates.GET("/test3/{destination}"), request ->
                 ok().contentType(MediaType.APPLICATION_JSON).body(journeyService.findByDestination(request.pathVariable("destination"))
                         .map(this::journeyToResource), Resource.class));
@@ -129,6 +135,7 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeWithAnnotationAndGraphQL() {
+        log.info("Finding all journey using graphql");
         ExecutionResult executionResult = this.graphQL.execute("{allJourney {destination}}");
         log.debug(executionResult.getData().toString());
         return route(RequestPredicates.GET("/graphqlEndpointTransformed"), request ->
