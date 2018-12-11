@@ -8,4 +8,4 @@ services:
 before_install:
   - docker build -f Dockerfile.testdb . -t testdb
   - docker-compose up -d couchtest
-  
+  - sleep 100
