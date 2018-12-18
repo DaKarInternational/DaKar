@@ -49,9 +49,6 @@ public class ReactiveController {
     private Validator validator;
 
     @Autowired
-    private JourneyHandler journeyHandler;
-
-    @Autowired
     private GraphQL graphQL;
   
     @Autowired
@@ -130,15 +127,6 @@ public class ReactiveController {
         String id = UUID.randomUUID().toString();
         return route(RequestPredicates.POST("/test5"), request ->
                 ok().body(journeyService.saveJourney(Mono.just(new Journey(id, "afghanistan", "afghanistan", ""))), Journey.class));
-    }
-
-    /**
-     * Save a journey using handler
-     * @return
-     */
-    @Bean
-    RouterFunction<ServerResponse> saveJourney() {
-        return route(RequestPredicates.POST("/saveJourneyCouch"), journeyHandler::saveJourney);
     }
 
 

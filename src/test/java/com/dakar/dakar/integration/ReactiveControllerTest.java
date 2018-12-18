@@ -93,35 +93,6 @@ public class ReactiveControllerTest {
      * create a journey
      */
     @Test
-    public void testSaveJourneyHandler() {
-        String id = UUID.randomUUID().toString();
-        Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
-
-        webClient.post().uri("/saveJourneyCouch")
-                .body(Mono.just(journey), Journey.class)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBodyList(Journey.class);
-    }
-
-    /**
-     * create a journey error
-     */
-    @Test
-    public void testSaveJourneyHandlerError() {
-        String id = UUID.randomUUID().toString();
-        Journey journey = new Journey(id, "", "afghanistan", "o");
-
-        webClient.post().uri("/saveJourneyCouch")
-                .body(Mono.just(journey), Journey.class)
-                .exchange()
-                .expectStatus().isEqualTo(422);
-    }
-
-    /**
-     * create a journey
-     */
-    @Test
     public void testSaveJourneyJavaxValidator() {
         String id = UUID.randomUUID().toString();
         Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
@@ -135,7 +106,7 @@ public class ReactiveControllerTest {
     }
 
     /**
-     * create a journey error
+     * create a journey error because no price
      */
     @Test
     public void testSaveJourneyJavaxValidatorError() {
@@ -166,19 +137,18 @@ public class ReactiveControllerTest {
     }
 
     /**
-     * create a journey error
+     * create a journey error cause destination is empty
      */
     @Test
     public void testSaveJourneySpringValidatorError() {
         String id = UUID.randomUUID().toString();
-        Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
+        Journey journey = new Journey(id, "afghanistan", "", "o");
 
         webClient.post().uri("/saveJourneyValidatorSpring")
                 .body(Mono.just(journey), Journey.class)
                 .exchange()
                 .expectStatus()
-                .isOk()
-                .expectBodyList(Journey.class);
+                .isEqualTo(422);
     }
   
     /**
