@@ -113,10 +113,10 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeForCouch() {
-        log.info("Saving a journey");
-        String id = UUID.randomUUID().toString();
-        return route(RequestPredicates.POST("/test5"), request ->
-                ok().body(journeyService.saveJourney(Mono.just(new Journey(id, "afghanistan", "afghanistan", ""))), Journey.class));
+        return route(RequestPredicates.POST("/test5"), request -> {
+            Mono<Journey> journey = request.bodyToMono(Journey.class);
+            return ok().body(journeyService.saveJourney(journey), Journey.class);
+        });
     }
 
     /**

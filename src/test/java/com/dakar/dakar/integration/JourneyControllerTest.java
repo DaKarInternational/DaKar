@@ -14,31 +14,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
 
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class JourneyControllerTest {
-
-    @Autowired
-    private WebTestClient webClient;
-
-    /**
-     * create a journey with a classic endpoint
-     */
-    @Test
-    public void test5ClassicSave() {
-        webClient.post().uri("/test5")
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBodyList(Journey.class)
-                .consumeWith(journey -> {
-                    Assert.assertEquals(journey.getResponseBody().get(0).getDestination(), "afghanistan");
-                });
-    }
+public class JourneyControllerTest extends AbstractControllerTest{
 
     /**
      * create a journey with GraphQL
@@ -101,18 +84,18 @@ public class JourneyControllerTest {
      */
     @Test
     public void findAJourneyByDestinationUsingGraphQl() {
+        // Create a journey
+        Journey journey = new Journey(JOURNEY_ID, "1000", "afghanistan", "DaKar");
 
         //TODO put this in a setup method
         //TODO maybe use directly the service for this kind of things ?
         webClient.post()
                 .uri("/test5")
+                .body(Mono.just(journey), Journey.class)
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBodyList(Journey.class)
-                .consumeWith(journey -> {
-                    Assert.assertEquals(journey.getResponseBody().get(0).getDestination(), "afghanistan");
-                });
+                .expectBodyList(Journey.class);
         
         GraphQLParameter graphQLParameter = new GraphQLParameter();
         graphQLParameter.setQuery("{allJourney {destination\nprice}}");
@@ -124,8 +107,8 @@ public class JourneyControllerTest {
                 .expectStatus()
                 .isOk()
                 .expectBody(SimpleExecutionResult.class)
-                .consumeWith(journey -> {
-                    Assert.assertTrue(journey.getResponseBody().getData().toString().contains("afghanistan"));
+                .consumeWith(result -> {
+                    Assert.assertTrue(result.getResponseBody().getData().toString().contains("afghanistan"));
                 });
     }
 
@@ -136,18 +119,11 @@ public class JourneyControllerTest {
     public void findJourneyByIdUsingGraphQl() {
 
         // Create a journey
-        Journey journeySaved = webClient.post().uri("/test5")
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBodyList(Journey.class)
-                .returnResult()
-                .getResponseBody()
-                .get(0);
+        createDefaultJourney(JOURNEY_ID, "afghanistan", "1000", "DaKar");
 
         // Find it by id
         String queryFindJourneyById = " query findJourney{\n" +
-                "            findJourneyById(id:\"" + journeySaved.getId() +"\"){\n" +
+                "            findJourneyById(id:\"" + JOURNEY_ID +"\"){\n" +
                 "                id\n" +
                 "                destination\n" +
                 "            }\n" +
@@ -173,18 +149,11 @@ public class JourneyControllerTest {
     @Test
     public void graphqlDelete() {
         // Create a journey to delete
-        Journey journeySaved = webClient.post().uri("/test5")
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBodyList(Journey.class)
-                .returnResult()
-                .getResponseBody()
-                .get(0);
+        createDefaultJourney(JOURNEY_ID, "afghanistan", "1000", "DaKar");
 
         // Delete a journey
         String queryDelete = " mutation deleteJourney {\n" +
-                "            deleteJourney(id:\"" + journeySaved.getId() +"\")\n" +
+                "            deleteJourney(id:\"" + JOURNEY_ID +"\")\n" +
                 "}\n";
         GraphQLParameter graphQLParameterDelete = new GraphQLParameter();
         graphQLParameterDelete.setQuery(queryDelete);
@@ -197,7 +166,7 @@ public class JourneyControllerTest {
 
         // Find it by id to check that it has been removed
         String queryFindJourneyById = " query findJourney{\n" +
-                "            findJourneyById(id:\"" + journeySaved.getId() +"\"){\n" +
+                "            findJourneyById(id:\"" + JOURNEY_ID +"\"){\n" +
                 "                id\n" +
                 "                destination\n" +
                 "            }\n" +
