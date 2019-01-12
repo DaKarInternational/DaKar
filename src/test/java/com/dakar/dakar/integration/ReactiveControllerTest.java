@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
@@ -102,6 +103,68 @@ public class ReactiveControllerTest extends AbstractControllerTest{
                 });
     }
 
+    /**
+     * create a journey
+     */
+    @Test
+    public void testSaveJourneyJavaxValidator() {
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
+
+        webClient.post().uri("/saveJourneyValidatorJavax")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(Journey.class);
+    }
+
+    /**
+     * create a journey error because no price
+     */
+    @Test
+    public void testSaveJourneyJavaxValidatorError() {
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "", "afghanistan", "o");
+
+        webClient.post().uri("/saveJourneyValidatorJavax")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus()
+                .isEqualTo(422);
+    }
+
+    /**
+     * create a journey
+     */
+    @Test
+    public void testSaveJourneySpringValidator() {
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "afghanistan", "afghanistan", "o");
+
+        webClient.post().uri("/saveJourneyValidatorSpring")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(Journey.class);
+    }
+
+    /**
+     * create a journey error cause destination is empty
+     */
+    @Test
+    public void testSaveJourneySpringValidatorError() {
+        String id = UUID.randomUUID().toString();
+        Journey journey = new Journey(id, "afghanistan", "", "o");
+
+        webClient.post().uri("/saveJourneyValidatorSpring")
+                .body(Mono.just(journey), Journey.class)
+                .exchange()
+                .expectStatus()
+                .isEqualTo(422);
+    }
+  
     /**
      * Delete a journey
      */

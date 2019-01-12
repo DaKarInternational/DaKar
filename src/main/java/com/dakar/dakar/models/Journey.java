@@ -9,6 +9,9 @@ import lombok.NonNull;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
 @Data
@@ -22,6 +25,7 @@ public class Journey {
     @GeneratedValue(strategy = UNIQUE)
     private String id;
     @Field
+    @NotEmpty
     private String price;
     @NonNull
     @Field

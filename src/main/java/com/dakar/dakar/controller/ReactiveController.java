@@ -13,17 +13,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import reactor.core.publisher.Mono;
+
+import javax.validation.Validator;
+
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Mono;
 
 import java.util.Locale;
 import java.util.UUID;
 
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
-import static org.springframework.web.reactive.function.server.ServerResponse.noContent;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 import org.apache.logging.log4j.LogManager;
@@ -39,8 +46,11 @@ public class ReactiveController {
     private IJourneyService journeyService;
 
     @Autowired
-    private GraphQL graphQL;
+    private Validator validator;
 
+    @Autowired
+    private GraphQL graphQL;
+  
     @Autowired
     private MessageSource messageSource;
 
@@ -119,6 +129,47 @@ public class ReactiveController {
         });
     }
 
+
+    /**
+     * Save a journey with Javax validator
+     * @return
+     */
+    @Bean
+    RouterFunction<ServerResponse> saveJourneyValidatorJavax() {
+        return route(RequestPredicates.POST("/saveJourneyValidatorJavax"),
+                request -> request.bodyToMono(Journey.class).flatMap(
+                        body -> {
+                            if(validator.validate(body).isEmpty()){
+                                return ok().body(journeyService.saveJourney(Mono.just(body)), Journey.class);
+                            }
+                            return ServerResponse.unprocessableEntity().build();
+                        }
+                )
+
+        );
+    }
+
+    /**
+     * Save a journey with Spring validator
+     * @return
+     */
+    @Bean
+    RouterFunction<ServerResponse> saveJourneyValidatorSpring() {
+        return route(RequestPredicates.POST("/saveJourneyValidatorSpring"),
+                request -> request.bodyToMono(Journey.class).flatMap(
+                        body -> {
+                            Errors errors = new BeanPropertyBindingResult(body, "journey");
+                            validate(body, errors);
+                            if(!errors.hasErrors()){
+                                return ok().body(journeyService.saveJourney(Mono.just(body)), Journey.class);
+                            }
+                            return ServerResponse.unprocessableEntity().build();
+                        }
+                )
+
+        );
+    }
+
     /**
      * DEMO
      * classic delete endpoint
@@ -159,5 +210,9 @@ public class ReactiveController {
         Resource<Journey> journeyResource = new Resource<>(journey);
         return journeyResource;
 
+    }
+
+    public void validate(Object obj, Errors e) {
+        ValidationUtils.rejectIfEmpty(e, "destination", "La destination doit être renseignée");
     }
 }
