@@ -55,3 +55,6 @@ docker-compose up -d couchtest
 
 # make sure that the db is correctly started  
 docker-compose logs couchtest  
+
+
+https://central.sonatype.org/pages/apache-maven.html
