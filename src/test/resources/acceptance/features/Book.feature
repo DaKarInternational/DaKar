@@ -31,3 +31,11 @@ Feature: Book a journey
     Examples:
       | userName | id                                   | destination | numbersJourneysFound |
       | Dakar    | 28356590-332e-43e0-ba7c-50c6a98e41a8 | Vietnam     | 1                    |
+
+  Scenario Outline: Search by criterias : destination
+    Given These journeys have been created
+    When <userName> search a journey by criteria : <destination>
+    Then <userName> find <numbersJourneysFound> destinations matching <destination>
+    Examples:
+      | userName | destination | numbersJourneysFound |
+      | Dakar    | Vietnam     | 1                    |

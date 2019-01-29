@@ -188,4 +188,75 @@ public class JourneyControllerTest extends AbstractControllerTest{
                     Assert.assertTrue(journey.getResponseBody().getData().toString().contains("findJourneyById=null"));
                 });
     }
+
+    /**
+     * find a journey by destination using graphql
+     */
+    @Test
+    public void findJourneyByCriteriaDestinationUsingGraphQl() {
+        // Create a journey
+        createDefaultJourney(JOURNEY_ID, "afghanistan", "1000", "DaKar");
+
+        // Query to search by criterias
+        String destination = "afghanistan";
+        String queryFindJourneyByCriterias = "{"
+                +  "  searchJourney(criteria: {"
+                +  "    destination: {"
+                +  "      contains: \"" + destination +"\""
+                +  "    }"
+                +  "  }"
+                +  "  ) {"
+                +  "    id"
+                +  "    destination}}";
+
+        GraphQLParameter graphQLParameter = new GraphQLParameter();
+        graphQLParameter.setQuery(queryFindJourneyByCriterias);
+        this.webClient.post()
+                .uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameter))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(SimpleExecutionResult.class)
+                .consumeWith(result -> {
+                    Assert.assertTrue(result.getResponseBody().getData().toString().contains("afghanistan"));
+                });
+    }
+
+    /**
+     * find a journey by destination using graphql
+     */
+    @Test
+    public void findJourneyByCriteriaPriceUsingGraphQl() {
+        // Create a journey
+        createDefaultJourney(JOURNEY_ID, "afghanistan", "1000", "DaKar");
+
+        // Query to search by criterias
+        String price = "1000";
+        String queryFindJourneyByCriterias = "{"
+                +  "  searchJourney(criteria: {"
+                +  "    price: {"
+                +  "      contains: \"" + price +"\""
+                +  "    }"
+                +  "  }"
+                +  "  ) {"
+                +  "    id"
+                +  "    price}}";
+
+        GraphQLParameter graphQLParameter = new GraphQLParameter();
+        graphQLParameter.setQuery(queryFindJourneyByCriterias);
+        this.webClient.post()
+                .uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameter))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(SimpleExecutionResult.class)
+                .consumeWith(result -> {
+                    Assert.assertTrue(result.getResponseBody().getData().toString().contains("1000"));
+                });
+    }
+
 }

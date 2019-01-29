@@ -6,7 +6,6 @@ import org.springframework.data.couchbase.core.query.ViewIndexed;
 import org.springframework.data.couchbase.repository.ReactiveCouchbaseRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @Repository
 @N1qlPrimaryIndexed
@@ -15,7 +14,9 @@ public interface JourneyRepository extends ReactiveCouchbaseRepository<Journey, 
 
     Flux<Journey> findAll();
 
-    Mono<Journey> findFirstByDestination(String destination);
+    Flux<Journey> findFirstByDestination(String destination);
+
+    Flux<Journey> findFirstByPrice(String price);
 
     /**
      * Additional custom finder method, backed by a View that indexes

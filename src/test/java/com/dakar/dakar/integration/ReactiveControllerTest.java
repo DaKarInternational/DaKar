@@ -36,9 +36,9 @@ public class ReactiveControllerTest extends AbstractControllerTest{
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBody(Journey.class)
+                .expectBodyList(Journey.class)
                 .consumeWith(journey -> {
-                    Assert.assertEquals(journey.getResponseBody().getDestination(), "afghanistan");
+                    Assert.assertEquals(journey.getResponseBody().get(0).getDestination(), "afghanistan");
                 });
     }
 
@@ -56,10 +56,10 @@ public class ReactiveControllerTest extends AbstractControllerTest{
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBody(Journey.class)
+                .expectBodyList(Journey.class)
 //                .isEqualTo(new Journey("afghanistan", "540"));
                 .consumeWith(journey -> {
-                    Assert.assertEquals(journey.getResponseBody().getDestination(), "afghanistan");
+                    Assert.assertEquals(journey.getResponseBody().get(0).getDestination(), "afghanistan");
                 });
     }
 
@@ -77,10 +77,10 @@ public class ReactiveControllerTest extends AbstractControllerTest{
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBody(Journey.class)
+                .expectBodyList(Journey.class)
 //                .isEqualTo(new Journey("afghanistan", "345"));
                 .consumeWith(journey -> {
-                    Assert.assertEquals(journey.getResponseBody().getDestination(), "afghanistan");
+                    Assert.assertEquals(journey.getResponseBody().get(0).getDestination(), "afghanistan");
                 });
     }
 

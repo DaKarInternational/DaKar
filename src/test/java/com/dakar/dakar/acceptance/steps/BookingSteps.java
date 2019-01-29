@@ -90,4 +90,10 @@ public class BookingSteps {
 				.isOk()
 				.expectBody(SimpleExecutionResult.class);
 	}
+
+	@When("^<userName> search a journey by criteria : <destination>$")
+	public void usernameSearchAJourneyByCriteriaDestination() throws Throwable {
+		// Write code here that turns the phrase above into concrete actions
+		throw new PendingException();
+	}
 }

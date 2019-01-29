@@ -2,6 +2,7 @@ package com.dakar.dakar.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.dakar.dakar.models.Journey;
+import com.dakar.dakar.models.JourneyCriteriaInput;
 import com.dakar.dakar.services.interfaces.IJourneyService;
 
 import java.util.List;
@@ -40,5 +41,10 @@ public class QueryResolver implements GraphQLQueryResolver {
      */
     public Journey findJourneyById(String id){
         return journeyService.findById(id).block();
+    }
+
+    public List<Journey> searchJourney(JourneyCriteriaInput criterias) {
+        return journeyService.findByCriterias(criterias).collectList().block();
+
     }
 }
