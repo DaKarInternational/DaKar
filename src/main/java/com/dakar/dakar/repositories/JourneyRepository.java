@@ -12,11 +12,41 @@ import reactor.core.publisher.Flux;
 @ViewIndexed(designDoc = "journey")
 public interface JourneyRepository extends ReactiveCouchbaseRepository<Journey, String> {
 
+    /**
+     * Get all journeys
+     * @return
+     */
     Flux<Journey> findAll();
 
+    /**
+     * Get first journey by destination
+     * @return
+     */
     Flux<Journey> findFirstByDestination(String destination);
 
+    /**
+     * Get journeys by destination
+     * @return
+     */
+    Flux<Journey> findByDestination(String destination);
+
+    /**
+     * Get first journey by price
+     * @return
+     */
     Flux<Journey> findFirstByPrice(String price);
+
+    /**
+     * Get journeys by price
+     * @return
+     */
+    Flux<Journey> findByPrice(String price);
+
+    /**
+     * Get journeys by destination and price
+     * @return
+     */
+    Flux<Journey> findByDestinationAndPrice(String destination, String Price);
 
     /**
      * Additional custom finder method, backed by a View that indexes

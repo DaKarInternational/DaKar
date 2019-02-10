@@ -74,11 +74,13 @@ public class JourneyServiceImpl implements IJourneyService {
      */
     @Override
     public Flux<Journey> findByCriterias(JourneyCriteriaInput criterias) {
-        Flux<Journey> journeys;
-        if(criterias.getDestination() != null && !"".equals(criterias.getDestination())) {
-            journeys = journeyRepository.findFirstByDestination(criterias.getDestination().getContains());
+        Flux<Journey> journeys = Flux.just();
+        if((criterias.getDestination() != null && !"".equals(criterias.getDestination())) && (criterias.getPrice() != null && !"".equals(criterias.getPrice()))) {
+            journeys = journeyRepository.findByDestinationAndPrice(criterias.getDestination().getContains(), criterias.getPrice().getContains());
+        } else if(criterias.getDestination() != null && !"".equals(criterias.getDestination())) {
+            journeys = journeyRepository.findByDestination(criterias.getDestination().getContains());
         } else if(criterias.getPrice() != null && !"".equals(criterias.getPrice())) {
-            journeys = journeyRepository.findFirstByPrice(criterias.getPrice().getContains());
+            journeys = journeyRepository.findByPrice(criterias.getPrice().getContains());
         } else {
             journeys = journeyRepository.findAll();
         }

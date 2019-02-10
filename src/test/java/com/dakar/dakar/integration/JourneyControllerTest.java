@@ -190,10 +190,10 @@ public class JourneyControllerTest extends AbstractControllerTest{
     }
 
     /**
-     * find a journey by destination using graphql
+     * Basic flow : Find journeys by destination using graphql
      */
     @Test
-    public void findJourneyByCriteriaDestinationUsingGraphQl() {
+    public void findJourneysByCriteriaDestinationUsingGraphQl() {
         // Create a journey
         createDefaultJourney(JOURNEY_ID, "afghanistan", "1000", "DaKar");
 
@@ -225,10 +225,10 @@ public class JourneyControllerTest extends AbstractControllerTest{
     }
 
     /**
-     * find a journey by destination using graphql
+     * Basic flow : Find journeys by price using graphql
      */
     @Test
-    public void findJourneyByCriteriaPriceUsingGraphQl() {
+    public void findJourneysByCriteriaPriceUsingGraphQl() {
         // Create a journey
         createDefaultJourney(JOURNEY_ID, "afghanistan", "1000", "DaKar");
 
@@ -256,6 +256,118 @@ public class JourneyControllerTest extends AbstractControllerTest{
                 .expectBody(SimpleExecutionResult.class)
                 .consumeWith(result -> {
                     Assert.assertTrue(result.getResponseBody().getData().toString().contains("1000"));
+                });
+    }
+
+    /**
+     * Basic flow : Find journeys by destination and price using graphql
+     */
+    @Test
+    public void findJourneysByCriteriaDestinationAndPriceUsingGraphQl() {
+        // Create a journey
+        String price = "1000";
+        String destination = "afghanistan";
+        createDefaultJourney(JOURNEY_ID, destination, price, "DaKar");
+
+        // Query to search by criterias
+        String queryFindJourneyByCriterias = "{"
+                +  "  searchJourney(criteria: {"
+                +  "    destination: {"
+                +  "      contains: \"" + destination +"\""
+                +  "    },"
+                +  "    price: {"
+                +  "      contains: \"" + price +"\""
+                +  "    }"
+                +  "  }"
+                +  "  ) {"
+                +  "    destination"
+                +  "    price}}";
+
+        GraphQLParameter graphQLParameter = new GraphQLParameter();
+        graphQLParameter.setQuery(queryFindJourneyByCriterias);
+        this.webClient.post()
+                .uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameter))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(SimpleExecutionResult.class)
+                .consumeWith(result -> {
+                    Assert.assertTrue(result.getResponseBody().getData().toString().contains("1000"));
+                });
+    }
+
+    /**
+     * Exception flow : Find journeys by destination and price using graphql wrong data
+     * because there is no match
+     */
+    @Test
+    public void findJourneysByCriteriaDestinationAndPriceUsingGraphQlWrongData() {
+        // Create a journey
+        String price = "456";
+        String destination = "afghanistan";
+        createDefaultJourney(JOURNEY_ID, destination, "1000", "DaKar");
+
+        // Query to search by criterias
+        String queryFindJourneyByCriterias = "{"
+                +  "  searchJourney(criteria: {"
+                +  "    destination: {"
+                +  "      contains: \"" + destination +"\""
+                +  "    },"
+                +  "    price: {"
+                +  "      contains: \"" + price +"\""
+                +  "    }"
+                +  "  }"
+                +  "  ) {"
+                +  "    destination"
+                +  "    price}}";
+
+        GraphQLParameter graphQLParameter = new GraphQLParameter();
+        graphQLParameter.setQuery(queryFindJourneyByCriterias);
+        this.webClient.post()
+                .uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameter))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(SimpleExecutionResult.class)
+                .consumeWith(result -> {
+                    Assert.assertTrue(!result.getResponseBody().getData().toString().contains("afghanistan"));
+                });
+    }
+
+    /**
+     * Basic flow : Find all journeys because no criterias
+     */
+    @Test
+    public void findJourneysWithNoCriteriasUsingGraphQl() {
+        // Create a journey
+        String price = "1000";
+        String destination = "afghanistan";
+        createDefaultJourney(JOURNEY_ID, destination, price, "DaKar");
+
+        // Query to search by criterias
+        String queryFindJourneyByCriterias = "{"
+                +  "  searchJourney(criteria: {"
+                +  "  }"
+                +  "  ) {"
+                +  "    destination"
+                +  "    price}}";
+
+        GraphQLParameter graphQLParameter = new GraphQLParameter();
+        graphQLParameter.setQuery(queryFindJourneyByCriterias);
+        this.webClient.post()
+                .uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameter))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(SimpleExecutionResult.class)
+                .consumeWith(result -> {
+                    Assert.assertTrue(result.getResponseBody().getData().toString().contains("afghanistan"));
                 });
     }
 

@@ -52,6 +52,12 @@ public class GraphQlController {
           }
         }
          */
+
+        /**
+         * https://medium.com/open-graphql/implementing-search-in-graphql-11d5f71f179
+         */
+
+        
         return route(RequestPredicates.POST("/graphql"), request -> {
             if (request.headers().contentType().filter(mediaType -> mediaType.isCompatibleWith(GraphQLMediaType)).isPresent()) {
                 return request.bodyToMono(GraphQLParameter.class)

@@ -20,7 +20,7 @@ import static org.junit.Assert.assertNull;
 @Slf4j
 public class DeleteAJourneySteps {
 
-    private Journey journey;
+    private Journey savedJourney;
 
     @Autowired
     private IJourneyService journeyService;
@@ -28,19 +28,18 @@ public class DeleteAJourneySteps {
     @Given("^journey with the following details:$")
     public void journeyWithTheFollowingDetails(DataTable dataTable) {
         List<Journey> list = dataTable.asList(Journey.class);
-        journey = list.get(0);
-        journeyService.saveJourney(Mono.just(journey));
+        savedJourney = journeyService.saveJourney(Mono.just(list.get(0))).collectList().block().get(0);
     }
 
     @When("^Delete this journey$")
     public void deleteThisJourney(){
         // Then delete
-        journeyService.deleteJourney(journey.getId());
+        journeyService.deleteJourney(savedJourney.getId()).block();
     }
 
     @Then("^The journey is deleted$")
     public void theJourneyIsDeleted(){
-        assertNull(journeyService.findById(journey.getId()).block());
+        assertNull(journeyService.findById(savedJourney.getId()).block());
     }
 }
 
