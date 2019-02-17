@@ -1,28 +1,38 @@
 Feature: Book a journey
 
-  As a client, I can search a journey by destination
+  As a client, I can search a journey
 
-#  ignoring while we don't have the endpoint to search by destination
-  @ignore
   Scenario Outline: Search journey by destination
     Given These journeys have been created
     When <userName> search a destination: <destination>
     Then <userName> find <numbersJourneysFound> destinations matching <destination>
     Examples:
       | userName | destination | numbersJourneysFound |
-      | Dakar    | Vietnam     | 2                    |
+      | Dakar    | Vietnam     | 1                    |
 
-
-#  ignoring while we don't have the endpoint to search by destination
-  @ignore
-  Scenario Outline: Search by destination and don't find any matches
+  Scenario Outline: Search journey by price
     Given These journeys have been created
-    When <userName> search a journey: <destination>
-    Then <userName> find <numbersJourneysFound> destinations matching <destination>
+    When <userName> search a price <price>
+    Then <userName> find <numbersJourneysFound> destinations matching <price>
     Examples:
-      | userName | destination | numbersJourneysFound |
-      | Dakar    | Vietnam     | 2                    |
+      | userName | price | numbersJourneysFound |
+      | Dakar    | 1000  | 1                    |
 
+  Scenario Outline: Search journey by destination and price
+    Given These journeys have been created
+    When <userName> search a destination <destination> and a price <price>
+    Then <userName> find <numbersJourneysFound> destinations matching <price>
+    Examples:
+      | userName | destination | price | numbersJourneysFound |
+      | Dakar    | Vietnam  | 1000     | 1                    |
+
+  Scenario Outline: Search journey by destination and price no matches
+    Given These journeys have been created
+    When <userName> search a destination <destination> and a price <price>
+    Then <userName> find <numbersJourneysFound> destinations no matching <price>
+    Examples:
+      | userName | price | numbersJourneysFound |
+      | Dakar    | 1000  | 1                    |
 
   Scenario Outline: Show a journey
     Given These journeys have been created

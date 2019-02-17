@@ -1,6 +1,7 @@
 package com.dakar.dakar.services.implementation;
 
 import com.dakar.dakar.models.Journey;
+import com.dakar.dakar.models.JourneyCriteriaInput;
 import com.dakar.dakar.repositories.JourneyRepository;
 import com.dakar.dakar.services.interfaces.IJourneyService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,14 +18,10 @@ public class JourneyServiceImpl implements IJourneyService {
     private JourneyRepository journeyRepository;
 
     @Override
-    public Mono<Journey> findByDestination(String destination) {
+    public Flux<Journey> findByDestination(String destination) {
 //        journeyRepository.findAll().subscribe(journey -> {log.error(journey.toString());});
         //TODO : business checks before insert
-        return journeyRepository.findFirstByDestination(destination)
-                .map(it -> {
-                    log.debug(it.toString());
-                    return it;
-                });
+        return journeyRepository.findFirstByDestination(destination);
     }
 
     /**
@@ -68,5 +65,25 @@ public class JourneyServiceImpl implements IJourneyService {
     public Mono<Journey> findById(String id) {
         // http://javasampleapproach.com/reactive-programming/reactor/reactor-convert-flux-into-list-map-reactive-programming
         return this.journeyRepository.findById(id);
+    }
+
+    /**
+     * Search by criterias (destination, price, etc...)
+     * @param criterias
+     * @return
+     */
+    @Override
+    public Flux<Journey> findByCriterias(JourneyCriteriaInput criterias) {
+        Flux<Journey> journeys = Flux.just();
+        if((criterias.getDestination() != null && !"".equals(criterias.getDestination())) && (criterias.getPrice() != null && !"".equals(criterias.getPrice()))) {
+            journeys = journeyRepository.findByDestinationAndPrice(criterias.getDestination().getContains(), criterias.getPrice().getContains());
+        } else if(criterias.getDestination() != null && !"".equals(criterias.getDestination())) {
+            journeys = journeyRepository.findByDestination(criterias.getDestination().getContains());
+        } else if(criterias.getPrice() != null && !"".equals(criterias.getPrice())) {
+            journeys = journeyRepository.findByPrice(criterias.getPrice().getContains());
+        } else {
+            journeys = journeyRepository.findAll();
+        }
+        return journeys;
     }
 }

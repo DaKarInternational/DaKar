@@ -1,6 +1,8 @@
 package com.dakar.dakar.unit;
 
 import com.dakar.dakar.models.Journey;
+import com.dakar.dakar.models.JourneyCriteriaInput;
+import com.dakar.dakar.models.StringFilterCriteriaInput;
 import com.dakar.dakar.repositories.JourneyRepository;
 import com.dakar.dakar.services.implementation.JourneyServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,8 +98,8 @@ public class DakarApplicationUnitTests {
         saveJourney(journey);
 
         // Find by destination
-        when(journeyRepository.findFirstByDestination(journey.getDestination())).thenReturn(Mono.just(journey));
-        Journey journeySaved = journeyService.findByDestination(journey.getDestination()).block();
+        when(journeyRepository.findFirstByDestination(journey.getDestination())).thenReturn(Flux.just(journey));
+        Journey journeySaved = journeyService.findByDestination(journey.getDestination()).blockFirst();
         assertTrue(journey.getDestination().equals(journeySaved.getDestination()));
     }
 
@@ -126,6 +129,122 @@ public class DakarApplicationUnitTests {
         when(journeyRepository.saveAll((Publisher<Journey>) any())).thenReturn(Flux.just(journey));
         Mono<Journey> journeyMono = Mono.just(journey);
         journeyService.saveJourney(journeyMono).blockFirst();
+    }
+
+    /**
+     * Should find journeys by criteria : destination
+     */
+    @Test
+    public void searchJourneysByCriteriaDestination() {
+        // Create a journey
+        Journey journey = createDefaultJourney();
+
+        // Save in database
+        saveJourney(journey);
+
+        JourneyCriteriaInput criterias = new JourneyCriteriaInput();
+        StringFilterCriteriaInput destinationFilter = new StringFilterCriteriaInput();
+        destinationFilter.setContains(journey.getDestination());
+        criterias.setDestination(destinationFilter);
+
+        // Find by destination
+        when(journeyRepository.findByDestination(criterias.getDestination().getContains())).thenReturn(Flux.just(journey));
+        List<Journey> journeys = journeyService.findByCriterias(criterias).collectList().block();
+        assertTrue(journeys.size() == 1);
+        assertTrue(journeys.get(0).getDestination() == journey.getDestination());
+    }
+
+    /**
+     * Should find journeys by criteria : price
+     */
+    @Test
+    public void searchJourneysByCriteriaPrice() {
+        // Create a journey
+        Journey journey = createDefaultJourney();
+
+        // Save in database
+        saveJourney(journey);
+
+        JourneyCriteriaInput criterias = new JourneyCriteriaInput();
+        StringFilterCriteriaInput priceFilter = new StringFilterCriteriaInput();
+        priceFilter.setContains(journey.getPrice());
+        criterias.setPrice(priceFilter);
+
+        // Find by destination
+        when(journeyRepository.findByPrice(criterias.getPrice().getContains())).thenReturn(Flux.just(journey));
+        List<Journey> journeys = journeyService.findByCriterias(criterias).collectList().block();
+        assertTrue(journeys.size() == 1);
+        assertTrue(journeys.get(0).getPrice() == journey.getPrice());
+    }
+
+    /**
+     * Should search journeys by criterias : destination and price
+     */
+    @Test
+    public void searchJourneysByCriteriasDestinationAndPrice() {
+        // Create a journey
+        Journey journey = createDefaultJourney();
+
+        // Save in database
+        saveJourney(journey);
+
+        JourneyCriteriaInput criterias = new JourneyCriteriaInput();
+        StringFilterCriteriaInput destinationFilter = new StringFilterCriteriaInput();
+        destinationFilter.setContains(journey.getDestination());
+        criterias.setDestination(destinationFilter);
+        StringFilterCriteriaInput priceFilter = new StringFilterCriteriaInput();
+        priceFilter.setContains(journey.getPrice());
+        criterias.setPrice(priceFilter);
+
+        // Find by destination
+        when(journeyRepository.findByDestinationAndPrice(criterias.getDestination().getContains(), criterias.getPrice().getContains())).thenReturn(Flux.just(journey));
+        List<Journey> journeys = journeyService.findByCriterias(criterias).collectList().block();
+        assertTrue(journeys.size() == 1);
+        assertTrue(journeys.get(0).getDestination() == journey.getDestination());
+        assertTrue(journeys.get(0).getPrice() == journey.getPrice());
+    }
+
+    /**
+     * Should search journeys with no criterias
+     */
+    @Test
+    public void searchJourneysWithNoCriterias() {
+        // Create a journey
+        Journey journey = createDefaultJourney();
+        Journey journey2 = createDefaultJourney();
+        journey2.setPrice("456");
+        journey2.setDestination("Afghanistan");
+        // Save in database
+        saveJourney(journey);
+        saveJourney(journey2);
+
+        JourneyCriteriaInput criterias = new JourneyCriteriaInput();
+        // Find by destination
+        when(journeyRepository.findAll()).thenReturn(Flux.just(journey, journey2));
+        List<Journey> journeys = journeyService.findByCriterias(criterias).collectList().block();
+        assertTrue(journeys.size() == 2);
+    }
+
+    /**
+     * Should not find journeys by criteria : destination
+     * because wrong destination
+     */
+    @Test
+    public void searchJourneysByCriteriaDestinationFail() {
+        // Create a journey
+        Journey journey = createDefaultJourney();
+
+        // Save in database
+        saveJourney(journey);
+
+        JourneyCriteriaInput criterias = new JourneyCriteriaInput();
+        StringFilterCriteriaInput destinationFilter = new StringFilterCriteriaInput();
+        destinationFilter.setContains("invalid");
+        criterias.setDestination(destinationFilter);
+
+        // Find by destination
+        when(journeyRepository.findByDestination(criterias.getDestination().getContains())).thenReturn(null);
+        assertNull(journeyService.findByCriterias(criterias));
     }
 
     /**
