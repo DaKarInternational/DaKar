@@ -1,6 +1,8 @@
 package com.dakar.dakar.integration;
 
 import com.dakar.dakar.models.Journey;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -18,7 +20,17 @@ public class AbstractControllerTest {
     @Autowired
     protected WebTestClient webClient;
 
+    // Journey data
     protected String JOURNEY_ID;
+    protected static final String JOURNEY_DESTINATION = "afghanistan";
+    protected static final String JOURNEY_PRICE = "1000";
+    protected static final String JOURNEY_OWNER = "DaKar";
+
+    // Journey requests
+    protected static final String REQUEST_ALL_JOURNEY = "allJourney";
+
+    // To parse result as json
+    public static final Gson GSON = new Gson();
 
     /**
      * Step before each test

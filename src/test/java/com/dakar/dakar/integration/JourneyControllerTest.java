@@ -3,6 +3,10 @@ package com.dakar.dakar.integration;
 import com.dakar.dakar.models.GraphQLParameter;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.models.SimpleExecutionResult;
+import com.dakar.dakar.utils.JsonParser;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import graphql.GraphQLError;
 import graphql.validation.ValidationError;
 import lombok.extern.slf4j.Slf4j;
@@ -87,7 +91,7 @@ public class JourneyControllerTest extends AbstractControllerTest{
     @Test
     public void findAJourneyByDestinationUsingGraphQl() {
         // Create a journey
-        Journey journey = new Journey(JOURNEY_ID, "1000", "afghanistan", "DaKar");
+        Journey journey = new Journey(JOURNEY_ID, JOURNEY_PRICE, JOURNEY_DESTINATION, JOURNEY_OWNER);
 
         //TODO put this in a setup method
         //TODO maybe use directly the service for this kind of things ?
@@ -100,7 +104,7 @@ public class JourneyControllerTest extends AbstractControllerTest{
                 .expectBodyList(Journey.class);
         
         GraphQLParameter graphQLParameter = new GraphQLParameter();
-        graphQLParameter.setQuery("{allJourney {destination\nprice}}");
+        graphQLParameter.setQuery("{" + REQUEST_ALL_JOURNEY + " {destination\nprice}}");
         this.webClient.post()
                 .uri("/graphql")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -110,7 +114,13 @@ public class JourneyControllerTest extends AbstractControllerTest{
                 .isOk()
                 .expectBody(SimpleExecutionResult.class)
                 .consumeWith(result -> {
-                    Assert.assertTrue(result.getResponseBody().getData().toString().contains("afghanistan"));
+                    // We check the result
+                    String jsonResult = GSON.toJson(result.getResponseBody());
+                    JsonArray journeys = JsonParser.getJsonArray(jsonResult, REQUEST_ALL_JOURNEY);
+                    Assert.assertTrue(journeys.size() > 0);
+                    JsonObject jsonJourney = journeys.get(0).getAsJsonObject();
+                    Assert.assertTrue("afghanistan".equals(jsonJourney.get("destination").getAsString()));
+                    Assert.assertTrue("1000".equals(jsonJourney.get("price").getAsString()));
                 });
     }
 
