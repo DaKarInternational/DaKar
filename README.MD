@@ -60,3 +60,8 @@ docker-compose logs couchtest
 Javadoc:  
 
 ./mvnw javadoc:javadoc
+
+# Delete all containers
+docker rm $(docker ps -a -q)
+# Delete all images
+docker rmi $(docker images -q)
