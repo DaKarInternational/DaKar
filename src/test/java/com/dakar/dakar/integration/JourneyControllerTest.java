@@ -50,8 +50,12 @@ public class JourneyControllerTest extends AbstractControllerTest{
                 .expectStatus()
                 .isOk()
                 .expectBody(SimpleExecutionResult.class)
-                .consumeWith(journey -> {
-                    Assert.assertTrue(journey.getResponseBody().getData().toString().contains("tt"));
+                .consumeWith(result -> {
+                    // We check the result
+                    String jsonResult = GSON.toJson(result.getResponseBody());
+                    JsonObject jsonJourney = JsonParser.getJsonObject(jsonResult, REQUEST_CREATE_JOURNEY);
+                    Assert.assertTrue("tt".equals(jsonJourney.get("destination").getAsString()));
+                    Assert.assertTrue("ll".equals(jsonJourney.get("price").getAsString()));
                 });
     }
 
@@ -150,8 +154,12 @@ public class JourneyControllerTest extends AbstractControllerTest{
                 .expectStatus()
                 .isOk()
                 .expectBody(SimpleExecutionResult.class)
-                .consumeWith(journey -> {
-                    Assert.assertTrue(journey.getResponseBody().getData().toString().contains("afghanistan"));
+                .consumeWith(result -> {
+                    // We check the result
+                    String jsonResult = GSON.toJson(result.getResponseBody());
+                    JsonObject jsonJourney = JsonParser.getJsonObject(jsonResult, REQUEST_FIND_JOURNEY_BY_ID);
+                    Assert.assertTrue("afghanistan".equals(jsonJourney.get("destination").getAsString()));
+                    Assert.assertTrue(JOURNEY_ID.equals(jsonJourney.get("id").getAsString()));
                 });
     }
 
@@ -230,7 +238,12 @@ public class JourneyControllerTest extends AbstractControllerTest{
                 .isOk()
                 .expectBody(SimpleExecutionResult.class)
                 .consumeWith(result -> {
-                    Assert.assertTrue(result.getResponseBody().getData().toString().contains("afghanistan"));
+                    String jsonResult = GSON.toJson(result.getResponseBody());
+                    JsonArray journeys = JsonParser.getJsonArray(jsonResult, REQUEST_SEARCH_JOURNEY_BY_CRITERIAS);
+                    Assert.assertTrue(journeys.size() > 0);
+                    JsonObject jsonJourney = journeys.get(0).getAsJsonObject();
+                    Assert.assertTrue("afghanistan".equals(jsonJourney.get("destination").getAsString()));
+                    Assert.assertNotNull(jsonJourney.get("id").getAsString());
                 });
     }
 
@@ -265,7 +278,12 @@ public class JourneyControllerTest extends AbstractControllerTest{
                 .isOk()
                 .expectBody(SimpleExecutionResult.class)
                 .consumeWith(result -> {
-                    Assert.assertTrue(result.getResponseBody().getData().toString().contains("1000"));
+                    String jsonResult = GSON.toJson(result.getResponseBody());
+                    JsonArray journeys = JsonParser.getJsonArray(jsonResult, REQUEST_SEARCH_JOURNEY_BY_CRITERIAS);
+                    Assert.assertTrue(journeys.size() > 0);
+                    JsonObject jsonJourney = journeys.get(0).getAsJsonObject();
+                    Assert.assertTrue("1000".equals(jsonJourney.get("price").getAsString()));
+                    Assert.assertNotNull(jsonJourney.get("id").getAsString());
                 });
     }
 
@@ -304,7 +322,12 @@ public class JourneyControllerTest extends AbstractControllerTest{
                 .isOk()
                 .expectBody(SimpleExecutionResult.class)
                 .consumeWith(result -> {
-                    Assert.assertTrue(result.getResponseBody().getData().toString().contains("1000"));
+                    String jsonResult = GSON.toJson(result.getResponseBody());
+                    JsonArray journeys = JsonParser.getJsonArray(jsonResult, REQUEST_SEARCH_JOURNEY_BY_CRITERIAS);
+                    Assert.assertTrue(journeys.size() > 0);
+                    JsonObject jsonJourney = journeys.get(0).getAsJsonObject();
+                    Assert.assertTrue("1000".equals(jsonJourney.get("price").getAsString()));
+                    Assert.assertTrue(destination.equals(jsonJourney.get("destination").getAsString()));
                 });
     }
 
@@ -345,6 +368,9 @@ public class JourneyControllerTest extends AbstractControllerTest{
                 .expectBody(SimpleExecutionResult.class)
                 .consumeWith(result -> {
                     Assert.assertTrue(!result.getResponseBody().getData().toString().contains("afghanistan"));
+                    String jsonResult = GSON.toJson(result.getResponseBody());
+                    JsonArray journeys = JsonParser.getJsonArray(jsonResult, REQUEST_SEARCH_JOURNEY_BY_CRITERIAS);
+                    Assert.assertTrue(journeys.size() == 0);
                 });
     }
 
@@ -377,7 +403,12 @@ public class JourneyControllerTest extends AbstractControllerTest{
                 .isOk()
                 .expectBody(SimpleExecutionResult.class)
                 .consumeWith(result -> {
-                    Assert.assertTrue(result.getResponseBody().getData().toString().contains("afghanistan"));
+                    String jsonResult = GSON.toJson(result.getResponseBody());
+                    JsonArray journeys = JsonParser.getJsonArray(jsonResult, REQUEST_SEARCH_JOURNEY_BY_CRITERIAS);
+                    Assert.assertTrue(journeys.size() > 0);
+                    JsonObject jsonJourney = journeys.get(0).getAsJsonObject();
+                    Assert.assertTrue("1000".equals(jsonJourney.get("price").getAsString()));
+                    Assert.assertTrue(destination.equals(jsonJourney.get("destination").getAsString()));
                 });
     }
 

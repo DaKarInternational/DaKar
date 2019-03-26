@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 import static org.junit.Assert.assertEquals;
 
 @Slf4j
-public class SaveAJourneySteps {
+public class SaveAJourneySteps extends CommonSteps {
 
     private Journey journey;
 
@@ -27,6 +27,9 @@ public class SaveAJourneySteps {
 
     @Autowired
     private IJourneyService journeyService;
+
+    // Journey requests
+    protected static final String REQUEST_ALL_JOURNEY = "allJourney";
 
     @Given("^(.*) participated to the creation of one journey$")
     public void user_participated_to_the_creation_of_one_journey(String userName) {
@@ -50,8 +53,7 @@ public class SaveAJourneySteps {
                 .expectStatus()
                 .isOk()
                 .expectBody(SimpleExecutionResult.class)
-                .consumeWith(journey -> {
-                    journey.getResponseBody().getData();
+                .consumeWith(result -> {
                     this.journey = new Journey();
                     this.journey.setDestination("Dakar");//TODO fetch from the returned data (parse the JSON)
                 });
