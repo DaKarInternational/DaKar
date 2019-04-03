@@ -129,7 +129,6 @@ public class BookingSteps {
 				.isOk()
 				.expectBody(SimpleExecutionResult.class)
 				.consumeWith(executionResult -> {
-					System.out.println();
 					result = executionResult.getResponseBody().getData().toString();
 				});
 	}
