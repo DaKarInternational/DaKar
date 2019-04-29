@@ -6,6 +6,7 @@ import com.dakar.dakar.models.SimpleExecutionResult;
 import com.dakar.dakar.utils.JsonParser;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import graphql.GraphQLError;
 import graphql.validation.ValidationError;
@@ -108,7 +109,7 @@ public class JourneyControllerTest extends AbstractControllerTest{
                 .expectBodyList(Journey.class);
         
         GraphQLParameter graphQLParameter = new GraphQLParameter();
-        graphQLParameter.setQuery("{" + REQUEST_ALL_JOURNEY + " {destination\nprice}}");
+        graphQLParameter.setQuery("{" + REQUEST_ALL_JOURNEY + " {id\ndestination\nprice}}");
         this.webClient.post()
                 .uri("/graphql")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -122,9 +123,13 @@ public class JourneyControllerTest extends AbstractControllerTest{
                     String jsonResult = GSON.toJson(result.getResponseBody());
                     JsonArray journeys = JsonParser.getJsonArray(jsonResult, REQUEST_ALL_JOURNEY);
                     Assert.assertTrue(journeys.size() > 0);
-                    JsonObject jsonJourney = journeys.get(0).getAsJsonObject();
-                    Assert.assertTrue("afghanistan".equals(jsonJourney.get("destination").getAsString()));
-                    Assert.assertTrue("1000".equals(jsonJourney.get("price").getAsString()));
+                    for (JsonElement journeyElement : journeys) {
+                        JsonObject jsonJourney = journeyElement.getAsJsonObject();
+                        if(JOURNEY_ID.equals(jsonJourney.get("id").getAsString())) {
+                            Assert.assertTrue("afghanistan".equals(jsonJourney.get("destination").getAsString()));
+                            Assert.assertTrue("1000".equals(jsonJourney.get("price").getAsString()));
+                        }
+                    }
                 });
     }
 
@@ -406,9 +411,13 @@ public class JourneyControllerTest extends AbstractControllerTest{
                     String jsonResult = GSON.toJson(result.getResponseBody());
                     JsonArray journeys = JsonParser.getJsonArray(jsonResult, REQUEST_SEARCH_JOURNEY_BY_CRITERIAS);
                     Assert.assertTrue(journeys.size() > 0);
-                    JsonObject jsonJourney = journeys.get(0).getAsJsonObject();
-                    Assert.assertTrue("1000".equals(jsonJourney.get("price").getAsString()));
-                    Assert.assertTrue(destination.equals(jsonJourney.get("destination").getAsString()));
+                    for (JsonElement journeyElement : journeys) {
+                        JsonObject jsonJourney = journeyElement.getAsJsonObject();
+                        if(JOURNEY_ID.equals(jsonJourney.get("id").getAsString())) {
+                            Assert.assertTrue("1000".equals(jsonJourney.get("price").getAsString()));
+                            Assert.assertTrue(destination.equals(jsonJourney.get("destination").getAsString()));
+                        }
+                    }
                 });
     }
 
