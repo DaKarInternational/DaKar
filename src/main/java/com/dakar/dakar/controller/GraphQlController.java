@@ -76,7 +76,7 @@ public class GraphQlController {
                                         .map(error -> error.getMessage()).reduce("", (a,b) -> a + b);
                                 return ServerResponse.unprocessableEntity().syncBody(errorMessage);
                             }
-                            return ok().syncBody(executionResult);
+                            return ok().syncBody(executionResult.toSpecification());
                         })
                         .onErrorResume(error -> badRequest().build())
                         .switchIfEmpty(badRequest().build());
