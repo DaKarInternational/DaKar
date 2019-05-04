@@ -394,6 +394,7 @@ public class JourneyControllerTest extends AbstractControllerTest{
                 +  "  searchJourney(criteria: {"
                 +  "  }"
                 +  "  ) {"
+                +  "    id"
                 +  "    destination"
                 +  "    price}}";
 
