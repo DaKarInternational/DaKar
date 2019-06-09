@@ -76,6 +76,10 @@ Or you just :
 
 docker-compose up -d couchtest  
 
+docker-compose stop couchtest  
+
+# make sure that the db is correctly started  
+docker-compose logs couchtest  
 
 
 #### Generate the javadoc:  
