@@ -9,3 +9,8 @@ before_install:
   - docker-compose build
   - docker-compose up -d couchtest
   - sleep 100
+
+script:
+  - ./mvnw clean package source:jar javadoc:jar deploy
+  - ./mvnw deploy
+  - ./mvnw dockerfile:build
