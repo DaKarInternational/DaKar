@@ -12,8 +12,7 @@ services:
 
 script:
   - cp ./dist/settings.xml $HOME/.m2/settings.xml
-  - ./mvnw clean package -DskipTests source:jar javadoc:jar deploy 
-  - echo "$DOCKER_PWD" | docker login -u "$DOCKER_USR" --password-stdin
-  - ./mvnw dockerfile:build
-  - docker push dreaserdocker/dakar:latest
+  - ./mvnw clean -DskipTests package source:jar javadoc:jar deploy
+#  - ./mvnw clean package source:jar javadoc:jar deploy 
+  - ./mvnw dockerfile:build dockerfile:push
 
