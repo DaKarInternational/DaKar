@@ -12,6 +12,6 @@ language: java
 
 script:
   - cp ./dist/settings.xml $HOME/.m2/settings.xml
-  - ./mvnw clean package -DskipTest source:jar javadoc:jar deploy
+  - ./mvnw clean package -DskipTests source:jar javadoc:jar deploy -B 
   #- ./mvnw dockerfile:build
   #- ./mvnw dockerfile:push
