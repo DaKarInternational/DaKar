@@ -43,7 +43,7 @@
     </Appenders>
 
     <Loggers>
-        <AsyncLogger name="com.dakar.dakar" level="debug" additivity="false">
+        <AsyncLogger name="com.dakar.dakar" level="info" additivity="false">
             <AppenderRef ref="ConsoleAppender" />
             <AppenderRef ref="FileAppender" />
         </AsyncLogger>
