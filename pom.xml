@@ -5,11 +5,11 @@
 
 	<groupId>com.dakar</groupId>
 	<artifactId>dakar</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>dakar</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Fully reactive online travel agency</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -185,6 +185,24 @@
 				<configuration>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+			</plugin>
 		</plugins>
 	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>bintray-blablanumerodeux-dakar</id>
+			<name>blablanumerodeux-dakar</name>
+			<url>https://api.bintray.com/maven/dakarinternational/dakar/dakar/;publish=1</url>
+		</repository>
+	</distributionManagement>
 </project>
