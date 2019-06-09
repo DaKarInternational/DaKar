@@ -8,7 +8,7 @@
             <password>${env.BINTRAY_API_KEY}</password>
         </server>
         <server>
-            <id>docker-hub</id>
+            <id>docker.io</id>
             <username>${env.DOCKER_USR}</username>
             <password>${env.DOCKER_PWD}</password>
             <configuration>
