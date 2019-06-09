@@ -1,0 +1,22 @@
+version: '3'
+services:
+  couch:
+    image: "couchbase:latest"
+    ports:
+      - "8091-8094:8091-8094"
+      - "11210-11211:11210-11211"
+    container_name: "couch-dakar"
+    networks:
+      - dakar-network
+  app:
+    image: "dreaserdocker/dakar:latest"
+    ports:
+      - "8080:8080"
+    container_name: 'app-dakar'
+    depends_on:
+      - "couch"
+    networks:
+      - dakar-network
+networks:
+  dakar-network:
+    driver: bridge
