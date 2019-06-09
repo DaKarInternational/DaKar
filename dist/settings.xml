@@ -5,7 +5,7 @@
         <server>
             <id>bintray-blablanumerodeux-dakar</id>
             <username>blablanumerodeux</username>
-            <password>set your API key here</password>
+            <password>${env.API_KEY}</password>
         </server>
     </servers>
     <profiles>
