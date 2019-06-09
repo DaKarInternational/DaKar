@@ -5,7 +5,15 @@
         <server>
             <id>bintray-blablanumerodeux-dakar</id>
             <username>blablanumerodeux</username>
-            <password>${env.API_KEY}</password>
+            <password>${env.BINTRAY_API_KEY}</password>
+        </server>
+        <server>
+            <id>docker-hub</id>
+            <username>${env.DOCKER_USR}</username>
+            <password>${env.DOCKER_PWD}</password>
+            <configuration>
+                <email>${env.DOCKER_EMAIL}</email>
+            </configuration>
         </server>
     </servers>
     <profiles>
