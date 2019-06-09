@@ -15,4 +15,5 @@ script:
   - ./mvnw clean package -DskipTests source:jar javadoc:jar deploy 
   - echo "$DOCKER_PWD" | docker login -u "$DOCKER_USR" --password-stdin
   - ./mvnw dockerfile:build
-  - ./mvnw dockerfile:push
+  - docker push dreaserdocker/dakar:latest
+
