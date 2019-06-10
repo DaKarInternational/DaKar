@@ -49,6 +49,7 @@ http://localhost:8080/graphql
 
 Functional controller -> i18n:  
 http://dakar.lambla.eu:8080/welcome/fr/message
+http://localhost:8080/welcome/fr/message
 
 Couchbase:  
 http://localhost:8091/  
