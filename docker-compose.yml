@@ -20,7 +20,7 @@ services:
     networks:
       - dakar-network
   app:
-    image: "dakar/dakar:latest"
+    image: "dakarinternational/dakar:latest"
     build: .
     ports:
      - "8080:8080"
