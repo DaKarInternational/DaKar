@@ -1,14 +1,37 @@
-#Docker setup :  
+#### Docker setup:  
 sudo systemctl start docker  
 sudo usermod -a -G docker $USER  
 sudo reboot  
+docker pull dreaserdocker/dakar
+docker-compose pull
+docker login
 
-add mongo-dakar in your /etc/hosts -> this is temporary. TODO : properties file outside the jar ? or develop in docker ?  
-mvnw package  
+
+
+#### On way to launch the app in local: 
+1. build jar  
+mvnw install -DskipTests  
+
+2. build docker  
 mvnw dockerfile:build  
+
+3. launch test db  
+docker-compose up -d couchtest  
+make sure that the db is correctly started:  
+docker-compose logs couchtest  
+
+4.launch app  
+mvnw spring-boot:run
+
+
+#### If you have some network issues with Docker, you can have a look at this:
+add couch-dakar in your /etc/hosts -> this is temporary. TODO : properties file outside the jar ? or develop in docker ?  
+
+
+#### Launch all docker-compose services
 docker-compose up  
 
-
+#### Some test endpoints
 Functional controller   
 http://localhost:8080/test5/  
 
@@ -27,17 +50,17 @@ http://localhost:8080/graphql
 Couchbase:  
 http://localhost:8091/  
 
-chmod +x graphiql-app-0.7.2-x86_64.AppImage
 
 
 
-docker-compose ps  
-docker ps --all
-
+#### To build the test couchbase image independently of the rest using docker
 docker build -f Dockerfile.testdb . -t testdb
-docker images
 
+#### To build and launch the couchbase using docker-conpose
 docker-compose up -d couch // to launch only the db
+
+#### List all images
+docker images
 
 
 To launch the integration tests, either you launch a new container with a couchbase and do all that : 
@@ -53,15 +76,25 @@ Or you just :
 
 docker-compose up -d couchtest  
 
+docker-compose stop couchtest  
+
 # make sure that the db is correctly started  
 docker-compose logs couchtest  
 
 
-Javadoc:  
+#### Generate the javadoc:  
 
 ./mvnw javadoc:javadoc
 
-# Delete all containers
+#### List all containers
+docker-compose ps  
+docker ps --all
+
+#### Delete all containers
 docker rm $(docker ps -a -q)
-# Delete all images
+
+#### Delete all images
 docker rmi $(docker images -q)
+
+
+
