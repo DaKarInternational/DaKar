@@ -12,7 +12,8 @@ services:
 
 script:
   - cp ./dist/settings.xml $HOME/.m2/settings.xml
-  - ./mvnw clean -DskipTests package source:jar javadoc:jar deploy
+  - ./mvnw -DskipTests source:jar javadoc:jar
+  - ./mvnw deploy
 #  - ./mvnw clean package source:jar javadoc:jar deploy 
   - ./mvnw dockerfile:build dockerfile:push
 
