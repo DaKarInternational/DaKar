@@ -98,3 +98,30 @@ docker rmi $(docker images -q)
 
 
 
+
+#### Some examples of GraphQl queries
+
+// all jouneys  
+query {
+    allJourney{
+        destination
+    }
+}
+
+// search Journeys  
+{
+    searchJourney(criteria: {destination: {contains: "afghanistan"}}) {
+        id
+        destination
+    }
+}
+
+// create Journey  
+mutation {
+    createJourney(input: {price: "test", destination: "afghanistan"}) {
+        price
+        destination
+    }
+}
+
+
