@@ -72,12 +72,14 @@ public class JourneyServiceImpl implements IJourneyService {
     }
 
     /**
-     * Search by criterias (destination, price, etc...)
-     * @param criterias
+     * Search by criterias 
+     * @param criterias like destination, price, etc...
      * @return Flux of Journeys found
      */
     @Override
     public Flux<Journey> findByCriterias(JourneyCriteriaInput criterias) {
+        // https://www.baeldung.com/java-optional
+        // https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html#of-T-
         Optional<String> destination = Optional.ofNullable(criterias)
                 .map(JourneyCriteriaInput::getDestination)
                 .map(StringFilterCriteriaInput::getContains)
