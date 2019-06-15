@@ -1,7 +1,7 @@
 version: '3'
 services:
   couchtest:
-    image: "testdb:latest"
+    image: "dakarinternational/couch-test:latest"
     build:
       dockerfile: Dockerfile.testdb
       context: .
