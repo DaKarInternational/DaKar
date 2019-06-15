@@ -16,25 +16,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import reactor.core.publisher.Mono;
-
-import javax.validation.Validator;
-
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
 
+import javax.validation.Validator;
 import java.util.Locale;
-import java.util.UUID;
 
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @Slf4j
 @Controller
@@ -50,7 +42,7 @@ public class ReactiveController {
 
     @Autowired
     private GraphQL graphQL;
-  
+
     @Autowired
     private MessageSource messageSource;
 
@@ -67,18 +59,18 @@ public class ReactiveController {
 
     /**
      * Endpoint pour tester l'i18n
-     * @return
+     * @return a response containing a body with the translated message
      */
     @Bean
     RouterFunction<ServerResponse> routeWelcome() {
         return route(RequestPredicates.GET("/welcome/{locale}/{name}"), request -> {
-                    Locale locale;
-                    if("fr".equals(request.pathVariable("locale"))){
-                        locale = Locale.FRANCE;
-                    } else {
-                        locale = null;
-                    }
-                    return ok().body(BodyInserters.fromObject(messageSource.getMessage("message.welcome", new Object [] {request.pathVariable("name")}, locale)));
+            Locale locale;
+            if ("fr".equals(request.pathVariable("locale"))) {
+                locale = Locale.FRANCE;
+            } else {
+                locale = null;
+            }
+            return ok().body(BodyInserters.fromObject(messageSource.getMessage("message.welcome", new Object[]{request.pathVariable("name")}, locale)));
         });
     }
 
@@ -132,14 +124,14 @@ public class ReactiveController {
 
     /**
      * Save a journey with Javax validator
-     * @return
+     * @return Journey serialised in a response body
      */
     @Bean
     RouterFunction<ServerResponse> saveJourneyValidatorJavax() {
         return route(RequestPredicates.POST("/saveJourneyValidatorJavax"),
                 request -> request.bodyToMono(Journey.class).flatMap(
                         body -> {
-                            if(validator.validate(body).isEmpty()){
+                            if (validator.validate(body).isEmpty()) {
                                 return ok().body(journeyService.saveJourney(Mono.just(body)), Journey.class);
                             }
                             return ServerResponse.unprocessableEntity().build();
@@ -151,7 +143,7 @@ public class ReactiveController {
 
     /**
      * Save a journey with Spring validator
-     * @return
+     * @return Journey serialised in a response body
      */
     @Bean
     RouterFunction<ServerResponse> saveJourneyValidatorSpring() {
@@ -160,7 +152,7 @@ public class ReactiveController {
                         body -> {
                             Errors errors = new BeanPropertyBindingResult(body, "journey");
                             validate(body, errors);
-                            if(!errors.hasErrors()){
+                            if (!errors.hasErrors()) {
                                 return ok().body(journeyService.saveJourney(Mono.just(body)), Journey.class);
                             }
                             return ServerResponse.unprocessableEntity().build();

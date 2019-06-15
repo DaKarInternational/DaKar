@@ -2,13 +2,17 @@ package com.dakar.dakar.services.implementation;
 
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.models.JourneyCriteriaInput;
+import com.dakar.dakar.models.StringFilterCriteriaInput;
 import com.dakar.dakar.repositories.JourneyRepository;
 import com.dakar.dakar.services.interfaces.IJourneyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -70,20 +74,27 @@ public class JourneyServiceImpl implements IJourneyService {
     /**
      * Search by criterias (destination, price, etc...)
      * @param criterias
-     * @return
+     * @return Flux of Journeys found
      */
     @Override
     public Flux<Journey> findByCriterias(JourneyCriteriaInput criterias) {
-        Flux<Journey> journeys = Flux.just();
-        if((criterias.getDestination() != null && !"".equals(criterias.getDestination())) && (criterias.getPrice() != null && !"".equals(criterias.getPrice()))) {
-            journeys = journeyRepository.findByDestinationAndPrice(criterias.getDestination().getContains(), criterias.getPrice().getContains());
-        } else if(criterias.getDestination() != null && !"".equals(criterias.getDestination())) {
-            journeys = journeyRepository.findByDestination(criterias.getDestination().getContains());
-        } else if(criterias.getPrice() != null && !"".equals(criterias.getPrice())) {
-            journeys = journeyRepository.findByPrice(criterias.getPrice().getContains());
+        Optional<String> destination = Optional.ofNullable(criterias)
+                .map(JourneyCriteriaInput::getDestination)
+                .map(StringFilterCriteriaInput::getContains)
+                .filter(StringUtils::hasText);
+        Optional<String> price = Optional.ofNullable(criterias)
+                .map(JourneyCriteriaInput::getPrice)
+                .map(StringFilterCriteriaInput::getContains)
+                .filter(StringUtils::hasText);
+        if (destination.isPresent() && price.isPresent()) {
+            //TODO: we need to 'curify' this so that we can compose functions and remove the if
+            return journeyRepository.findByDestinationAndPrice(destination.get(), price.get());
+        } else if (destination.isPresent()) {
+            return journeyRepository.findByDestination(destination.get());
+        } else if (price.isPresent()) {
+            return journeyRepository.findByPrice(price.get());
         } else {
-            journeys = journeyRepository.findAll();
+            return journeyRepository.findAll();
         }
-        return journeys;
     }
 }
