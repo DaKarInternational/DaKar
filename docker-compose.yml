@@ -1,7 +1,7 @@
 version: '3'
 services:
   couchtest:
-    image: "testdb:latest"
+    image: "dakarinternational/couch-test:latest"
     build:
       dockerfile: Dockerfile.testdb
       context: .
@@ -20,7 +20,7 @@ services:
     networks:
       - dakar-network
   app:
-    image: "dakar/dakar:latest"
+    image: "dakarinternational/dakar:latest"
     build: .
     ports:
      - "8080:8080"

@@ -5,14 +5,17 @@ language: java
 services:
   - docker
   
-#before_install:
-  #- docker-compose build
-  #- docker-compose up -d couchtest
-  #- sleep 100
+before_install:
+#  - docker-compose pull couchtest
+  - docker-compose build
+  - docker-compose up -d couchtest
+  - sleep 100
+  - docker-compose logs couchtest
 
-script:
+install:
   - cp ./dist/settings.xml $HOME/.m2/settings.xml
-  - ./mvnw clean -DskipTests package source:jar javadoc:jar deploy
-#  - ./mvnw clean package source:jar javadoc:jar deploy 
+  - ./mvnw -DskipTests source:jar javadoc:jar
+#  - ./mvnw -DskipTests deploy
+  - ./mvnw deploy
   - ./mvnw dockerfile:build dockerfile:push
 

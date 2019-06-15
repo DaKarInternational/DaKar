@@ -28,7 +28,8 @@ curl -i -u Administrator:password -X POST http://127.0.0.1:8091/pools/default/bu
 # https://developer.couchbase.com/documentation/server/current/rest-api/rbac.html
 curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
 
-#sleep 10
+sleep 10
+curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
 
 # Create primary index, only if Spring data doesn't do it for us
 #curl -v -u Administrator:password http://127.0.0.1:8093/query/service -d 'statement=CREATE PRIMARY INDEX ON `test`'

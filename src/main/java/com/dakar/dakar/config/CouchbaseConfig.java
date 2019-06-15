@@ -1,5 +1,6 @@
 package com.dakar.dakar.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 import org.springframework.data.couchbase.repository.config.EnableReactiveCouchbaseRepositories;
@@ -19,9 +20,16 @@ import java.util.List;
 @EnableReactiveCouchbaseRepositories
 public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
+    @Value("${spring.couchbase.bucket.name}")
+    private String bucketName;
+    @Value("${spring.couchbase.bucket.password}")
+    private String password;
+    @Value("${spring.couchbase.bootstrap-hosts}")
+    private String ip;
+
     @Override
     protected List<String> getBootstrapHosts() {
-        return Arrays.asList("localhost");
+        return Arrays.asList(this.ip);
     }
 
 
@@ -56,11 +64,11 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
     protected String getBucketName() {
-        return "test";
+        return this.bucketName;
     }
 
     @Override
     protected String getBucketPassword() {
-        return "password";
+        return this.password;
     }
 }

@@ -9,7 +9,7 @@ services:
     networks:
       - dakar-network
   app:
-    image: "dreaserdocker/dakar:latest"
+    image: "dakarinternational/dakar:latest"
     ports:
       - "8080:8080"
     container_name: 'app-dakar'
