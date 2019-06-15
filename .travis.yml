@@ -10,9 +10,7 @@ before_install:
   - docker-compose up -d couchtest
   - sleep 100
 
-install:
-  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-  - ./mvnw test -B
+#install:
 #  - cp ./dist/settings.xml $HOME/.m2/settings.xml
 #  - ./mvnw -DskipTests source:jar javadoc:jar
 #  - ./mvnw -DskipTests deploy
