@@ -6,10 +6,10 @@ services:
   - docker
   
 before_install:
-  - docker-compose pull couchtest
-#  - docker-compose build
+#  - docker-compose pull couchtest
+  - docker-compose build
   - docker-compose up -d couchtest
-  - sleep 70
+  - sleep 100
   - docker-compose logs couchtest
 
 install:
