@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.models.JourneyCriteriaInput;
 import com.dakar.dakar.services.interfaces.IJourneyService;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * and https://github.com/oembedler/spring-graphql-common#requires
  * is outdated
  */
+@Slf4j
 public class QueryResolver implements GraphQLQueryResolver {
 
     // no autowire possible here yet
@@ -35,16 +37,35 @@ public class QueryResolver implements GraphQLQueryResolver {
     }
 
     /**
-     * 
-     * @param id
-     * @return
+     *
+     * @param id searched
+     * @return Journey that match the id
      */
     public Journey findJourneyById(String id){
-        return journeyService.findById(id).block();
+        Journey block = null;
+        try {
+            block = journeyService.findById(id)
+                    .block();
+        } catch (Exception e) {
+            log.error("An error occurred during the research of the JourneyID: " + id);
+        }
+        return block;
     }
 
+    /**
+     * @param criterias searched
+     * @return list of Journeys that match the criterias
+     */
     public List<Journey> searchJourney(JourneyCriteriaInput criterias) {
-        return journeyService.findByCriterias(criterias).collectList().block();
+        List<Journey> block = null;
+        try {
+            block = journeyService.findByCriterias(criterias)
+                    .collectList()
+                    .block();
+        } catch (Exception e) {
+            log.error("An error occurred during the research with these criterias: " + criterias);
+        }
+        return block;
 
     }
 }
