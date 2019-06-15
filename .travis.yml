@@ -8,7 +8,7 @@ services:
 before_install:
   - docker-compose pull couchtest
   - docker-compose up -d couchtest
-  - sleep 20
+  - sleep 50
   - docker-compose logs couchtest
 
 #install:
