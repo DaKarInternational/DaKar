@@ -6,16 +6,16 @@ services:
   - docker
   
 before_install:
-#  - docker-compose pull couchtest
-  - docker-compose build
+  - docker-compose pull couchtest
+#  - docker-compose build
   - docker-compose up -d couchtest
-  - sleep 100
+  - sleep 70
   - docker-compose logs couchtest
 
-#install:
-#  - cp ./dist/settings.xml $HOME/.m2/settings.xml
-#  - ./mvnw -DskipTests source:jar javadoc:jar
+install:
+  - cp ./dist/settings.xml $HOME/.m2/settings.xml
+  - ./mvnw -DskipTests source:jar javadoc:jar
 #  - ./mvnw -DskipTests deploy
-#  - ./mvnw deploy
-#  - ./mvnw dockerfile:build dockerfile:push
+  - ./mvnw deploy
+  - ./mvnw dockerfile:build dockerfile:push
 
