@@ -37,6 +37,20 @@
       "matrixParams": {
         "override": 1
       }
+    },
+    {
+      "includePattern": "target/(.*)-(\\d+.\\d+.\\d+).jar",
+      "uploadPattern": "$2/$1.jar",
+      "matrixParams": {
+        "override": 1
+      }
+    },
+    {
+      "includePattern": "pom.xml",
+      "uploadPattern": "pom.xml",
+      "matrixParams": {
+        "override": 1
+      }
     }
   ],
   "publish": true
