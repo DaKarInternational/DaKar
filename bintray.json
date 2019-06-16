@@ -32,7 +32,7 @@
   "files":
   [
     {
-      "includePattern": "/home/travis/.m2/repository/com/dakar/dakar/(.*)/(.*)",
+      "includePattern": "/home/travis/.m2/repository/com/dakar/dakar/(.*)/(.*dakar.*)",
       "uploadPattern": "$1/$2",
       "matrixParams": {
         "override": 1
