@@ -31,7 +31,7 @@
   },
   "files":
   [
-    {"includePattern": "./target/dakar-(.*.jar)", "uploadPattern": "@VERSION@/$1"}
+    {"includePattern": "/home/travis/build/DaKarInternational/DaKar/target/dakar-0.0.1-javadoc.jar", "uploadPattern": "@VERSION@/$1"}
   ],
   "publish": true
 }
