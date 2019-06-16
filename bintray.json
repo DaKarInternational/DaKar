@@ -31,7 +31,13 @@
   },
   "files":
   [
-    {"includePattern": "target/(.*.jar)", "uploadPattern": "$1"}
+    {
+      "includePattern": "target/(.*)-(\\d+.\\d+.\\d+).jar",
+      "uploadPattern": "$2/$1",
+      "matrixParams": {
+        "override": 1
+      }
+    }
   ],
   "publish": true
 }
