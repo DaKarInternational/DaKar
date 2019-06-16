@@ -1,8 +1,8 @@
 {
   "package": {
     "name": "dakar",
-    "repo": "https://dl.bintray.com/dakarinternational/dakar/",
-    "subject": "blablanumerodeux",
+    "repo": "dakar",
+    "subject": "dakarinternational",
     "desc": "I was pushed completely automatically",
     "website_url": "http://dakar.lambla.eu",
     "issue_tracker_url": "https://github.com/DaKarInternational/DaKar/issues",
