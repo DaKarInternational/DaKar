@@ -32,21 +32,14 @@
   "files":
   [
     {
-      "includePattern": "\\./../.m2/repository/com/dakar/dakar/(.*)/(.*)",
+      "includePattern": "/home/travis/.m2/repository/com/dakar/dakar/(.*)/(.*)",
       "uploadPattern": "$1/$2",
       "matrixParams": {
         "override": 1
       }
     },
     {
-      "includePattern": "/home/travis/(.*)",
-      "uploadPattern": "$1",
-      "matrixParams": {
-        "override": 1
-      }
-    },
-    {
-      "includePattern": "\\./../.m2/repository/com/dakar/dakar/(.*maven-metadata.*)",
+      "includePattern": "/home/travis//.m2/repository/com/dakar/dakar/(.*maven-metadata.*)",
       "uploadPattern": "$1",
       "matrixParams": {
         "override": 1
