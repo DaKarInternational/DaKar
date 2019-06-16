@@ -32,7 +32,7 @@
   "files":
   [
     {
-      "includePattern": "/home/travis/.m2/repository/com/dakar/dakar/(.*)/(.*dakar.*)",
+      "includePattern": "/home/travis/.m2/repository/com/dakar/dakar/(0.0.3)/(.*dakar.*)",
       "uploadPattern": "$1/$2",
       "matrixParams": {
         "override": 1
@@ -41,28 +41,6 @@
     {
       "includePattern": "/home/travis//.m2/repository/com/dakar/dakar/(.*maven-metadata)(-local)(.*)",
       "uploadPattern": "$1$3",
-      "matrixParams": {
-        "override": 1
-      }
-    },
-    {
-      "includePattern": "target/(.*)-(\\d+.\\d+.\\d+)-(.*).jar",
-      "excludePattern": ".*original.*",
-      "uploadPattern": "$2/$1-$3.jar",
-      "matrixParams": {
-        "override": 1
-      }
-    },
-    {
-      "includePattern": "target/(.*)-(\\d+.\\d+.\\d+).jar",
-      "uploadPattern": "$2/$1.jar",
-      "matrixParams": {
-        "override": 1
-      }
-    },
-    {
-      "includePattern": "pom.xml",
-      "uploadPattern": "pom.xml",
       "matrixParams": {
         "override": 1
       }
