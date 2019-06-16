@@ -24,7 +24,7 @@ script:
 
 deploy:
   provider: bintray
-  file: "./bintray.json"
+  file: "./bintray-old.json"
   user: "blablanumerodeux"
   key: $BINTRAY_API_KEY
   skip_cleanup: true # to upload artifacts created during the build
