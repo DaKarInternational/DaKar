@@ -39,15 +39,15 @@
       }
     },
     {
-      "includePattern": "/home/travis//.m2/repository/com/dakar/dakar/(.*maven-metadata.*)",
-      "uploadPattern": "$1",
+      "includePattern": "/home/travis//.m2/repository/com/dakar/dakar/(.*maven-metadata)(-local)(.*)",
+      "uploadPattern": "$1$3",
       "matrixParams": {
         "override": 1
       }
     },
     {
       "includePattern": "target/(.*)-(\\d+.\\d+.\\d+)-(.*).jar",
-      "excludePattern": "target/.*original.*",
+      "excludePattern": ".*original.*",
       "uploadPattern": "$2/$1-$3.jar",
       "matrixParams": {
         "override": 1
