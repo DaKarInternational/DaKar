@@ -39,7 +39,7 @@
       }
     },
     {
-      "includePattern": "\\./(.*)",
+      "includePattern": "\\./home/travis/(.*)",
       "uploadPattern": "$1",
       "matrixParams": {
         "override": 1
