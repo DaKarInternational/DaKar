@@ -19,6 +19,9 @@ install:
   - ./mvnw -DskipTests install source:jar javadoc:jar
 #  - ./mvnw dockerfile:build dockerfile:push
 
+script:
+  - echo "skipping tests"
+
 deploy:
   provider: bintray
   file: "./CHANGELOG.MD"
