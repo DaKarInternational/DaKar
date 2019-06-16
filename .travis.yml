@@ -24,7 +24,7 @@ script:
 
 deploy:
   provider: bintray
-  file: "./CHANGELOG.MD"
+  file: "./bintray.json"
   user: "blablanumerodeux"
   key: "13c49d310002c1fbf2f0660d8bd3f0b8ad2c8b5d"
   skip_cleanup: true # to upload artifacts created during the build
