@@ -1,6 +1,6 @@
 {
   "package": {
-    "name": "auto-upload",
+    "name": "dakar",
     "repo": "com.dakar",
     "subject": "blablanumerodeux",
     "desc": "I was pushed completely automatically",
@@ -31,8 +31,7 @@
   },
   "files":
   [
-    {"includePattern": "build/bin(.*)*/(.*\\.gem)", "excludePattern": ".*/do-not-deploy/.*", "uploadPattern": "gems/$2"},
-    {"includePattern": "build/docs/(.*)", "uploadPattern": "docs/$1"}
+    {"includePattern": "target/dakar-.*.jar", "uploadPattern": "@VERSION@/$1"}
   ],
   "publish": true
 }
