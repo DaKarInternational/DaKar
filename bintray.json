@@ -31,7 +31,7 @@
   },
   "files":
   [
-    {"includePattern": "target/(.*)", "uploadPattern": "@VERSION@/$1"}
+    {"includePattern": "target/(.*.jar)", "uploadPattern": "$1"}
   ],
   "publish": true
 }
