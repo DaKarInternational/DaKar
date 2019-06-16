@@ -18,7 +18,7 @@ services:
     networks:
       - dakar-network
   app-ng:
-    image: "dakarinternational/app-ng:latest"
+    image: "dakarinternational/dakar-ng:latest"
     ports:
       - "80:80"
     container_name: 'app-dakar-ng'
