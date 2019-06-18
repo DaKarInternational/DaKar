@@ -39,7 +39,7 @@ jobs:
 
       # run tests
       - run:
-          - command: |
+          command: |
             docker-compose pull couchtest
             docker-compose build
             docker-compose up -d couchtest
