@@ -38,4 +38,9 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests
-      - run: mvn test
+      - run:
+          - docker-compose pull couchtest
+          - docker-compose build
+          - docker-compose up -d couchtest
+          - docker-compose logs couchtesttest
+          - mvn test
