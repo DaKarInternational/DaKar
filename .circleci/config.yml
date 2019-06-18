@@ -40,12 +40,14 @@ jobs:
       # run tests
       - setup_remote_docker
       - run:
+          name: totoo
           command: |
             docker-compose pull couchtest
             docker-compose build
             docker-compose up -d couchtest
             docker-compose logs couchtest
         -run:
+          name: titit
           command: |
             mvn test
             mvn -DskipTests install -DcreateChecksum=true source:jar javadoc:jar
