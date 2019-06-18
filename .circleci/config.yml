@@ -46,7 +46,7 @@ jobs:
             docker-compose build
             docker-compose up -d couchtest
             docker-compose logs couchtest
-        -run:
+      - run:
           name: titit
           command: |
             mvn test
