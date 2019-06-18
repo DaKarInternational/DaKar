@@ -49,4 +49,4 @@ jobs:
           name: titit
           command: |
             mvn -DskipTests install -DcreateChecksum=true source:jar javadoc:jar
-            mvn dockerfile:build dockerfile:push
+            mvn -s .circleci.settings.xml dockerfile:build dockerfile:push
