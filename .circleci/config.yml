@@ -39,8 +39,9 @@ jobs:
 
       # run tests
       - run:
-          - docker-compose pull couchtest
-          - docker-compose build
-          - docker-compose up -d couchtest
-          - docker-compose logs couchtesttest
-          - mvn test
+          - command: |
+            docker-compose pull couchtest
+            docker-compose build
+            docker-compose up -d couchtest
+            docker-compose logs couchtesttest
+            mvn test
