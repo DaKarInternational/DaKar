@@ -44,5 +44,5 @@ jobs:
             docker-compose pull couchtest
             docker-compose build
             docker-compose up -d couchtest
-            docker-compose logs couchtesttest
+            docker-compose logs couchtest
             mvn test
