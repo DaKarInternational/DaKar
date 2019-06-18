@@ -40,13 +40,13 @@ jobs:
       # run tests
       - setup_remote_docker
       - run:
-          name: totoo
+          name: testdb
           command: |
             docker-compose pull couchtest
             docker-compose up -d couchtest
             docker-compose logs couchtest
       - run:
-          name: titit
+          name: deploy
           command: |
             cp ./.circleci/settings.xml ~/.m2 
             mvn install -DcreateChecksum=true source:jar javadoc:jar
