@@ -50,4 +50,4 @@ jobs:
           command: |
             cp ./.circleci/settings.xml ~/.m2 
             mvn -DskipTests install -DcreateChecksum=true source:jar javadoc:jar
-            mvn -s .circleci.settings.xml dockerfile:build dockerfile:push
+            mvn dockerfile:build dockerfile:push
