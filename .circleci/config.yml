@@ -49,5 +49,4 @@ jobs:
           name: titit
           command: |
             mvn -DskipTests install -DcreateChecksum=true source:jar javadoc:jar
-            mvn test
             mvn dockerfile:build dockerfile:push
