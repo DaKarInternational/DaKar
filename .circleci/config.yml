@@ -43,10 +43,10 @@ jobs:
       - run:
           name: test
           command: |
-            sleep 10
+            sleep 100
             docker-compose logs couchtest
-            cp ./.circleci/settings.xml ~/.m2 
             mvn install -DcreateChecksum=true source:jar javadoc:jar -e
+            cp ./.circleci/settings.xml ~/.m2 
             mvn -DskipTests deploy
             mvn dockerfile:build dockerfile:push
 #            docker-compose pull couchtest
