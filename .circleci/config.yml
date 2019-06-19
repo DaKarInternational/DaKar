@@ -40,14 +40,12 @@ jobs:
       # run tests
       - setup_remote_docker
       - run:
-          name: testdb
+          name: test
           command: |
             docker-compose pull couchtest
             docker-compose up -d couchtest
+            sleep 100
             docker-compose logs couchtest
-      - run:
-          name: deploy
-          command: |
             cp ./.circleci/settings.xml ~/.m2 
             mvn install -DcreateChecksum=true source:jar javadoc:jar -e
             mvn -DskipTests deploy
