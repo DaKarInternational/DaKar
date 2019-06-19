@@ -43,7 +43,7 @@ jobs:
       - run:
           name: test
           command: |
-            sleep 100
+            sleep 10
             docker-compose logs couchtest
             mvn install -DcreateChecksum=true source:jar javadoc:jar -e
             cp ./.circleci/settings.xml ~/.m2 
@@ -53,3 +53,21 @@ jobs:
 #            docker-compose up -d couchtest
 #            sleep 100
 #            docker-compose logs couchtest
+  deploy-job:
+    - steps:
+        - add_ssh_keys:
+            fingerprints:
+              - "32:e4:94:57:e8:e3:04:a1:65:a7:a7:49:a7:e2:e8:56"
+
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy-job:
+          requires:
+            - build
+          filters:
+            branches:
+              only: features/circleci
