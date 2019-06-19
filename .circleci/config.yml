@@ -55,6 +55,8 @@ jobs:
 #            docker-compose logs couchtest
 
   deploy-job:
+    docker:
+      - image: circleci/openjdk:8-jdk
     steps:
       - add_ssh_keys:
           fingerprints:
