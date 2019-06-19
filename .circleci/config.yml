@@ -49,6 +49,6 @@ jobs:
           name: deploy
           command: |
             cp ./.circleci/settings.xml ~/.m2 
-            mvn install -DcreateChecksum=true source:jar javadoc:jar
+            mvn install -DcreateChecksum=true source:jar javadoc:jar -e
             mvn -DskipTests deploy
             mvn dockerfile:build dockerfile:push
