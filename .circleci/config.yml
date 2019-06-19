@@ -45,8 +45,6 @@ jobs:
           command: |
             docker-compose pull couchtest
             docker-compose up -d couchtest
-            sleep 100
-            docker-compose logs couchtest
             sleep 10
             docker-compose logs couchtest
             mvn install -DcreateChecksum=true source:jar javadoc:jar -e
