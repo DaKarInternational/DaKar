@@ -68,6 +68,7 @@ jobs:
   push-docker:
     docker:
       - image: circleci/openjdk:8-jdk
+    steps:
       - run:
           name: push
           command: |
