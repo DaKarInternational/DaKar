@@ -77,8 +77,24 @@ jobs:
             docker-compose logs couchtest
             docker-compose push couchtest
 
+  testdb:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: push
+          command: |
+            docker-compose up -d couchtest
+            sleep 30
+            docker-compose logs couchtest
+
 workflows:
   version: 2
+  run-testdb:
+    jobs:
+      - testdb
   build:
     jobs:
       - build
