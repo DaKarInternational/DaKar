@@ -80,6 +80,8 @@ jobs:
   testdb:
     docker:
       - image: circleci/openjdk:8-jdk
+    requires:
+      - hold
     steps:
       - checkout
       - setup_remote_docker
@@ -98,8 +100,6 @@ workflows:
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
       - testdb
-          requires:
-            - hold
 
   build:
     jobs:
