@@ -79,9 +79,10 @@ jobs:
 
 workflows:
   version: 2
+  build:
   build-and-deploy:
     jobs:
-#      - push-test-db
+      - push-test-db
       - build:
           requires:
             - push-test-db
