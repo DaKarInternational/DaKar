@@ -102,11 +102,11 @@ workflows:
   
   run-testdb:
     jobs:
-      - hold:
-          type: approval
       - run-test-db
           requires:
             - hold
+      - hold:
+          type: approval
           
   build:
     jobs:
