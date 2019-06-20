@@ -69,7 +69,7 @@ jobs:
       - run:
           name: push
           command: |
-            docker login -e $DOCKER_EMAIL -p $DOCKER_PWD -u $DOCKER_USR
+            docker login -p $DOCKER_PWD -u $DOCKER_USR
             docker-compose build couchtest
             docker-compose up -d couchtest
             sleep 10
