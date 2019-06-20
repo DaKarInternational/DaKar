@@ -80,6 +80,8 @@ jobs:
 workflows:
   version: 2
   build:
+    jobs:
+      - build
   build-and-deploy:
     jobs:
       - push-test-db
