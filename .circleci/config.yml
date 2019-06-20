@@ -89,7 +89,7 @@ jobs:
             docker-compose pull
             docker-compose up -d couchtest
             sleep 30
-            docker-compose logs couchtest
+            docker-compose logs -f couchtest
 
 workflows:
   version: 2
