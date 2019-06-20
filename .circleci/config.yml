@@ -63,6 +63,7 @@ jobs:
           fingerprints:
             - "32:e4:94:57:e8:e3:04:a1:65:a7:a7:49:a7:e2:e8:56"
 
+
   push-test-db:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -76,12 +77,10 @@ jobs:
           command: |
             docker login -p $DOCKER_PWD -u $DOCKER_USR
             docker-compose build couchtest
-            docker-compose up -d couchtest
-            sleep 30
-            docker-compose logs couchtest
             docker-compose push couchtest
+            
 
-  testdb:
+  run-test-db:
     docker:
       - image: circleci/openjdk:8-jdk
     requires:
@@ -92,10 +91,12 @@ jobs:
       - run:
           name: push
           command: |
-            docker-compose pull
+            docker-compose pull couchtest
             docker-compose up -d couchtest
             sleep 30
-            docker-compose logs -f couchtest
+            docker-compose logs couchtest
+
+
 
 workflows:
   version: 2
@@ -103,8 +104,7 @@ workflows:
     jobs:
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
-      - testdb
-
+      - run-test-db
   build:
     jobs:
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
