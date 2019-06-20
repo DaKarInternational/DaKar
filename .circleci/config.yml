@@ -68,8 +68,7 @@ jobs:
       - run:
           name: push
           command: |
-            mvn dockerfile:build dockerfile:push
-
+            docker-compose build couchtest
 
 workflows:
   version: 2
