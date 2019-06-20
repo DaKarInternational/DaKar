@@ -98,16 +98,16 @@ workflows:
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
         type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
       - testdb
-        requires:
-          - hold
+          requires:
+            - hold
 
   build:
     jobs:
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
         type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
       - build
-        requires:
-          - hold
+          requires:
+            - hold
   build-and-deploy:
     jobs:
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
