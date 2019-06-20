@@ -65,11 +65,20 @@ jobs:
           fingerprints:
             - "32:e4:94:57:e8:e3:04:a1:65:a7:a7:49:a7:e2:e8:56"
 
+  push-docker:
+    docker:
+      - image: circleci/openjdk:8-jdk
+      - run:
+          name: run_tests
+          command: |
+            mvn dockerfile:build dockerfile:push
+
 
 workflows:
   version: 2
   build-and-deploy:
     jobs:
+      - push-docker
       - build
       - deploy-job:
           requires:
