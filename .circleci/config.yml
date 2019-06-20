@@ -5,10 +5,15 @@
 version: 2
 jobs:
   build:
-    docker:
+    machine:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
       - image: dakarinternational/couch-test:latest
+
+      - run: |
+          # tell the operating system to remove the file size limit on core dump files 
+          ulimit -c unlimited
+          ./dump
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -39,9 +44,9 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests
-      - setup_remote_docker
+#      - setup_remote_docker
       - run:
-          name: test
+          name: run_tests
           command: |
             mvn install -DcreateChecksum=true source:jar javadoc:jar -e
             cp ./.circleci/settings.xml ~/.m2 
