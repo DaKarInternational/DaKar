@@ -10,10 +10,10 @@ jobs:
       - image: circleci/openjdk:8-jdk
       - image: dakarinternational/couch-test:latest
 
-      - run: |
-          # tell the operating system to remove the file size limit on core dump files 
-          ulimit -c unlimited
-          ./dump
+#      - run: |
+#           tell the operating system to remove the file size limit on core dump files 
+#          ulimit -c unlimited
+#          ./dump
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
