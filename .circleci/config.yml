@@ -70,6 +70,7 @@ jobs:
           name: push
           command: |
             docker-compose build couchtest
+            docker-compose push
 
 workflows:
   version: 2
