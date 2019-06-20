@@ -96,7 +96,7 @@ workflows:
   run-testdb:
     jobs:
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
-        type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
       - testdb
           requires:
             - hold
@@ -104,18 +104,19 @@ workflows:
   build:
     jobs:
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
-        type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
       - build
           requires:
             - hold
-  build-and-deploy:
+  build-and-deploy-and-push:
     jobs:
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
-        type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
+          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
       - push-test-db
-      - build:
           requires:
             - hold
+      - build:
+          requires:
             - push-test-db
           filters:
             branches:
