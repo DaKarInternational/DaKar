@@ -9,6 +9,8 @@ jobs:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
       - image: dakarinternational/couch-test:latest
+    requires:
+      - hold
 
 #      - run: |
 #           tell the operating system to remove the file size limit on core dump files 
@@ -106,8 +108,6 @@ workflows:
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
       - build
-          requires:
-            - hold
   build-and-deploy-and-push:
     jobs:
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
