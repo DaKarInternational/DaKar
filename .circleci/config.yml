@@ -9,6 +9,7 @@ jobs:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
       - image: dakarinternational/couch-test:latest
+        
     requires:
       - hold
 
@@ -48,7 +49,7 @@ jobs:
       # run tests
       - setup_remote_docker
       - run:
-          name: run_tests
+          name: junit run tests
           command: |
             docker-compose logs couchtest
             mvn install -DcreateChecksum=true source:jar javadoc:jar -e
@@ -73,7 +74,7 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-          name: push
+          name: build and push
           command: |
             docker login -p $DOCKER_PWD -u $DOCKER_USR
             docker-compose build couchtest
@@ -89,12 +90,12 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-          name: push
+          name: pull and run
           command: |
             docker-compose pull couchtest
             docker-compose up -d couchtest
             sleep 30
-            docker-compose logs couchtest
+            docker-compose logs -f couchtest
 
 
 
