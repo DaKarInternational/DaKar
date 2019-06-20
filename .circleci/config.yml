@@ -86,6 +86,7 @@ jobs:
       - run:
           name: push
           command: |
+            docker-compose pull
             docker-compose up -d couchtest
             sleep 30
             docker-compose logs couchtest
