@@ -44,7 +44,7 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests
-#      - setup_remote_docker
+      - setup_remote_docker
       - run:
           name: run_tests
           command: |
