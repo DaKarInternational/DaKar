@@ -73,7 +73,7 @@ jobs:
             docker login -p $DOCKER_PWD -u $DOCKER_USR
             docker-compose build couchtest
             docker-compose up -d couchtest
-            sleep 10
+            sleep 30
             docker-compose logs couchtest
             docker-compose push couchtest
 
