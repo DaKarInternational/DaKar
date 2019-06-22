@@ -90,7 +90,7 @@ jobs:
             docker-compose pull couchtest
             docker-compose up -d couchtest
             sleep 30
-            docker-compose logs -f couchtest
+            docker-compose logs couchtest
 
 
 
