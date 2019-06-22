@@ -1,0 +1,307 @@
+# Java Maven CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  
+  build:
+    machine: true
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+#    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: mvn dependency:go-offline
+
+      - run:
+          name: run test db
+          command: |
+            docker-compose pull couchtest
+            docker-compose up -d couchtest
+            docker-compose logs couchtest
+      - run:
+          name: maven install
+          command: |
+            sleep 50
+            mvn source:jar javadoc:jar install -DcreateChecksum=true -e
+            docker-compose stop couchtest
+            cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
+            cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
+            cp ./.circleci/docker-compose-prod.yml /home/circleci/project/target/docker-compose-prod.yml
+            ls -la /home/circleci/.m2/repository/com/dakar/dakar/
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+
+      - save_cache:
+          paths:
+            - /home/circleci/project/target/
+          key: v1-artifacts-{{ checksum "pom.xml" }}
+
+      - persist_to_workspace:
+          root: /home/circleci/
+          paths:
+            - project/target/*
+      
+      - store_artifacts:
+          path: /home/circleci/.m2/repository/com/dakar/dakar/
+  build-skiptest:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: mvn dependency:go-offline
+
+      - run:
+          name: maven install
+          command: |
+            mvn source:jar javadoc:jar install -DskipTests -DcreateChecksum=true -e
+            cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
+            cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
+            cp ./.circleci/docker-compose-prod.yml /home/circleci/project/target/docker-compose-prod.yml
+            ls -la /home/circleci/.m2/repository/com/dakar/dakar/
+            
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+          
+      - save_cache:
+          paths:
+            - /home/circleci/project/target/
+          key: v1-artifacts-{{ checksum "pom.xml" }}
+          
+      - persist_to_workspace:
+         root: /home/circleci/
+         paths:
+           - project/target/*
+#           - .m2/repository/com/dakar/dakar/*
+
+      - store_artifacts:
+          path: /home/circleci/.m2/repository/com/dakar/dakar/
+  maven-deploy:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - restore_cache:
+          keys:
+            - v1-artifacts-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-artifacts-
+
+      - run: mvn dependency:go-offline
+      - attach_workspace:
+          at: /home/circleci/
+      - run:
+          name: maven deploy
+          command: |
+            cp ./target/settings.xml ~/.m2 
+            ls -la /home/circleci/project/target/
+            mvn source:jar javadoc:jar deploy -DskipTests -DcreateChecksum=true
+      - store_artifacts:
+          path: /home/circleci/.m2/repository/com/dakar/dakar/
+            
+  docker-build-push:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - setup_remote_docker
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - restore_cache:
+          keys:
+            - v1-artifacts-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-artifacts-
+
+#      - run: mvn dependency:go-offline
+      - attach_workspace:
+          at: /home/circleci
+      - run:
+          name: docker build
+          command: |
+            pwd
+            ls -l
+            ls -l target
+            docker login -p $DOCKER_PWD -u $DOCKER_USR
+            mvn dockerfile:build dockerfile:push
+      - persist_to_workspace:
+          root: /home/circleci/
+          paths:
+            - project/target/*
+    
+  ssh-deploy-in-vps:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - attach_workspace:
+          at: /home/circleci/
+      - run:
+          name: deploy on vps
+          command: |
+            pwd
+            ls -la
+            cd /home/circleci/project/target
+            scp -oStrictHostKeyChecking=no ./deploy.sh dreaser@dakar.lambla.eu:/opt/deploy.sh
+            scp -oStrictHostKeyChecking=no ./docker-compose-prod.yml dreaser@dakar.lambla.eu:/opt/docker-compose-prod.yml
+            ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu "
+            /opt/deploy.sh"
+      - add_ssh_keys:
+          fingerprints:
+            - "32:e4:94:57:e8:e3:04:a1:65:a7:a7:49:a7:e2:e8:56"
+              
+              
+  build-and-push-testdb:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: build and push
+          command: |
+            docker login -p $DOCKER_PWD -u $DOCKER_USR
+            docker-compose build couchtest
+            docker-compose push couchtest
+            
+
+  run-test-db:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: pull and run
+          command: |
+            docker-compose pull couchtest
+            docker-compose up -d couchtest
+            docker-compose logs -f couchtest
+
+
+
+
+
+
+
+workflows:
+  version: 2
+  
+  run-testdb:
+    jobs:
+      - hold:
+          type: approval
+      - run-test-db:
+          requires:
+            - hold
+          
+  just-build:
+    jobs:
+      - build
+  just-build-skiptest-and-deploy-on-nexus:
+    jobs:
+      - hold:
+          type: approval
+      - build-skiptest:
+          requires:
+            - hold
+      - maven-deploy:
+          requires:
+            - build-skiptest
+  build-skiptest-push-vps:
+    jobs:
+      - hold:
+          type: approval
+      - build-skiptest:
+          requires:
+            - hold
+      - ssh-deploy-in-vps:
+          requires:
+            - docker-build-push
+          filters:
+            branches:
+              only: features/circleci
+      - docker-build-push:
+          requires:
+            - build-skiptest
+  build-skiptest-deploy-push-vps:
+    jobs:
+      - hold:
+          type: approval
+      - build-skiptest:
+          requires:
+            - hold
+      - ssh-deploy-in-vps:
+          requires:
+            - docker-build-push
+          filters:
+            branches:
+              only: features/circleci
+      - maven-deploy:
+          requires:
+            - build-skiptest
+      - docker-build-push:
+          requires:
+            - build-skiptest
+  build-deploy-push-vps:
+    jobs:
+      - hold: 
+          type: approval 
+      - build-and-push-testdb:
+          requires:
+            - hold
+      - build:
+          requires:
+            - build-and-push-testdb
+      - ssh-deploy-in-vps:
+          requires:
+            - docker-build-push
+          filters:
+            branches:
+              only: features/circleci
+      - maven-deploy:
+          requires:
+            - build
+      - docker-build-push:
+          requires:
+            - build

@@ -78,10 +78,17 @@ CREATE PRIMARY INDEX ON `test`
 create user 'test' with password = 'password'  
 
 Or you just :  
-
+```
 docker-compose up -d couchtest  
 
 docker-compose stop couchtest  
+
+docker exec -ti couch-test /bin/bash  
+tail -f /opt/couchbase/var/lib/couchbase/logs/http_access_internal.log  
+
+or 
+docker-compose exec couchtest bash
+```
 
 # make sure that the db is correctly started  
 docker-compose logs couchtest  
