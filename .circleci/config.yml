@@ -24,9 +24,9 @@ jobs:
       MAVEN_OPTS: -Xmx3200m
 
     steps:
-      - setup_remote_docker
-      - run: |
-          ulimit -c unlimited
+#      - setup_remote_docker
+#      - run: |
+#          ulimit -c unlimited
 #          ./dump
       #           tell the operating system to remove the file size limit on core dump files 
 
