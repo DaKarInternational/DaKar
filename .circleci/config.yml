@@ -129,7 +129,6 @@ jobs:
           name: maven deploy
           command: |
             cp ./target/settings.xml ~/.m2 
-            ls -la /home/circleci/.m2/repository/com/dakar/dakar/
             ls -la /home/circleci/project/target/
             mvn source:jar javadoc:jar deploy -DskipTests -DcreateChecksum=true
       - store_artifacts:
@@ -243,6 +242,22 @@ workflows:
           requires:
             - hold
       - maven-deploy:
+          requires:
+            - build-skiptest
+  build-skiptest-push-vps:
+    jobs:
+      - hold:
+          type: approval
+      - build-skiptest:
+          requires:
+            - hold
+      - ssh-deploy-in-vps:
+          requires:
+            - docker-build-push
+          filters:
+            branches:
+              only: features/circleci
+      - docker-build-push:
           requires:
             - build-skiptest
   build-skiptest-deploy-push-vps:
