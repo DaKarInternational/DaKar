@@ -122,7 +122,7 @@ jobs:
           command: |
             pwd
             ls -la
-            cd /tmp/workspace/target/
+            cd /tmp/workspace/
             ls -la
             cp ./settings.xml ~/.m2 
             mvn -DskipTests deploy
