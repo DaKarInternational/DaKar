@@ -101,7 +101,7 @@ jobs:
           name: maven install
           command: |
             mvn install -DskipTests -DcreateChecksum=true source:jar javadoc:jar -e
-            touch /home/circleci/project/target/deploy.sh
+            cp ./dist/deploy.sh /home/circleci/project/target/deploy.sh
             
       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
       - persist_to_workspace:
