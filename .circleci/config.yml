@@ -49,6 +49,9 @@ jobs:
       - run:
           name: junit run tests
           command: |
+            docker-compose pull couchtest
+            docker-compose up -d couchtest
+            sleep 10
             curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
             docker-compose logs -f couchtest
       - run:
@@ -58,10 +61,6 @@ jobs:
             cp ./.circleci/settings.xml ~/.m2 
             mvn -DskipTests deploy
             mvn dockerfile:build dockerfile:push
-#            docker-compose pull couchtest
-#            docker-compose up -d couchtest
-#            sleep 10
-#            docker-compose logs couchtest
       - add_ssh_keys:
           fingerprints:
             - "32:e4:94:57:e8:e3:04:a1:65:a7:a7:49:a7:e2:e8:56"
