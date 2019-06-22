@@ -114,7 +114,7 @@ workflows:
       - hold: 
           type: approval 
       - build-and-push-testdb
-      - build
+      - build:
           filters:
             branches:
               only: features/circleci
