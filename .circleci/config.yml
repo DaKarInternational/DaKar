@@ -51,6 +51,11 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
+      - save_cache:
+          paths:
+            - /home/circleci/.m2/repository/com/dakar/dakar/
+          key: v1-artifacts-{{ checksum "pom.xml" }}
+
       - persist_to_workspace:
           root: /home/circleci/
           paths:
@@ -87,6 +92,11 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
           
+      - save_cache:
+          paths:
+            - /home/circleci/.m2/repository/com/dakar/dakar/
+          key: v1-artifacts-{{ checksum "pom.xml" }}
+          
       - persist_to_workspace:
          root: /home/circleci/
          paths:
@@ -106,6 +116,11 @@ jobs:
             - v1-dependencies-{{ checksum "pom.xml" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
+      - restore_cache:
+          keys:
+            - v1-artifacts-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-artifacts-
 
       - run: mvn dependency:go-offline
       - attach_workspace:
@@ -131,6 +146,11 @@ jobs:
             - v1-dependencies-{{ checksum "pom.xml" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
+      - restore_cache:
+          keys:
+            - v1-artifacts-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-artifacts-
 
 #      - run: mvn dependency:go-offline
       - attach_workspace:
@@ -194,6 +214,7 @@ jobs:
             docker-compose pull couchtest
             docker-compose up -d couchtest
             docker-compose logs -f couchtest
+
 
 
 
