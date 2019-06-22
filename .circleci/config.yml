@@ -161,12 +161,8 @@ jobs:
           name: deploy on vps
           command: |
             cd /tmp/workspace/project/target
-            ls -lart
-            scp -oStrictHostKeyChecking=no ./deploy.sh dreaser@dakar.lambla.eu:/opt/deploy,sh
+            scp -oStrictHostKeyChecking=no ./deploy.sh dreaser@dakar.lambla.eu:/opt/deploy.sh
             ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu "
-            pwd
-            ls -lart
-            chmod +x /opt/deploy.sh
             /opt/deploy.sh"
       - add_ssh_keys:
           fingerprints:
