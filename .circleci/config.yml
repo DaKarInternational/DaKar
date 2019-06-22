@@ -8,10 +8,6 @@ jobs:
     machine: true
 #      image: circleci/classic:latest
       
-#    docker:
-#      - image: circleci/openjdk:8-jdk
-#      - image: dakarinternational/couch-test:latest
-        
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -36,11 +32,6 @@ jobs:
 
       - run: mvn dependency:go-offline
 
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
-
       - run:
           name: run test db
           command: |
@@ -55,6 +46,11 @@ jobs:
             docker-compose stop couchtest
             cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
             cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
 
       - persist_to_workspace:
           root: /home/circleci/
@@ -78,10 +74,6 @@ jobs:
 
       - run: mvn dependency:go-offline
 
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
 
       - run:
           name: maven install
@@ -90,6 +82,11 @@ jobs:
             cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
             cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
             
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+          
       - persist_to_workspace:
          root: /home/circleci/
          paths:
@@ -117,7 +114,7 @@ jobs:
             cp ./target/settings.xml ~/.m2 
             mvn -DskipTests deploy
       - store_artifacts:
-          path: /home/circleci/.m2/repository/
+          path: /home/circleci/.m2/repository/com/dakar/dakar/
             
   docker-build-push:
     docker:
