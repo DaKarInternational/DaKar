@@ -12,6 +12,11 @@ jobs:
         
     requires:
       - hold
+      - push-test-db
+    
+    filters:
+      branches:
+        only: features/circleci
 
 #      - run: |
 #           tell the operating system to remove the file size limit on core dump files 
@@ -119,9 +124,4 @@ workflows:
       - hold: # <<< A job that will require manual approval in the CircleCI web application.
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
       - push-test-db
-      - build:
-          requires:
-            - push-test-db
-          filters:
-            branches:
-              only: features/circleci
+      - build
