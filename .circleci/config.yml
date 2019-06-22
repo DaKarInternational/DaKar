@@ -10,7 +10,7 @@ jobs:
       - image: dakarinternational/couch-test:latest
         
       - run: |
-           tell the operating system to remove the file size limit on core dump files 
+#           tell the operating system to remove the file size limit on core dump files 
           ulimit -c unlimited
           ./dump
 
