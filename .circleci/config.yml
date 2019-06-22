@@ -213,6 +213,10 @@ workflows:
   just-build:
     jobs:
       - build
+  just-build-and-deploy-on-nexus:
+    jobs:
+      - build
+      - maven-deploy
   build-skiptest-deploy-push-vps:
     jobs:
       - hold:
