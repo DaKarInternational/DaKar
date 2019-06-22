@@ -96,22 +96,21 @@ jobs:
             docker-compose logs -f couchtest
 
 
+  hold: # <<< A job that will require manual approval in the CircleCI web application.
+    type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
 
 workflows:
   version: 2
   
   run-testdb:
     jobs:
+      - hold
       - run-test-db
           requires:
             - hold
-      - hold:
-          type: approval
           
   build:
     jobs:
-      - hold: # <<< A job that will require manual approval in the CircleCI web application.
-          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
       - build
       
   build-and-deploy-and-push:
