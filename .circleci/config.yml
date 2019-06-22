@@ -134,6 +134,7 @@ jobs:
           command: |
             pwd
             ls -l
+            ls -l target
             mvn dockerfile:build dockerfile:push
         
     
