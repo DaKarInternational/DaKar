@@ -46,14 +46,12 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      #      - run:
-      #          name: run test db
-      #          command: |
-      #            docker-compose pull couchtest
-      #            docker-compose up -d couchtest
-      #            sleep 10
-      #            curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
-      #            docker-compose logs -f couchtest
+      - run:
+          name: run test db
+          command: |
+            docker-compose pull couchtest
+            docker-compose up -d couchtest
+            docker-compose logs couchtest
       - run:
           name: maven stuff
           command: |
