@@ -21,6 +21,7 @@ jobs:
       MAVEN_OPTS: -Xmx3200m
 
     steps:
+      - setup_remote_docker
       - run: |
           ulimit -c unlimited
 #          ./dump
@@ -42,12 +43,11 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      - setup_remote_docker
       - run:
           name: junit run tests
           command: |
-            docker-compose logs couchtest
             curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
+            docker-compose logs -f couchtest
       - run:
           name: maven stuff
           command: |
