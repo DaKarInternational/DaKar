@@ -101,12 +101,10 @@ jobs:
             cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
             cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
             
-      # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
       - persist_to_workspace:
          root: /home/circleci/
          paths:
            - project/target/*
-#           - project/target/dakar-0.0.2-javadoc.jar
 
   maven-deploy:
     docker:
