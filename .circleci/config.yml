@@ -101,6 +101,8 @@ jobs:
           name: maven install
           command: |
             mvn install -DskipTests -DcreateChecksum=true source:jar javadoc:jar -e
+            pwd
+            ls -lart
             cp ./dist/deploy.sh /home/circleci/project/target/deploy.sh
             
       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
@@ -161,6 +163,7 @@ jobs:
             ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu "
             pwd
             ls -lart
+            chmod +x /opt/deploy.sh
             /opt/deploy.sh"
       - add_ssh_keys:
           fingerprints:
