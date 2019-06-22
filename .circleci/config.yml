@@ -85,7 +85,8 @@ jobs:
 
   run-test-db:
     docker:
-      - image: dakarinternational/couch-test:latest
+#      - image: dakarinternational/couch-test:latest
+      - image: couchbase:5.1.0
     steps:
       - run:
           name: logs
