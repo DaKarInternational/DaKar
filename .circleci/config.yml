@@ -42,7 +42,7 @@ jobs:
           name: maven install
           command: |
             sleep 50
-            mvn install -DcreateChecksum=true source:jar javadoc:jar -e
+            mvn source:jar javadoc:jar install -DcreateChecksum=true -e
             docker-compose stop couchtest
             cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
             cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
@@ -80,7 +80,7 @@ jobs:
       - run:
           name: maven install
           command: |
-            mvn install -DskipTests -DcreateChecksum=true source:jar javadoc:jar -e
+            mvn source:jar javadoc:jar install -DskipTests -DcreateChecksum=true -e
             cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
             cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
             ls -la /home/circleci/.m2/repository/com/dakar/dakar/
