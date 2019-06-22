@@ -91,6 +91,7 @@ jobs:
          root: /home/circleci/
          paths:
            - project/target/*
+           - .m2/repository/com/dakar/dakar/*
 
   maven-deploy:
     docker:
