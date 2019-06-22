@@ -25,11 +25,6 @@ jobs:
 
     steps:
 #      - setup_remote_docker
-#      - run: |
-#          ulimit -c unlimited
-#          ./dump
-      #           tell the operating system to remove the file size limit on core dump files 
-
       - checkout
 
       # Download and cache dependencies
@@ -58,20 +53,11 @@ jobs:
             sleep 50
             mvn install -DcreateChecksum=true source:jar javadoc:jar -e
             docker-compose stop couchtest
-      - run:
-          name: maven deploy
-          command: |
-            cp ./.circleci/settings.xml ~/.m2 
-            mvn -DskipTests deploy
-      - run:
-          name: docker build
-          command: |
-            mvn dockerfile:build 
-      - run:
-          name: docker push
-          command: |
-            mvn dockerfile:push
 
+      - persist_to_workspace:
+          root: /home/circleci/
+          paths:
+            - project/target/*
 
   build-skiptest:
     docker:
@@ -117,7 +103,7 @@ jobs:
           command: |
             pwd
             ls -lart
-            cp ./project/target/settings.xml ~/.m2 
+            cp ./target/settings.xml ~/.m2 
             mvn -DskipTests deploy
       - persist_to_workspace:
           root: /home/circleci/
