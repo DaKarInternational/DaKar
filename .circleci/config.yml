@@ -107,6 +107,7 @@ workflows:
           
   just-build:
     jobs:
+      - run-test-db
       - build:
           requires:
             - run-test-db
