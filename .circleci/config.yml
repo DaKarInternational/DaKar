@@ -108,7 +108,7 @@ jobs:
          # taken to be the root directory of the workspace.
          root: workspace
          paths:
-           - ../../.m2/repository/com/dakar/dakar
+           - ../../.m2/repository/com/dakar/dakar/*.xml
             
   maven-deploy:
     docker:
