@@ -22,7 +22,6 @@ jobs:
 
     steps:
       - run: |
-          curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
           ulimit -c unlimited
 #          ./dump
       #           tell the operating system to remove the file size limit on core dump files 
@@ -48,6 +47,7 @@ jobs:
           name: junit run tests
           command: |
             docker-compose logs couchtest
+            curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
             mvn install -DcreateChecksum=true source:jar javadoc:jar -e
             cp ./.circleci/settings.xml ~/.m2 
             mvn -DskipTests deploy
@@ -92,6 +92,7 @@ jobs:
             docker-compose up -d couchtest
             sleep 30
             docker-compose logs couchtest
+            curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
 
 
 
@@ -108,10 +109,7 @@ workflows:
           
   just-build:
     jobs:
-      - run-test-db
-      - build:
-          requires:
-            - run-test-db
+      - build
       
   build-deploy-and-push:
     jobs:
