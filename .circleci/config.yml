@@ -239,7 +239,7 @@ workflows:
               only: features/circleci
       - maven-deploy:
           requires:
-            - build-skiptest
+            - build
       - docker-build-push:
           requires:
-            - build-skiptest
+            - build
