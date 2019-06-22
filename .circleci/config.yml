@@ -106,8 +106,6 @@ workflows:
     jobs:
       - hold
       - run-test-db
-          requires:
-            - hold
           
   build:
     jobs:
