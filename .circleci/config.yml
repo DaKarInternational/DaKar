@@ -108,6 +108,8 @@ workflows:
   just-build:
     jobs:
       - build
+          requires:
+            - run-test-db
       
   build-deploy-and-push:
     jobs:
