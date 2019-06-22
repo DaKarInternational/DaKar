@@ -111,9 +111,6 @@ jobs:
       - run:
           name: maven deploy
           command: |
-            pwd
-            ls -lart
-            ls -l ~/.m2
             cp ./target/settings.xml ~/.m2 
             mvn -DskipTests deploy
             
@@ -135,6 +132,8 @@ jobs:
       - run:
           name: docker build
           command: |
+            pwd
+            ls -l
             mvn dockerfile:build dockerfile:push
         
     
