@@ -237,7 +237,11 @@ workflows:
       - build
   just-build-skiptest-and-deploy-on-nexus:
     jobs:
-      - build-skiptest
+      - hold:
+          type: approval
+      - build-skiptest:
+          requires:
+            - hold
       - maven-deploy:
           requires:
             - build-skiptest
