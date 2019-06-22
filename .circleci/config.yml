@@ -44,6 +44,7 @@ jobs:
             docker-compose stop couchtest
             cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
             cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
+            cp ./.circleci/docker-compose-prod.yml /home/circleci/project/target/docker-compose-prod.yml
             ls -la /home/circleci/.m2/repository/com/dakar/dakar/
 
       - save_cache:
@@ -85,6 +86,7 @@ jobs:
             mvn source:jar javadoc:jar install -DskipTests -DcreateChecksum=true -e
             cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
             cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
+            cp ./.circleci/docker-compose-prod.yml /home/circleci/project/target/docker-compose-prod.yml
             ls -la /home/circleci/.m2/repository/com/dakar/dakar/
             
       - save_cache:
@@ -181,6 +183,7 @@ jobs:
             ls -la
             cd /home/circleci/project/target
             scp -oStrictHostKeyChecking=no ./deploy.sh dreaser@dakar.lambla.eu:/opt/deploy.sh
+            scp -oStrictHostKeyChecking=no ./docker-compose-prod.yml dreaser@dakar.lambla.eu:/opt/docker-compose-prod.yml
             ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu "
             /opt/deploy.sh"
       - add_ssh_keys:
@@ -214,6 +217,7 @@ jobs:
             docker-compose pull couchtest
             docker-compose up -d couchtest
             docker-compose logs -f couchtest
+
 
 
 
