@@ -153,6 +153,8 @@ jobs:
       - run:
           name: deploy on vps
           command: |
+            pwd
+            ls -la
             cd /home/circleci/project/target
             scp -oStrictHostKeyChecking=no ./deploy.sh dreaser@dakar.lambla.eu:/opt/deploy.sh
             ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu "
