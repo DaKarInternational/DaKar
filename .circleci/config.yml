@@ -108,8 +108,8 @@ jobs:
          # taken to be the root directory of the workspace.
          root: workspace
          paths:
-           - ../../.m2/repository/com/dakar/dakar/*.xml
-            
+           - ../../.m2/repository/com/dakar/dakar/maven-metadata-local.xml
+
   maven-deploy:
     docker:
       - image: circleci/openjdk:8-jdk
