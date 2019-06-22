@@ -84,6 +84,8 @@ jobs:
   run-test-db:
     docker:
       - image: circleci/openjdk:8-jdk
+    requires:
+      - hold
     steps:
       - checkout
       - setup_remote_docker
@@ -103,8 +105,6 @@ workflows:
   run-testdb:
     jobs:
       - run-test-db
-          requires:
-            - hold
       - hold:
           type: approval
           
