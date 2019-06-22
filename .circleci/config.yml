@@ -53,7 +53,7 @@ jobs:
 
       - save_cache:
           paths:
-            - /home/circleci/.m2/repository/com/dakar/dakar/
+            - /home/circleci/project/target/
           key: v1-artifacts-{{ checksum "pom.xml" }}
 
       - persist_to_workspace:
