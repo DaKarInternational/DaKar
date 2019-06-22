@@ -152,7 +152,7 @@ jobs:
       - run:
           name: deploy on vps
           command: |
-            ls -lart
+            add_ssh_keys
             ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu
       - add_ssh_keys:
           fingerprints:
