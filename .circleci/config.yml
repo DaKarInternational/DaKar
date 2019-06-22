@@ -53,6 +53,8 @@ jobs:
             sleep 50
             mvn install -DcreateChecksum=true source:jar javadoc:jar -e
             docker-compose stop couchtest
+            cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
+            cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
 
       - persist_to_workspace:
           root: /home/circleci/
@@ -140,7 +142,6 @@ jobs:
             ls -l
             ls -l target
             docker login -p $DOCKER_PWD -u $DOCKER_USR
-            cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
             mvn dockerfile:build dockerfile:push
       - persist_to_workspace:
           root: /home/circleci/
