@@ -107,7 +107,7 @@ jobs:
          # taken to be the root directory of the workspace.
          root: workspace
          paths:
-           - ~/.m2
+           - /home/circleci/.m2
             
   maven-deploy:
     docker:
@@ -213,8 +213,8 @@ workflows:
       - hold:
           type: approval
       - build-and-push-testdb:
-          requires:
-            - hold
+#          requires:
+#            - hold
       - build-skiptest:
           requires:
             - build-and-push-testdb
