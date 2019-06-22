@@ -48,6 +48,9 @@ jobs:
           command: |
             docker-compose logs couchtest
             curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
+      - run:
+          name: maven stuff
+          command: |
             mvn install -DcreateChecksum=true source:jar javadoc:jar -e
             cp ./.circleci/settings.xml ~/.m2 
             mvn -DskipTests deploy
