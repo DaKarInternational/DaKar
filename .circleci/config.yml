@@ -223,18 +223,14 @@ workflows:
     jobs:
       - hold:
           type: approval
-      - build-and-push-testdb
-#          requires:
-#            - hold
-      - build-skiptest:
-          requires:
-            - build-and-push-testdb
+      - build-skiptest
       - ssh-deploy-in-vps:
           requires:
             - build-skiptest
           filters:
             branches:
               only: features/circleci
+      - maven-deploy
 
   build-deploy-push-vps:
     jobs:
