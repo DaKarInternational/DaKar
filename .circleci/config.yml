@@ -97,8 +97,6 @@ jobs:
             sleep 30
             docker-compose logs -f couchtest
 
-  hold:
-    type: approval
 
 
 workflows:
@@ -106,8 +104,9 @@ workflows:
   
   run-testdb:
     jobs:
-      - hold
       - run-test-db
+      - hold:
+          type: approval
           
   build:
     jobs:
