@@ -228,6 +228,8 @@ workflows:
             branches:
               only: features/circleci
       - maven-deploy
+          requires:
+            - build-skiptest
 
   build-deploy-push-vps:
     jobs:
