@@ -79,7 +79,7 @@ jobs:
     
     steps:
       - checkout
-      - run: mkdir -p workspace
+#      - run: mkdir -p workspace
 #      will be created here /home/circleci/project/workspace
 
 
@@ -104,9 +104,9 @@ jobs:
             
       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
       - persist_to_workspace:
-         root: workspace
+         root: /home/circleci/
          paths:
-           - ../../.m2/repository/com/dakar/dakar/maven-metadata-local.xml
+           -.m2/repository/com/dakar/dakar/maven-metadata-local.xml
 
   maven-deploy:
     docker:
