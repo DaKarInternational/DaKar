@@ -5,9 +5,12 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: circleci/openjdk:8-jdk
-      - image: dakarinternational/couch-test:latest
+    machine: true
+#      image: circleci/classic:latest
+      
+#    docker:
+#      - image: circleci/openjdk:8-jdk
+#      - image: dakarinternational/couch-test:latest
         
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
