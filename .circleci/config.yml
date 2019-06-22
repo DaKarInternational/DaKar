@@ -64,13 +64,58 @@ jobs:
             cp ./.circleci/settings.xml ~/.m2 
             mvn -DskipTests deploy
       - run:
-          name: docker push
+          name: docker build
           command: |
             mvn dockerfile:build 
       - run:
           name: docker push
           command: |
             mvn dockerfile:push
+
+
+  build-skiptest:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+
+      - run:
+          name: maven install
+          command: |
+            mvn install -DskipTests -DcreateChecksum=true source:jar javadoc:jar -e
+      - run:
+          name: maven deploy
+          command: |
+            cp ./.circleci/settings.xml ~/.m2 
+            mvn -DskipTests deploy
+      - run:
+          name: docker build
+          command: |
+            mvn dockerfile:build 
+      - run:
+          name: docker push
+          command: |
+            mvn dockerfile:push
+        
+    
+  ssh-deploy-in-vps:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
       - run:
           name: deploy on vps
           command: |
@@ -79,8 +124,8 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "32:e4:94:57:e8:e3:04:a1:65:a7:a7:49:a7:e2:e8:56"
-
-
+              
+              
   build-and-push-testdb:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -124,7 +169,26 @@ workflows:
   just-build:
     jobs:
       - build
-      
+
+
+  build-skiptest-deploy-and-push:
+    jobs:
+      - hold:
+          type: approval
+      - build-and-push-testdb:
+          requires:
+            - hold
+      - build-skiptest:
+          requires:
+            - build-and-push-testdb
+      - ssh-deploy-in-vps:
+          requires:
+            - build
+          filters:
+            branches:
+              only: features/circleci
+      - ssh-deploy-in-vps
+
   build-deploy-and-push:
     jobs:
       - hold: 
@@ -138,4 +202,5 @@ workflows:
           filters:
             branches:
               only: features/circleci
+      - ssh-deploy-in-vps
 
