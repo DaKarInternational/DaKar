@@ -114,6 +114,7 @@ jobs:
           name: maven deploy
           command: |
             cp ./target/settings.xml ~/.m2 
+            ls -la /home/circleci/.m2/repository/com/dakar/dakar/
             mvn -DskipTests deploy
       - store_artifacts:
           path: /home/circleci/.m2/repository/com/dakar/dakar/
