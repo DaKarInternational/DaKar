@@ -161,6 +161,8 @@ jobs:
             ls -lart
             cd /tmp/workspace/project
             ls -lart
+            cd /tmp/workspace/project/target
+            ls -lart
             scp -oStrictHostKeyChecking=no ./deply.sh dreaser@dakar.lambla.eu:/opt/deploy,sh
             ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu "
             pwd
