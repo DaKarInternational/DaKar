@@ -17,6 +17,15 @@ services:
       - "couch"
     networks:
       - dakar-network
+  app-ng:
+    image: "dakarinternational/dakar-ng:latest"
+    ports:
+      - "80:80"
+    container_name: 'app-dakar-ng'
+    depends_on:
+      - "app"
+    networks:
+      - dakar-network
 networks:
   dakar-network:
     driver: bridge
