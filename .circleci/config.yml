@@ -114,6 +114,8 @@ jobs:
           command: |
             cp ./target/settings.xml ~/.m2 
             mvn -DskipTests deploy
+      - store_artifacts:
+          path: /home/circleci/project/target/
             
   docker-build-push:
     docker:
