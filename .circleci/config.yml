@@ -106,7 +106,7 @@ jobs:
       - persist_to_workspace:
          root: /home/circleci/
          paths:
-           -.m2/repository/com/dakar/dakar/maven-metadata-local.xml
+           - /home/circleci/project/target/maven-metadata-local.xml
 
   maven-deploy:
     docker:
