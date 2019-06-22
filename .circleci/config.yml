@@ -119,6 +119,7 @@ jobs:
       - image: circleci/openjdk:8-jdk
     steps:
       - checkout
+      - setup_remote_docker
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -135,6 +136,7 @@ jobs:
             pwd
             ls -l
             ls -l target
+            docker login -p $DOCKER_PWD -u $DOCKER_USR
             cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
             mvn dockerfile:build dockerfile:push
         
