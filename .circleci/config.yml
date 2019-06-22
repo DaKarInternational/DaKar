@@ -120,7 +120,7 @@ jobs:
           name: deploy on vps
           command: |
             ls -lart
-            ssh dreaser@dakar.lambla.eu
+            ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu
       - add_ssh_keys:
           fingerprints:
             - "32:e4:94:57:e8:e3:04:a1:65:a7:a7:49:a7:e2:e8:56"
@@ -175,7 +175,7 @@ workflows:
             - hold
 
 
-  build-skiptest-deploy-and-push:
+  build-skiptest-deploy-push-vps:
     jobs:
       - hold:
           type: approval
@@ -192,7 +192,7 @@ workflows:
             branches:
               only: features/circleci
 
-  build-deploy-and-push:
+  build-deploy-push-vps:
     jobs:
       - hold: 
           type: approval 
