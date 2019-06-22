@@ -130,7 +130,8 @@ jobs:
           command: |
             cp ./target/settings.xml ~/.m2 
             ls -la /home/circleci/.m2/repository/com/dakar/dakar/0.0.2
-            mvn -DskipTests deploy
+            ls -la /home/circleci/project/target/
+            mvn source:jar javadoc:jar deploy -DskipTests -DcreateChecksum=true
       - store_artifacts:
           path: /home/circleci/.m2/repository/com/dakar/dakar/
             
