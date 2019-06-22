@@ -107,6 +107,7 @@ jobs:
          root: /home/circleci/
          paths:
            - project/target/dakar-0.0.2-javadoc.jar
+           - project/target/*
 
   maven-deploy:
     docker:
