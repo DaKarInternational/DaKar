@@ -101,9 +101,8 @@ jobs:
           name: maven install
           command: |
             mvn install -DskipTests -DcreateChecksum=true source:jar javadoc:jar -e
-            pwd
-            ls -lart
             cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
+            cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
             
       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
       - persist_to_workspace:
@@ -121,7 +120,7 @@ jobs:
       - run:
           name: maven deploy
           command: |
-            cp ./.circleci/settings.xml ~/.m2 
+            cp ./settings.xml ~/.m2 
             mvn -DskipTests deploy
             
   docker-build:
