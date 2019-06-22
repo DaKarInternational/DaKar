@@ -104,12 +104,9 @@ jobs:
           command: |
             pwd
             ls -lart
+            ls -l ~/.m2
             cp ./target/settings.xml ~/.m2 
             mvn -DskipTests deploy
-      - persist_to_workspace:
-          root: /home/circleci/
-          paths:
-            - project/target/*
             
   docker-build-push:
     docker:
