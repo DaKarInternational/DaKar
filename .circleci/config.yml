@@ -10,9 +10,9 @@ jobs:
       - image: dakarinternational/couch-test:latest
         
       - run: |
-#           tell the operating system to remove the file size limit on core dump files 
           ulimit -c unlimited
           ./dump
+#           tell the operating system to remove the file size limit on core dump files 
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
