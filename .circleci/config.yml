@@ -79,9 +79,6 @@ jobs:
     
     steps:
       - checkout
-#      - run: mkdir -p workspace
-#      will be created here /home/circleci/project/workspace
-
 
       # Download and cache dependencies
       - restore_cache:
