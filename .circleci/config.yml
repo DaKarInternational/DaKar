@@ -115,15 +115,12 @@ jobs:
       - run:
           name: maven deploy
           command: |
-            cd /home/circleci/project/target
-            ls -la
-            cp ./settings.xml ~/.m2 
+            cp project/target/settings.xml ~/.m2 
             mvn -DskipTests deploy
       - persist_to_workspace:
           root: /home/circleci/
           paths:
             - project/target/*
-              #           - project/target/dakar-0.0.2-javadoc.jar
             
   docker-build:
     docker:
