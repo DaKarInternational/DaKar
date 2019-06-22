@@ -85,24 +85,6 @@ jobs:
 
   run-test-db:
     docker:
-      - image: couchbase:5.1.0
-#      - image: dakarinternational/couch-test:latest
-    steps:
-      - run:
-          name: logs
-          command: |
-            cd /opt/couchbase/var/lib/couchbase/logs
-            ls -lart
-            sleep 30
-            ls -lart
-            sleep 30
-            ls -lart
-            curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
-#            tail -f /opt/couchbase/var/lib/couchbase/logs/http_access_internal.log
-#            ps auxef | grep -i couchbase
-
-  run-test-db-manu:
-    docker:
       - image: circleci/openjdk:8-jdk
     requires:
       - hold
@@ -115,8 +97,8 @@ jobs:
             docker-compose pull couchtest
             docker-compose up -d couchtest
             sleep 30
-            docker-compose logs couchtest
             curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
+            docker-compose logs -f couchtest
 
 
 
