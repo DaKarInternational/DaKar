@@ -135,6 +135,7 @@ jobs:
             pwd
             ls -l
             ls -l target
+            cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
             mvn dockerfile:build dockerfile:push
         
     
