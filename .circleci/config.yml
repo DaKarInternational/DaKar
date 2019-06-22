@@ -112,6 +112,8 @@ workflows:
       - hold:
           type: approval
       - run-test-db
+          requires:
+            - hold
           
   build:
     jobs:
