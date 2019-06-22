@@ -80,6 +80,7 @@ jobs:
     steps:
       - checkout
       - run: mkdir -p workspace
+#      will be created here /home/circleci/project/workspace
 
 
       # Download and cache dependencies
@@ -107,7 +108,7 @@ jobs:
          # taken to be the root directory of the workspace.
          root: workspace
          paths:
-           - /home/circleci/.m2
+           - ../../.m2/repository/com/dakar/dakar
             
   maven-deploy:
     docker:
