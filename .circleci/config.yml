@@ -191,7 +191,6 @@ workflows:
           filters:
             branches:
               only: features/circleci
-      - ssh-deploy-in-vps
 
   build-deploy-and-push:
     jobs:
@@ -203,8 +202,10 @@ workflows:
       - build:
           requires:
             - build-and-push-testdb
+      - ssh-deploy-in-vps:
+          requires:
+            - build
           filters:
             branches:
               only: features/circleci
-      - ssh-deploy-in-vps
 
