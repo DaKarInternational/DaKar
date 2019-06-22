@@ -46,6 +46,7 @@ jobs:
             docker-compose stop couchtest
             cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
             cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
+            ls -la /home/circleci/.m2/repository/com/dakar/dakar/
 
       - save_cache:
           paths:
@@ -76,13 +77,13 @@ jobs:
 
       - run: mvn dependency:go-offline
 
-
       - run:
           name: maven install
           command: |
             mvn install -DskipTests -DcreateChecksum=true source:jar javadoc:jar -e
             cp ./.circleci/deploy.sh /home/circleci/project/target/deploy.sh
             cp ./.circleci/settings.xml /home/circleci/project/target/settings.xml
+            ls -la /home/circleci/.m2/repository/com/dakar/dakar/
             
       - save_cache:
           paths:
