@@ -211,7 +211,7 @@ workflows:
     jobs:
       - hold:
           type: approval
-      - build-and-push-testdb:
+      - build-and-push-testdb
 #          requires:
 #            - hold
       - build-skiptest:
