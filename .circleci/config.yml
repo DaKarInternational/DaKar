@@ -149,9 +149,12 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
           name: deploy on vps
           command: |
+            scp -oStrictHostKeyChecking=no ./deply.sh dreaser@dakar.lambla.eu:/opt/deploy,sh
             ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu "
             pwd"
       - add_ssh_keys:
