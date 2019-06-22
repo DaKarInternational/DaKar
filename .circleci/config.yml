@@ -104,9 +104,9 @@ workflows:
   
   run-testdb:
     jobs:
-      - run-test-db
       - hold:
           type: approval
+      - run-test-db
           
   build:
     jobs:
