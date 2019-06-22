@@ -46,17 +46,18 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      - run:
-          name: junit run tests
-          command: |
-            docker-compose pull couchtest
-            docker-compose up -d couchtest
-            sleep 10
-            curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
-            docker-compose logs -f couchtest
+      #      - run:
+      #          name: run test db
+      #          command: |
+      #            docker-compose pull couchtest
+      #            docker-compose up -d couchtest
+      #            sleep 10
+      #            curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
+      #            docker-compose logs -f couchtest
       - run:
           name: maven stuff
           command: |
+            sleep 50
             mvn install -DcreateChecksum=true source:jar javadoc:jar -e
             cp ./.circleci/settings.xml ~/.m2 
             mvn -DskipTests deploy
@@ -83,6 +84,16 @@ jobs:
             
 
   run-test-db:
+    docker:
+      - image: dakarinternational/couch-test:latest
+    steps:
+      - run:
+          name: logs
+          command: |
+            curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
+            fg
+
+  run-test-db-manu:
     docker:
       - image: circleci/openjdk:8-jdk
     requires:
@@ -114,6 +125,7 @@ workflows:
           
   just-build:
     jobs:
+      - run-test-db
       - build
       
   build-deploy-and-push:
