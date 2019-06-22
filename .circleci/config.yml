@@ -101,6 +101,7 @@ jobs:
           name: maven install
           command: |
             mvn install -DskipTests -DcreateChecksum=true source:jar javadoc:jar -e
+            touch /home/circleci/project/target/deploy.sh
             
       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
       - persist_to_workspace:
@@ -156,7 +157,8 @@ jobs:
           command: |
             scp -oStrictHostKeyChecking=no ./deply.sh dreaser@dakar.lambla.eu:/opt/deploy,sh
             ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu "
-            pwd"
+            pwd
+            /opt/deploy.sh"
       - add_ssh_keys:
           fingerprints:
             - "32:e4:94:57:e8:e3:04:a1:65:a7:a7:49:a7:e2:e8:56"
