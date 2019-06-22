@@ -116,21 +116,26 @@ jobs:
       - image: circleci/openjdk:8-jdk
     steps:
       - attach_workspace:
-          at: /tmp/workspace
+          at: /home/circleci/
       - run:
           name: maven deploy
           command: |
-            cd /tmp/workspace/project/target
+            cd /home/circleci/project/target
             ls -la
             cp ./settings.xml ~/.m2 
             mvn -DskipTests deploy
+      - persist_to_workspace:
+          root: /home/circleci/
+          paths:
+            - project/target/*
+              #           - project/target/dakar-0.0.2-javadoc.jar
             
   docker-build:
     docker:
       - image: circleci/openjdk:8-jdk
     steps:
       - attach_workspace:
-          at: /tmp/workspace
+          at: /home/circleci
       - run:
           name: docker build
           command: |
@@ -142,7 +147,7 @@ jobs:
       - image: circleci/openjdk:8-jdk
     steps:
       - attach_workspace:
-          at: /tmp/workspace
+          at: /home/circleci/
       - run:
           name: docker push
           command: |
@@ -154,11 +159,11 @@ jobs:
       - image: circleci/openjdk:8-jdk
     steps:
       - attach_workspace:
-          at: /tmp/workspace
+          at: /home/circleci/
       - run:
           name: deploy on vps
           command: |
-            cd /tmp/workspace/project/target
+            cd /home/circleci/project/target
             scp -oStrictHostKeyChecking=no ./deploy.sh dreaser@dakar.lambla.eu:/opt/deploy.sh
             ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu "
             /opt/deploy.sh"
