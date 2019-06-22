@@ -134,10 +134,6 @@ jobs:
           name: docker build
           command: |
             mvn dockerfile:build dockerfile:push
-      - persist_to_workspace:
-          root: /home/circleci/
-          paths:
-            - project/target/*
         
     
   ssh-deploy-in-vps:
