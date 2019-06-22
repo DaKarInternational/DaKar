@@ -223,7 +223,7 @@ workflows:
       - build-skiptest
       - ssh-deploy-in-vps:
           requires:
-            - build-skiptest
+            - docker-build-push
           filters:
             branches:
               only: features/circleci
