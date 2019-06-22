@@ -152,8 +152,8 @@ jobs:
       - run:
           name: deploy on vps
           command: |
-            ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu
-            pwd
+            ssh -oStrictHostKeyChecking=no dreaser@dakar.lambla.eu "
+            pwd"
       - add_ssh_keys:
           fingerprints:
             - "32:e4:94:57:e8:e3:04:a1:65:a7:a7:49:a7:e2:e8:56"
