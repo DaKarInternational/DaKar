@@ -56,7 +56,9 @@ jobs:
           root: /home/circleci/
           paths:
             - project/target/*
-
+      
+      - store_artifacts:
+          path: /home/circleci/.m2/repository/com/dakar/dakar/
 
   build-skiptest:
     docker:
@@ -93,6 +95,9 @@ jobs:
            - project/target/*
 #           - .m2/repository/com/dakar/dakar/*
 
+      - store_artifacts:
+          path: /home/circleci/.m2/repository/com/dakar/dakar/
+  
   maven-deploy:
     docker:
       - image: circleci/openjdk:8-jdk
