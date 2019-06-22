@@ -238,7 +238,7 @@ workflows:
             - build-and-push-testdb
       - ssh-deploy-in-vps:
           requires:
-            - build
+            - docker-build-push
           filters:
             branches:
               only: features/circleci
