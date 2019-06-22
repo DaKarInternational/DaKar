@@ -90,9 +90,9 @@ jobs:
       - run:
           name: logs
           command: |
-            sleep 50
-            curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
             fg
+#            sleep 50
+#            curl -X PUT --data "name=John Smith&roles=cluster_admin&password=password" -H "Content-Type: application/x-www-form-urlencoded" http://Administrator:password@127.0.0.1:8091/settings/rbac/users/local/test
 
   run-test-db-manu:
     docker:
