@@ -53,13 +53,29 @@ jobs:
             docker-compose up -d couchtest
             docker-compose logs couchtest
       - run:
-          name: maven stuff
+          name: maven install
           command: |
             sleep 50
             mvn install -DcreateChecksum=true source:jar javadoc:jar -e
+            docker-compose stop couchtest
+      - run:
+          name: maven deploy
+          command: |
             cp ./.circleci/settings.xml ~/.m2 
             mvn -DskipTests deploy
-            mvn dockerfile:build dockerfile:push
+      - run:
+          name: docker push
+          command: |
+            mvn dockerfile:build 
+      - run:
+          name: docker push
+          command: |
+            mvn dockerfile:push
+      - run:
+          name: deploy on vps
+          command: |
+            ls -lart
+            ssh dreaser@dakar.lambla.eu
       - add_ssh_keys:
           fingerprints:
             - "32:e4:94:57:e8:e3:04:a1:65:a7:a7:49:a7:e2:e8:56"
@@ -68,8 +84,6 @@ jobs:
   build-and-push-testdb:
     docker:
       - image: circleci/openjdk:8-jdk
-    requires:
-      - hold
     steps:
       - checkout
       - setup_remote_docker
@@ -84,8 +98,6 @@ jobs:
   run-test-db:
     docker:
       - image: circleci/openjdk:8-jdk
-    requires:
-      - hold
     steps:
       - checkout
       - setup_remote_docker
@@ -111,7 +123,6 @@ workflows:
           
   just-build:
     jobs:
-      - run-test-db
       - build
       
   build-deploy-and-push:
