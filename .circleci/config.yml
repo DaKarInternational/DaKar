@@ -200,6 +200,7 @@ jobs:
 
 
 
+
 workflows:
   version: 2
   
@@ -211,20 +212,18 @@ workflows:
           requires:
             - hold
           
+          
   just-build:
     jobs:
-      - hold:
-          type: approval
-      - build:
-          requires:
-            - hold
-
+      - build
 
   build-skiptest-deploy-push-vps:
     jobs:
       - hold:
           type: approval
-      - build-skiptest
+      - build-skiptest:
+          requires:
+            - hold
       - ssh-deploy-in-vps:
           requires:
             - docker-build-push
