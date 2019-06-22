@@ -120,9 +120,7 @@ jobs:
       - run:
           name: maven deploy
           command: |
-            pwd
-            ls -la
-            cd /tmp/workspace/
+            cd /tmp/workspace/project/target
             ls -la
             cp ./settings.xml ~/.m2 
             mvn -DskipTests deploy
