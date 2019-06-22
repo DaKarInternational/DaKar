@@ -6,18 +6,9 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: circleci/openjdk:8-jdk
       - image: dakarinternational/couch-test:latest
         
-    requires:
-      - hold
-      - push-test-db
-    
-    filters:
-      branches:
-        only: features/circleci
-
 #      - run: |
 #           tell the operating system to remove the file size limit on core dump files 
 #          ulimit -c unlimited
@@ -51,7 +42,6 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      # run tests
       - setup_remote_docker
       - run:
           name: junit run tests
@@ -70,7 +60,7 @@ jobs:
             - "32:e4:94:57:e8:e3:04:a1:65:a7:a7:49:a7:e2:e8:56"
 
 
-  push-test-db:
+  build-and-push-testdb:
     docker:
       - image: circleci/openjdk:8-jdk
     requires:
@@ -117,13 +107,15 @@ workflows:
           
   just-build:
     jobs:
-      - hold: # <<< A job that will require manual approval in the CircleCI web application.
-          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
       - build
       
-  build-and-deploy-and-push:
+  build-deploy-and-push:
     jobs:
-      - hold: # <<< A job that will require manual approval in the CircleCI web application.
-          type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"<<
-      - push-test-db
+      - hold: 
+          type: approval 
+      - build-and-push-testdb
       - build
+          filters:
+            branches:
+              only: features/circleci
+
