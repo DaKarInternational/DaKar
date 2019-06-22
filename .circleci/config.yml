@@ -4,10 +4,9 @@
 #
 version: 2
 jobs:
+  
   build:
     machine: true
-#      image: circleci/classic:latest
-      
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -20,7 +19,6 @@ jobs:
       MAVEN_OPTS: -Xmx3200m
 
     steps:
-#      - setup_remote_docker
       - checkout
 
       # Download and cache dependencies
@@ -60,7 +58,6 @@ jobs:
       
       - store_artifacts:
           path: /home/circleci/.m2/repository/com/dakar/dakar/
-
   build-skiptest:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -98,7 +95,6 @@ jobs:
 
       - store_artifacts:
           path: /home/circleci/.m2/repository/com/dakar/dakar/
-  
   maven-deploy:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -201,6 +197,7 @@ jobs:
 
 
 
+
 workflows:
   version: 2
   
@@ -212,11 +209,9 @@ workflows:
           requires:
             - hold
           
-          
   just-build:
     jobs:
       - build
-
   build-skiptest-deploy-push-vps:
     jobs:
       - hold:
@@ -236,7 +231,6 @@ workflows:
       - docker-build-push:
           requires:
             - build-skiptest
-
   build-deploy-push-vps:
     jobs:
       - hold: 
