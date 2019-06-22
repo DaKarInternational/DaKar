@@ -227,7 +227,7 @@ workflows:
           filters:
             branches:
               only: features/circleci
-      - maven-deploy
+      - maven-deploy:
           requires:
             - build-skiptest
 
