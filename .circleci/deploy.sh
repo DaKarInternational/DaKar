@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
+set -x # Print commands and their arguments as they are executed.
 
 cd /opt/
 docker-compose -f docker-compose-prod.yml pull

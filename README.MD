@@ -87,7 +87,7 @@ docker exec -ti couch-test /bin/bash
 tail -f /opt/couchbase/var/lib/couchbase/logs/http_access_internal.log  
 
 or 
-docker-compose exec couchtest bash
+docker-compose -f docker-compose-prod.yml exec couch bash
 ```
 
 # make sure that the db is correctly started  

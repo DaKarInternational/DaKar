@@ -6,6 +6,8 @@ services:
       - "8091-8094:8091-8094"
       - "11210-11211:11210-11211"
     container_name: "couch-dakar"
+    volumes:
+      - /opt/couchbase/node1/var:/opt/couchbase/var
     networks:
       - dakar-network
   app:
