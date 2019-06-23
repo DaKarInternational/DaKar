@@ -88,6 +88,10 @@ tail -f /opt/couchbase/var/lib/couchbase/logs/http_access_internal.log
 
 or 
 docker-compose -f docker-compose-prod.yml exec couch bash
+
+docker image prune
+docker volume prune
+docker-compose -f docker-compose-prod.yml rm -v
 ```
 
 # make sure that the db is correctly started  

@@ -7,7 +7,7 @@ services:
       - "11210-11211:11210-11211"
     container_name: "couch-dakar"
     volumes:
-      - /opt/couchbase/node1/var:/opt/couchbase/var
+      - couch:/opt/couchbase/var
     networks:
       - dakar-network
   app:
@@ -31,3 +31,11 @@ services:
 networks:
   dakar-network:
     driver: bridge
+    
+volumes:
+  couch:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/couchbase/node1/var
+      o: bind
