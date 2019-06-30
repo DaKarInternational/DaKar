@@ -1,0 +1,41 @@
+version: '3'
+services:
+  couch:
+    image: "couchbase:5.1.0"
+    ports:
+      - "8091-8094:8091-8094"
+      - "11210-11211:11210-11211"
+    container_name: "couch-dakar"
+    volumes:
+      - couch:/opt/couchbase/var
+    networks:
+      - dakar-network
+  app:
+    image: "dakarinternational/dakar:latest"
+    ports:
+      - "8080:8080"
+    container_name: 'app-dakar'
+    depends_on:
+      - "couch"
+    networks:
+      - dakar-network
+  app-ng:
+    image: "dakarinternational/dakar-ng:latest"
+    ports:
+      - "80:80"
+    container_name: 'app-dakar-ng'
+    depends_on:
+      - "app"
+    networks:
+      - dakar-network
+networks:
+  dakar-network:
+    driver: bridge
+    
+volumes:
+  couch:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/couchbase/node1/var
+      o: bind

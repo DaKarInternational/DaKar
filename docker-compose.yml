@@ -1,15 +1,18 @@
 version: '3'
 services:
   couchtest:
-    image: "testdb:latest"
+    image: "dakarinternational/couch-test:latest"
+    build:
+      dockerfile: Dockerfile.testdb
+      context: .
     ports:
       - "8091-8094:8091-8094"
-      - "11210-11211:11210-11211"
+      - "11210:11210"
     container_name: "couch-test"
     networks:
       - dakar-network
   couch:
-    image: "couchbase:latest"
+    image: "couchbase:5.1.0"
     ports:
       - "8091-8094:8091-8094"
       - "11210-11211:11210-11211"
@@ -17,7 +20,8 @@ services:
     networks:
       - dakar-network
   app:
-    image: "dakar/dakar:latest"
+    image: "dakarinternational/dakar:latest"
+    build: .
     ports:
      - "8080:8080"
     container_name: 'app-dakar'

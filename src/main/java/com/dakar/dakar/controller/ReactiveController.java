@@ -8,14 +8,22 @@ import graphql.ExecutionResult;
 import graphql.GraphQL;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+
+import javax.validation.Validator;
+import java.util.Locale;
 
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
@@ -30,7 +38,13 @@ public class ReactiveController {
     private IJourneyService journeyService;
 
     @Autowired
+    private Validator validator;
+
+    @Autowired
     private GraphQL graphQL;
+
+    @Autowired
+    private MessageSource messageSource;
 
     /**
      * DEMO
@@ -38,8 +52,26 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routes() {
+        log.info("Finding journey by destination");
         return route(RequestPredicates.GET("/test1/{destination}"), request ->
                 ok().body(journeyService.findByDestination(request.pathVariable("destination")), Journey.class));
+    }
+
+    /**
+     * Endpoint pour tester l'i18n
+     * @return a response containing a body with the translated message
+     */
+    @Bean
+    RouterFunction<ServerResponse> routeWelcome() {
+        return route(RequestPredicates.GET("/welcome/{locale}/{name}"), request -> {
+            Locale locale;
+            if ("fr".equals(request.pathVariable("locale"))) {
+                locale = Locale.FRANCE;
+            } else {
+                locale = null;
+            }
+            return ok().body(BodyInserters.fromObject(messageSource.getMessage("message.welcome", new Object[]{request.pathVariable("name")}, locale)));
+        });
     }
 
 /*    @Bean
@@ -58,6 +90,7 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeWithAnnotationHateoasWithAssembler() {
+        log.info("Finding journey by destination with assembler");
         JourneyResourceAssembler assembler = new JourneyResourceAssembler();
         return route(RequestPredicates.GET("/test2/{destination}"), request ->
                 ok().body(journeyService.findByDestination(request.pathVariable("destination"))
@@ -70,6 +103,7 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeWithAnnotationHateoasWithoutAssembler() {
+        log.info("Finding journey by destination without assembler");
         return route(RequestPredicates.GET("/test3/{destination}"), request ->
                 ok().contentType(MediaType.APPLICATION_JSON).body(journeyService.findByDestination(request.pathVariable("destination"))
                         .map(this::journeyToResource), Resource.class));
@@ -81,8 +115,61 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeForCouch() {
-        return route(RequestPredicates.POST("/test5"), request ->
-                ok().body(journeyService.saveJourney(Mono.just(new Journey(null, "afghanistan", "afghanistan", ""))), Journey.class));
+        return route(RequestPredicates.POST("/test5"), request -> {
+            Mono<Journey> journey = request.bodyToMono(Journey.class);
+            return ok().body(journeyService.saveJourney(journey), Journey.class);
+        });
+    }
+
+
+    /**
+     * Save a journey with Javax validator
+     * @return Journey serialised in a response body
+     */
+    @Bean
+    RouterFunction<ServerResponse> saveJourneyValidatorJavax() {
+        return route(RequestPredicates.POST("/saveJourneyValidatorJavax"),
+                request -> request.bodyToMono(Journey.class).flatMap(
+                        body -> {
+                            if (validator.validate(body).isEmpty()) {
+                                return ok().body(journeyService.saveJourney(Mono.just(body)), Journey.class);
+                            }
+                            return ServerResponse.unprocessableEntity().build();
+                        }
+                )
+
+        );
+    }
+
+    /**
+     * Save a journey with Spring validator
+     * @return Journey serialised in a response body
+     */
+    @Bean
+    RouterFunction<ServerResponse> saveJourneyValidatorSpring() {
+        return route(RequestPredicates.POST("/saveJourneyValidatorSpring"),
+                request -> request.bodyToMono(Journey.class).flatMap(
+                        body -> {
+                            Errors errors = new BeanPropertyBindingResult(body, "journey");
+                            validate(body, errors);
+                            if (!errors.hasErrors()) {
+                                return ok().body(journeyService.saveJourney(Mono.just(body)), Journey.class);
+                            }
+                            return ServerResponse.unprocessableEntity().build();
+                        }
+                )
+
+        );
+    }
+
+    /**
+     * DEMO
+     * classic delete endpoint
+     */
+    @Bean
+    RouterFunction<ServerResponse> deleteJourney() {
+        return route(RequestPredicates.DELETE("/deleteJourney/{id}"), request ->
+                ServerResponse.noContent().build(journeyService.deleteJourney(request.pathVariable("id"))));
     }
 
     /**
@@ -91,6 +178,7 @@ public class ReactiveController {
      */
     @Bean
     RouterFunction<ServerResponse> routeWithAnnotationAndGraphQL() {
+        log.info("Finding all journey using graphql");
         ExecutionResult executionResult = this.graphQL.execute("{allJourney {destination}}");
         log.debug(executionResult.getData().toString());
         return route(RequestPredicates.GET("/graphqlEndpointTransformed"), request ->
@@ -114,5 +202,9 @@ public class ReactiveController {
         Resource<Journey> journeyResource = new Resource<>(journey);
         return journeyResource;
 
+    }
+
+    public void validate(Object obj, Errors e) {
+        ValidationUtils.rejectIfEmpty(e, "destination", "La destination doit être renseignée");
     }
 }
