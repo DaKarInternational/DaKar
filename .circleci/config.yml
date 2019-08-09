@@ -234,7 +234,6 @@ workflows:
       - run-test-db:
           requires:
             - hold
-          
   just-build:
     jobs:
       - build
@@ -258,9 +257,6 @@ workflows:
       - ssh-deploy-in-vps:
           requires:
             - docker-build-push
-          filters:
-            branches:
-              only: features/circleci
       - docker-build-push:
           requires:
             - build-skiptest
@@ -274,9 +270,6 @@ workflows:
       - ssh-deploy-in-vps:
           requires:
             - docker-build-push
-          filters:
-            branches:
-              only: features/circleci
       - maven-deploy:
           requires:
             - build-skiptest
@@ -296,9 +289,6 @@ workflows:
       - ssh-deploy-in-vps:
           requires:
             - docker-build-push
-          filters:
-            branches:
-              only: features/circleci
       - maven-deploy:
           requires:
             - build
