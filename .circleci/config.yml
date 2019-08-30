@@ -278,20 +278,22 @@ workflows:
             - build-skiptest
   build-deploy-push-vps:
     jobs:
-      - hold: 
-          type: approval 
       - build-and-push-testdb:
-          requires:
-            - hold
+          filters:
+            branches:
+              only:
+                - develop
+                - master
+                - features/ojo_snap
       - build:
           requires:
             - build-and-push-testdb
-      - ssh-deploy-in-vps:
-          requires:
-            - docker-build-push
       - maven-deploy:
           requires:
             - build
       - docker-build-push:
           requires:
             - build
+      - ssh-deploy-in-vps:
+          requires:
+            - docker-build-push
