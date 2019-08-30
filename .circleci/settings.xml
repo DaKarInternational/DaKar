@@ -15,6 +15,16 @@
                 <email>${env.DOCKER_EMAIL}</email>
             </configuration>
         </server>
+        <server>
+            <id>central</id>
+            <username>blablanumerodeux</username>
+            <password>${env.JFROG_API_KEY}</password>
+        </server>
+        <server>
+            <id>snapshots</id>
+            <username>blablanumerodeux</username>
+            <password>${env.JFROG_API_KEY}</password>
+        </server>
     </servers>
     <profiles>
         <profile>
