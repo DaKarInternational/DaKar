@@ -2,4 +2,4 @@
 FROM openjdk:8-jdk-alpine
 ARG JAR_FILE
 ADD ${JAR_FILE} app.jar
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=${PROFILE}", "/app.jar"]

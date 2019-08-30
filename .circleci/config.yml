@@ -284,7 +284,6 @@ workflows:
               only:
                 - develop
                 - master
-                - features/ojo_snap
       - build:
           requires:
             - build-and-push-testdb
