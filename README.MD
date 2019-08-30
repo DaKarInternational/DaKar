@@ -22,7 +22,10 @@ make sure that the db is correctly started:
 docker-compose logs couchtest  
 
 4.launch app  
-mvnw spring-boot:run
+mvnw spring-boot:run -Dspring.profiles.active=local
+or 
+java -jar -Dspring.profiles.active=local dakar-0.0.3.jar
+
 
 
 #### If you have some network issues with Docker, you can have a look at this:
@@ -80,9 +83,15 @@ create user 'test' with password = 'password'
 Or you just :  
 ```
 docker-compose up -d couchtest  
+```
 
+### to stop only one service
+```
 docker-compose stop couchtest  
+```
 
+### tail the logs of couchbase inside a docker
+```
 docker exec -ti couch-test /bin/bash  
 tail -f /opt/couchbase/var/lib/couchbase/logs/http_access_internal.log  
 
