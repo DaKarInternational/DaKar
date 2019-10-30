@@ -3,18 +3,21 @@ package com.dakar.dakar.controller;
 import com.dakar.dakar.models.GraphQLParameter;
 import graphql.ExecutionInput;
 import graphql.GraphQL;
-import graphql.GraphQLException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.reactive.HandlerMapping;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
+import org.springframework.web.reactive.socket.WebSocketHandler;
+import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAdapter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static graphql.ExecutionInput.newExecutionInput;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -31,6 +34,26 @@ public class GraphQlController {
     @Autowired
     private GraphQL graphQL;
 
+    @Autowired
+    private WebSocketHandler webSocketHandler;
+
+    @Bean
+    public HandlerMapping webSocketHandlerMapping() {
+        Map<String, WebSocketHandler> map = new HashMap<>();
+        map.put("/graphql", webSocketHandler);
+
+        log.info("Graphql WS route initialization");
+        SimpleUrlHandlerMapping handlerMapping = new SimpleUrlHandlerMapping();
+        handlerMapping.setOrder(1);
+        handlerMapping.setUrlMap(map);
+        return handlerMapping;
+    }
+
+    @Bean
+    public WebSocketHandlerAdapter handlerAdapter() {
+        return new WebSocketHandlerAdapter();
+    }
+
     /**
      * The GraphQL POST endpoint
      * <p>
@@ -39,25 +62,10 @@ public class GraphQlController {
      */
     @Bean
     RouterFunction<ServerResponse> routesGraphQl() {
-        log.info("Graphql route");
-        // some working queries :
-
-        // {allJourney {destination}}
-        
         /*
-        mutation {
-          createJourney(input: {price: "tt", country: "tt"}) {
-            price
-            country
-          }
-        }
+          https://medium.com/open-graphql/implementing-search-in-graphql-11d5f71f179
          */
-
-        /**
-         * https://medium.com/open-graphql/implementing-search-in-graphql-11d5f71f179
-         */
-
-        
+        log.info("Graphql POST route initialization");
         return route(RequestPredicates.POST("/graphql"), request -> {
             if (request.headers().contentType().filter(mediaType -> mediaType.isCompatibleWith(GraphQLMediaType)).isPresent()) {
                 return request.bodyToMono(GraphQLParameter.class)

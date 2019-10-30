@@ -4,8 +4,10 @@ import com.coxautodev.graphql.tools.SchemaParser;
 import com.dakar.dakar.resolvers.JourneyResolver;
 import com.dakar.dakar.resolvers.MutationResolver;
 import com.dakar.dakar.resolvers.QueryResolver;
+import com.dakar.dakar.resolvers.SubscriptionResolver;
 import com.dakar.dakar.services.interfaces.IJourneyService;
 import graphql.GraphQL;
+import graphql.execution.SubscriptionExecutionStrategy;
 import graphql.schema.GraphQLSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -22,7 +24,6 @@ import org.springframework.web.cors.reactive.CorsUtils;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import reactor.core.publisher.Mono;
 
 import java.util.Locale;
@@ -46,10 +47,12 @@ public class DakarApplication {
     public GraphQL buildGraphQL() {
         GraphQLSchema graphQLSchema = SchemaParser.newParser()
                 .file("graphQLSchemas/journey.graphqls")
-                .resolvers(new QueryResolver(journeyService), new JourneyResolver(), new MutationResolver(journeyService))
+                .resolvers(new QueryResolver(journeyService), new JourneyResolver(), new MutationResolver(journeyService), new SubscriptionResolver())
                 .build()
                 .makeExecutableSchema();
-        return GraphQL.newGraphQL(graphQLSchema).build();
+        return GraphQL.newGraphQL(graphQLSchema)
+                .subscriptionExecutionStrategy(new SubscriptionExecutionStrategy())
+                .build();
     }
 
     @Bean
@@ -85,6 +88,5 @@ public class DakarApplication {
         Locale.setDefault(Locale.ENGLISH);
         return messageSource;
     }
-
 
 }

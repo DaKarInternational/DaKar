@@ -39,26 +39,26 @@ TODO : properties file outside the jar ? or develop in docker ?
 
 #### Some test endpoints
 Functional controller   
-http://localhost:8080/test5/  
+<http://localhost:8080/test5/>  
 
 Functional controller :  
-http://localhost:8080/test1/afghanistan
+<http://localhost:8080/test1/afghanistan>
 
 Functional controller -> hateoas w/ assembler:  
-http://localhost:8080/test2/afghanistan
+<http://localhost:8080/test2/afghanistan>
 
 Functional controller -> hatoas w/ generics:  
-http://localhost:8080/test3/afghanistan
+<http://localhost:8080/test3/afghanistan>
 
 Functional controller -> GraphQL:  
-http://localhost:8080/graphql
+<http://localhost:8080/graphql>
 
 Functional controller -> i18n:  
-http://dakar.lambla.eu:8080/welcome/fr/message
-http://localhost:8080/welcome/fr/message
+<http://dakar.lambla.eu:8080/welcome/fr/message>
+<http://localhost:8080/welcome/fr/message>
 
 Couchbase:  
-http://localhost:8091/  
+<http://localhost:8091/>  
 
 
 

@@ -1,29 +1,25 @@
 package com.dakar.dakar.integration;
 
+import com.coxautodev.graphql.tools.SchemaParser;
 import com.dakar.dakar.models.GraphQLParameter;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.models.SimpleExecutionResult;
 import com.dakar.dakar.utils.JsonParser;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import graphql.GraphQLError;
-import graphql.validation.ValidationError;
+import graphql.GraphQL;
+import graphql.execution.SubscriptionExecutionStrategy;
+import graphql.schema.GraphQLSchema;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.reactive.server.EntityExchangeResult;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
-
-import java.util.function.Consumer;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -415,6 +411,54 @@ public class JourneyControllerTest extends AbstractControllerTest{
                     for (JsonElement journeyElement : journeys) {
                         JsonObject jsonJourney = journeyElement.getAsJsonObject();
                         if(JOURNEY_ID.equals(jsonJourney.get("id").getAsString())) {
+                            Assert.assertTrue("1000".equals(jsonJourney.get("price").getAsString()));
+                            Assert.assertTrue(destination.equals(jsonJourney.get("destination").getAsString()));
+                        }
+                    }
+                });
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void find() {
+
+        // Create a journey
+        String price = "1000";
+        String destination = "afghanistan";
+        createDefaultJourney(JOURNEY_ID, destination, price, "DaKar");
+
+        // Query to search by criterias
+
+        String query = "" +
+                "    subscription StockCodeSubscription {\n" +
+                "        stockQuotes(stockCode:\"IBM') {\n" +
+                "            dateTime\n" +
+                "            stockCode\n" +
+                "            stockPrice\n" +
+                "            stockPriceChange\n" +
+                "        }\n" +
+                "    }\n";
+
+
+        GraphQLParameter graphQLParameter = new GraphQLParameter();
+        graphQLParameter.setQuery(query);
+        this.webClient.post()
+                .uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameter))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(SimpleExecutionResult.class)
+                .consumeWith(result -> {
+                    String jsonResult = GSON.toJson(result.getResponseBody());
+                    JsonArray journeys = JsonParser.getJsonArray(jsonResult, REQUEST_SEARCH_JOURNEY_BY_CRITERIAS);
+                    Assert.assertTrue(journeys.size() > 0);
+                    for (JsonElement journeyElement : journeys) {
+                        JsonObject jsonJourney = journeyElement.getAsJsonObject();
+                        if (JOURNEY_ID.equals(jsonJourney.get("id").getAsString())) {
                             Assert.assertTrue("1000".equals(jsonJourney.get("price").getAsString()));
                             Assert.assertTrue(destination.equals(jsonJourney.get("destination").getAsString()));
                         }

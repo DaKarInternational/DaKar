@@ -31,7 +31,12 @@ type Mutation {
   deleteJourney(id: ID): ID
 }
 
+type Subscription {
+    stockQuotes(stockCodes:Int) : String!
+}
+
 schema{
     query: Query
     mutation: Mutation
+    subscription: Subscription
 }

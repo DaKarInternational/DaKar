@@ -5,6 +5,8 @@ import com.dakar.dakar.models.JourneyCriteriaInput;
 import com.dakar.dakar.models.StringFilterCriteriaInput;
 import com.dakar.dakar.repositories.JourneyRepository;
 import com.dakar.dakar.services.implementation.JourneyServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,18 +17,19 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.reactivestreams.Publisher;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.reactive.socket.WebSocketMessage;
+import org.springframework.web.reactive.socket.client.ReactorNettyWebSocketClient;
+import org.springframework.web.reactive.socket.client.WebSocketClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
+import java.net.URI;
+import java.time.Duration;
 import java.util.List;
-import java.util.UUID;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static java.util.UUID.randomUUID;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -48,6 +51,18 @@ public class DakarApplicationUnitTests {
     @Test
     //stupid test
     public void gotAllJourney() {
+
+        WebSocketClient client = new ReactorNettyWebSocketClient();
+        client.execute(
+                URI.create("ws://localhost:8080/event-emitter"),
+                session -> session.send(
+                        Mono.just(session.textMessage("event-spring-reactive-client-websocket")))
+                        .thenMany(session.receive()
+                                .map(WebSocketMessage::getPayloadAsText)
+                                .log())
+                        .then())
+                .block(Duration.ofSeconds(10L));
+
         when(journeyRepository.findAll()).thenReturn(Flux.just(new Journey()));
 
         List<Journey> journeyList = journeyService.allJourney().collectList().block();
@@ -253,7 +268,7 @@ public class DakarApplicationUnitTests {
      */
     public Journey createDefaultJourney(){
         Journey journey = new Journey();
-        String id = UUID.randomUUID().toString();
+        String id = randomUUID().toString();
         journey.setId(id);
         journey.setDestination("Vietnam");
         journey.setPrice("1200");
