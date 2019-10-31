@@ -9,6 +9,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class JourneyInput {
 
+    private String id;
     private String destination;
     private String price;
     private String owner;

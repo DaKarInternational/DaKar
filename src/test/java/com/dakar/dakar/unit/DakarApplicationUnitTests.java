@@ -3,7 +3,7 @@ package com.dakar.dakar.unit;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.models.JourneyCriteriaInput;
 import com.dakar.dakar.models.StringFilterCriteriaInput;
-import com.dakar.dakar.repositories.JourneyRepository;
+import com.dakar.dakar.repositories.IJourneyRepository;
 import com.dakar.dakar.services.implementation.JourneyServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -18,15 +18,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -38,7 +34,7 @@ public class DakarApplicationUnitTests {
     private JourneyServiceImpl journeyService;
 
     @Mock
-    private JourneyRepository journeyRepository;
+    private IJourneyRepository journeyRepository;
 
     @Before
     public void setup() {

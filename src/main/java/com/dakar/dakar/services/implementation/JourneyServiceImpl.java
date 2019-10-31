@@ -3,7 +3,7 @@ package com.dakar.dakar.services.implementation;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.models.JourneyCriteriaInput;
 import com.dakar.dakar.models.StringFilterCriteriaInput;
-import com.dakar.dakar.repositories.JourneyRepository;
+import com.dakar.dakar.repositories.IJourneyRepository;
 import com.dakar.dakar.services.interfaces.IJourneyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.Optional;
 public class JourneyServiceImpl implements IJourneyService {
 
     @Autowired
-    private JourneyRepository journeyRepository;
+    private IJourneyRepository journeyRepository;
 
     @Override
     public Flux<Journey> findByDestination(String destination) {

@@ -28,6 +28,18 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     /**
+     * Update a Journey
+     *
+     * @param journey
+     * @return The newly updated Journey
+     */
+    public Journey updateJourney(JourneyInput journey) {
+        Journey journeyCreated = new Journey(journey.getId(), journey.getPrice(), journey.getDestination(), "");
+        Mono<Journey> journeyMono = Mono.just(journeyCreated);
+        return journeyService.saveJourney(journeyMono).blockFirst();
+    }
+
+    /**
      * Delete a journey
      * @param id
      */
