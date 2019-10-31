@@ -4,31 +4,57 @@ import com.dakar.dakar.models.GraphQLParameter;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.models.SimpleExecutionResult;
 import com.dakar.dakar.utils.JsonParser;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import graphql.GraphQLError;
-import graphql.validation.ValidationError;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.reactive.server.EntityExchangeResult;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
-
-import java.util.function.Consumer;
 
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class JourneyControllerTest extends AbstractControllerTest{
+
+    /**
+     * update a journey with GraphQL
+     */
+    @Test
+    public void graphqlUpdate() {
+        // insert a journey first
+        this.graphqlSave();
+        // then update it
+        String query = " mutation {\n" +
+                "            updateJourney(input:{ id: \"1\" price:\"yaaa\" destination:\"yooo\" }){\n" +
+                "                id\n" +
+                "                price\n" +
+                "                destination\n" +
+                "            }\n" +
+                "}\n";
+        GraphQLParameter graphQLParameter = new GraphQLParameter();
+        graphQLParameter.setQuery(query);
+        this.webClient.post()
+                .uri("/graphql")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(graphQLParameter))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(SimpleExecutionResult.class)
+                .consumeWith(result -> {
+                    // We check the result
+                    String jsonResult = GSON.toJson(result.getResponseBody());
+                    JsonObject jsonJourney = JsonParser.getJsonObject(jsonResult, REQUEST_UPDATE_JOURNEY);
+                    Assert.assertTrue("yooo".equals(jsonJourney.get("destination").getAsString()));
+                    Assert.assertTrue("yaaa".equals(jsonJourney.get("price").getAsString()));
+                });
+    }
 
     /**
      * create a journey with GraphQL

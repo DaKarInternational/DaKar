@@ -2,13 +2,9 @@ package com.dakar.dakar.integration;
 
 import com.dakar.dakar.models.Journey;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
@@ -29,6 +25,7 @@ public class AbstractControllerTest {
     // Journey requests
     protected static final String REQUEST_ALL_JOURNEY = "allJourney";
     protected static final String REQUEST_CREATE_JOURNEY = "createJourney";
+    protected static final String REQUEST_UPDATE_JOURNEY = "updateJourney";
     protected static final String REQUEST_FIND_JOURNEY_BY_ID = "findJourneyById";
     protected static final String REQUEST_SEARCH_JOURNEY_BY_CRITERIAS = "searchJourney";
 
