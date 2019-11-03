@@ -68,6 +68,9 @@ http://localhost:8091/
 #### To build and launch the couchbase using docker-compose
 `docker-compose up -d couch // to launch only the db`  
 
+### To build and launch only the app without dependencies  
+`docker-compose -f docker-compose.yml up -d --no-deps --build app`
+
 #### List all images
 `docker images`  
 
