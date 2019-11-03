@@ -65,7 +65,7 @@ http://localhost:8091/
 #### To build the test couchbase image independently of the rest using docker
 `docker build -f Dockerfile.testdb . -t testdb`  
 
-#### To build and launch the couchbase using docker-conpose
+#### To build and launch the couchbase using docker-compose
 `docker-compose up -d couch // to launch only the db`  
 
 #### List all images
