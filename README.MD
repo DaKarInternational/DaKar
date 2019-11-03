@@ -31,7 +31,6 @@ or
 
 #### If you have some network issues with Docker, you can have a look at this:
 add couch-dakar in your /etc/hosts -> this is temporary.  
-TODO : properties file outside the jar ? or develop in docker ?  
 
 
 #### Launch all docker-compose services
@@ -77,12 +76,12 @@ To launch the integration tests, either you launch a new container with a couchb
 create cluster   
 create bucket  
 create index : 
-
-CREATE PRIMARY INDEX ON `test`  
-
+```
+CREATE PRIMARY INDEX ON 'test'  
+```
 create user 'test' with password = 'password'  
 
-Or you just :  
+Or just run the test db:  
 ```
 docker-compose up -d couchtest  
 ```
@@ -96,10 +95,14 @@ docker-compose stop couchtest
 ```
 docker exec -ti couch-test /bin/bash  
 tail -f /opt/couchbase/var/lib/couchbase/logs/http_access_internal.log  
-
-or 
+```
+or using docker-compose:  
+```
 docker-compose -f docker-compose-prod.yml exec couch bash
+```
 
+### to clean your volumes and images: 
+```
 docker image prune
 docker volume prune
 docker-compose -f docker-compose-prod.yml rm -v
@@ -128,7 +131,7 @@ docker ps --all
 
 
 
-#### Some examples of GraphQl queries
+#### Some GraphQl queries
 ```
 // all jouneys  
 query {
@@ -153,6 +156,13 @@ mutation {
     }
 }
 
-
+// update an existing Journey  
+mutation {
+    updateJourney(input:{ id: "1" price:"yaaa" destination:"yooo" }){
+        id
+        price
+        destination
+    }
+}
 ```
 
