@@ -34,7 +34,6 @@ public class MutationResolver implements GraphQLMutationResolver {
      * @return The newly updated Journey
      */
     public Journey updateJourney(JourneyInput journey) {
-        Journey journeyCreated = new Journey(journey.getId(), journey.getPrice(), journey.getDestination(), "");
         Mono<Journey> journeyFound = journeyService.findById(journey.getId())
                 .map((Journey it) -> {
                     it.setDestination(journey.getDestination());

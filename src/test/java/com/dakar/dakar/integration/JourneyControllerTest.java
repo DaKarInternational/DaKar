@@ -3,6 +3,7 @@ package com.dakar.dakar.integration;
 import com.dakar.dakar.models.GraphQLParameter;
 import com.dakar.dakar.models.Journey;
 import com.dakar.dakar.models.SimpleExecutionResult;
+import com.dakar.dakar.services.interfaces.IJourneyService;
 import com.dakar.dakar.utils.JsonParser;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -22,6 +24,9 @@ import reactor.core.publisher.Mono;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class JourneyControllerTest extends AbstractControllerTest{
 
+    @Autowired
+    IJourneyService journeyService;
+
     /**
      * update a journey with GraphQL
      */
@@ -29,9 +34,12 @@ public class JourneyControllerTest extends AbstractControllerTest{
     public void graphqlUpdate() {
         // insert a journey first
         this.graphqlSave();
+
+        String id = journeyService.allJourney().blockFirst().getId();
+
         // then update it
         String query = " mutation {\n" +
-                "            updateJourney(input:{ id: \"1\" price:\"yaaa\" destination:\"yooo\" }){\n" +
+                "            updateJourney(input:{ id: \"" + id + "\" price:\"yaaa\" destination:\"yooo\" }){\n" +
                 "                id\n" +
                 "                price\n" +
                 "                destination\n" +
