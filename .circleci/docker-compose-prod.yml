@@ -19,6 +19,8 @@ services:
       - "couch"
     networks:
       - dakar-network
+    environment:
+      PROFILE: prod
   app-ng:
     image: "dakarinternational/dakar-ng:latest"
     ports:
