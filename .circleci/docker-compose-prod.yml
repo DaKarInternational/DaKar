@@ -7,6 +7,13 @@ services:
       - couch:/opt/couchbase/var
     networks:
       - dakar-network
+      - traefik_traefik
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dakar-couch.rule=Host(`dakar-couch.project.lambla.eu`)"
+        - "traefik.http.routers.dakar-couch.entrypoints=web"
+        - "traefik.http.services.dakar-couch.loadbalancer.server.port=8091"
 
   api:
     image: "dakarinternational/dakar:latest"
