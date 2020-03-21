@@ -1,14 +1,14 @@
 version: '3.1'
 
 services:
-  dakar-couch:
+  couch:
     image: "couchbase:5.1.0"
     volumes:
       - couch:/opt/couchbase/var
     networks:
       - dakar-network
 
-  dakar-api:
+  api:
     image: "dakarinternational/dakar:latest"
     depends_on:
       - "couch"
@@ -17,7 +17,7 @@ services:
     environment:
       PROFILE: prod
 
-  dakar-front:
+  front:
     image: "dakarinternational/dakar-ng:latest"
     depends_on:
       - "dakar-api"
