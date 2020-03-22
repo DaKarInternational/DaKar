@@ -6,7 +6,7 @@ services:
     volumes:
       - couch:/opt/couchbase/var
     networks:
-      - dakar-network
+      #- dakar-network
       - traefik_traefik
     deploy:
       labels:
@@ -20,16 +20,28 @@ services:
     depends_on:
       - "couch"
     networks:
-      - dakar-network
+      #- dakar-network
+      - traefik_traefik
     environment:
       PROFILE: prod
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dakar-api.rule=Host(`dakar-api.project.lambla.eu`)"
+        - "traefik.http.routers.dakar-api.entrypoints=web"
+        - "traefik.http.services.dakar-api.loadbalancer.server.port=8443"
+        - "traefik.http.routers.dakar-ssl-api.rule=Host(`dakar-api.project.lambla.eu`)"
+        - "traefik.http.routers.dakar-ssl-api.entrypoints=websecure"
+        - "traefik.http.routers.dakar-ssl-api.tls=true"
+        - "traefik.http.routers.dakar-ssl-api.tls.certresolver=myresolver"
+        - "traefik.http.services.dakar-api.loadbalancer.server.port=8443"
 
   front:
     image: "dakarinternational/dakar-ng:latest"
     depends_on:
-      - "dakar-api"
+      - "api"
     networks:
-      - dakar-network
+      #- dakar-network
       - traefik_traefik
     deploy:
       labels:
@@ -44,9 +56,9 @@ services:
         - "traefik.http.services.dakar-front.loadbalancer.server.port=80"
 
 networks:
-  dakar-network:
-    driver: overlay
-    external: false
+  #  dakar-network:
+  #   driver: overlay
+  #  external: false
   traefik_traefik:
     driver: overlay
     external: true
