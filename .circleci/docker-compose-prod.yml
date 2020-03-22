@@ -29,12 +29,12 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.dakar-api.rule=Host(`dakar-api.project.lambla.eu`)"
         - "traefik.http.routers.dakar-api.entrypoints=web"
-        - "traefik.http.services.dakar-api.loadbalancer.server.port=8443"
+        - "traefik.http.services.dakar-api.loadbalancer.server.port=8088"
+        - "traefik.http.routers.dakar-api.middlewares=test-redirectscheme@docker"
         - "traefik.http.routers.dakar-ssl-api.rule=Host(`dakar-api.project.lambla.eu`)"
         - "traefik.http.routers.dakar-ssl-api.entrypoints=websecure"
         - "traefik.http.routers.dakar-ssl-api.tls=true"
         - "traefik.http.routers.dakar-ssl-api.tls.certresolver=myresolver"
-        - "traefik.http.services.dakar-api.loadbalancer.server.port=8443"
 
   front:
     image: "dakarinternational/dakar-ng:latest"
