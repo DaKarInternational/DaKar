@@ -5,7 +5,7 @@
 
 	<groupId>com.dakar</groupId>
 	<artifactId>dakar</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.5-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>dakar</name>
@@ -162,6 +162,17 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.java</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -209,11 +220,26 @@
 		</plugins>
 	</build>
 
-	<distributionManagement>
+	<!--this to push directly a release into bintray, does not work for snapshot though-->
+<!--	<distributionManagement>
 		<repository>
 			<id>bintray-blablanumerodeux-dakar</id>
 			<name>blablanumerodeux-dakar</name>
 			<url>https://api.bintray.com/maven/dakarinternational/dakar/dakar/;publish=1</url>
 		</repository>
+	</distributionManagement>-->
+
+	<!--this to push to OJO -->
+	<distributionManagement>
+		<repository>
+			<id>central</id>
+			<name>oss-jfrog-artifactory-releases</name>
+			<url>https://oss.jfrog.org/artifactory/oss-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>oss-jfrog-artifactory-snapshots</name>
+			<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+		</snapshotRepository>
 	</distributionManagement>
 </project>

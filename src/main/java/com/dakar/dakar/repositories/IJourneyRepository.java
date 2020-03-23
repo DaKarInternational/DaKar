@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
 @Repository
 @N1qlPrimaryIndexed
 @ViewIndexed(designDoc = "journey")
-public interface JourneyRepository extends ReactiveCouchbaseRepository<Journey, String> {
+public interface IJourneyRepository extends ReactiveCouchbaseRepository<Journey, String> {
 
     /**
      * Get all journeys

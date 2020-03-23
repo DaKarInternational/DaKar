@@ -14,6 +14,7 @@ input StringFilterCriteriaInput {
 }
 
 input JourneyInput {
+    id: String
     destination: String!
     price: String
     owner: String
@@ -27,8 +28,9 @@ type Journey {
 }
 
 type Mutation {
-  createJourney(input: JourneyInput): Journey
-  deleteJourney(id: ID): ID
+    createJourney(input: JourneyInput): Journey
+    updateJourney(input: JourneyInput): Journey
+    deleteJourney(id: ID): ID
 }
 
 schema{

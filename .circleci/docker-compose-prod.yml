@@ -1,37 +1,66 @@
-version: '3'
+version: '3.1'
+
 services:
   couch:
     image: "couchbase:5.1.0"
-    ports:
-      - "8091-8094:8091-8094"
-      - "11210-11211:11210-11211"
-    container_name: "couch-dakar"
     volumes:
       - couch:/opt/couchbase/var
     networks:
-      - dakar-network
-  app:
+      #- dakar-network
+      - traefik_traefik
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dakar-couch.rule=Host(`dakar-couch.project.lambla.eu`)"
+        - "traefik.http.routers.dakar-couch.entrypoints=web"
+        - "traefik.http.services.dakar-couch.loadbalancer.server.port=8091"
+
+  api:
     image: "dakarinternational/dakar:latest"
-    ports:
-      - "8080:8080"
-    container_name: 'app-dakar'
     depends_on:
       - "couch"
     networks:
-      - dakar-network
-  app-ng:
+      #- dakar-network
+      - traefik_traefik
+    environment:
+      PROFILE: prod
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dakar-api.rule=Host(`dakar-api.project.lambla.eu`)"
+        - "traefik.http.routers.dakar-api.entrypoints=web"
+        - "traefik.http.services.dakar-api.loadbalancer.server.port=8088"
+        - "traefik.http.routers.dakar-api.middlewares=test-redirectscheme@docker"
+        - "traefik.http.routers.dakar-ssl-api.rule=Host(`dakar-api.project.lambla.eu`)"
+        - "traefik.http.routers.dakar-ssl-api.entrypoints=websecure"
+        - "traefik.http.routers.dakar-ssl-api.tls=true"
+        - "traefik.http.routers.dakar-ssl-api.tls.certresolver=myresolver"
+
+  front:
     image: "dakarinternational/dakar-ng:latest"
-    ports:
-      - "80:80"
-    container_name: 'app-dakar-ng'
-    depends_on:
-      - "app"
     networks:
-      - dakar-network
+      #- dakar-network
+      - traefik_traefik
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dakar-front.rule=Host(`dakar.project.lambla.eu`)"
+        - "traefik.http.routers.dakar-front.entrypoints=web"
+        - "traefik.http.routers.dakar-front.middlewares=test-redirectscheme@docker"
+        - "traefik.http.routers.dakar-ssl-front.rule=Host(`dakar.project.lambla.eu`)"
+        - "traefik.http.routers.dakar-ssl-front.entrypoints=websecure"
+        - "traefik.http.routers.dakar-ssl-front.tls=true"
+        - "traefik.http.routers.dakar-ssl-front.tls.certresolver=myresolver"
+        - "traefik.http.services.dakar-front.loadbalancer.server.port=80"
+
 networks:
-  dakar-network:
-    driver: bridge
-    
+  #  dakar-network:
+  #   driver: overlay
+  #  external: false
+  traefik_traefik:
+    driver: overlay
+    external: true
+
 volumes:
   couch:
     driver: local
