@@ -38,8 +38,6 @@ services:
 
   front:
     image: "dakarinternational/dakar-ng:latest"
-    depends_on:
-      - "api"
     networks:
       #- dakar-network
       - traefik_traefik

@@ -1,8 +1,8 @@
 # Dakar
 
-Fully reactive online travel agency made with Spring Boot 2 (w/ WebFlux), Angular, GraphQL, CouchBASE, Maven, CircleCI, and Docker.  
+Fully reactive online travel agency made with Spring Boot 2 (w/ WebFlux), Angular, GraphQL, CouchBase, Maven, CircleCI, and Docker.
 
-The goal is to learn as much as possible about new tech while creating a small but hopefully helpful travel agency fully made in reactive programing.
+The goal is to learn as much as possible about new tech while creating a small but hopefully helpful travel agency fully made in reactive programming.
 
 ## Maven Central Repo
 https://mvnrepository.com/artifact/com.dakar/dakar
@@ -16,16 +16,16 @@ https://github.com/DaKarInternational/DaKar/releases/tag/3.0.0
 
 ### On way to launch the app  
 1. build jar  
-`mvnw clean install  `
+`mvnw clean install -DskipTests`
 
 2. build docker  
-`./mvnw dockerfile:build  `
+`./mvnw dockerfile:build`
 
 3. launch test db  
-`docker-compose up -d couchtest  `
+`docker-compose up -d couchtest`
 
 4. make sure that the db is correctly started  
-`docker-compose logs couchtest  `
+`docker-compose logs couchtest`
 
 5. launch the app within your IDE  
 `mvnw spring-boot:run -Dspring.profiles.active=local`
