@@ -1,42 +1,43 @@
-#### Docker setup:  
-```
-sudo systemctl start docker  
-sudo usermod -a -G docker $USER  
-sudo reboot  
-docker pull dreaserdocker/dakar
-docker-compose pull
-docker login
-```
+# Dakar
+
+Fully reactive online travel agency made with Spring Boot 2 (w/ WebFlux), Angular, GraphQL, CouchBase, Maven, CircleCI, and Docker.
+
+The goal is to learn as much as possible about new tech while creating a small but hopefully helpful travel agency fully made in reactive programming.
+
+## Maven Central Repo
+https://mvnrepository.com/artifact/com.dakar/dakar
+
+## Docker hub 
+https://hub.docker.com/repository/docker/dakarinternational/dakar
+
+## Github Release
+https://github.com/DaKarInternational/DaKar/releases/tag/3.0.0
 
 
-#### On way to launch the app in local: 
+### On way to launch the app  
 1. build jar  
-`mvnw install -DskipTests  `
+`mvnw clean install -DskipTests`
 
 2. build docker  
-`mvnw dockerfile:build  `
+`./mvnw dockerfile:build`
 
 3. launch test db  
-`docker-compose up -d couchtest  `
+`docker-compose up -d couchtest`
 
-make sure that the db is correctly started:  
-`docker-compose logs couchtest  `
+4. make sure that the db is correctly started  
+`docker-compose logs couchtest`
 
-4.launch app  
-`mvnw spring-boot:run -Dspring.profiles.active=local`  
-or  
-`java -jar -Dspring.profiles.active=local dakar-0.0.3.jar`
+5. launch the app within your IDE  
+`mvnw spring-boot:run -Dspring.profiles.active=local`
 
 
+If you have some network issues with Docker, you may consider having a look at your hosts file  
+add couch-dakar in your /etc/hosts 
 
-#### If you have some network issues with Docker, you can have a look at this:
-add couch-dakar in your /etc/hosts -> this is temporary.  
 
 
-#### Launch all docker-compose services
-`docker-compose up  `  
+### Some test endpoints
 
-#### Some test endpoints
 Functional controller   
 http://localhost:8080/test5/  
 
@@ -53,89 +54,110 @@ Functional controller -> GraphQL:
 http://localhost:8080/graphql
 
 Functional controller -> i18n:  
-http://dakar.lambla.eu:8080/welcome/fr/message
-http://localhost:8080/welcome/fr/message
+http://dakar.lambla.eu:8080/welcome/fr/message  
+http://localhost:8080/welcome/fr/message  
 
 Couchbase:  
 http://localhost:8091/  
 
+## Limitations
+- Swagger with spring webflux
+- GraphQL subscriptions with spring webflux
+
+## Some useful commands  
+
+### Docker setup:  
+```
+sudo systemctl start docker  
+sudo usermod -a -G docker $USER  
+sudo reboot  
+docker pull dreaserdocker/dakar
+docker-compose pull
+docker login
+```
 
 
+### List all images
+`docker images`
 
-#### To build the test couchbase image independently of the rest using docker
-`docker build -f Dockerfile.testdb . -t testdb`  
+### Build the test couchbase image independently of the rest using docker
+`docker build -f Dockerfile.testdb . -t testdb`
 
-#### To build and launch the couchbase using docker-compose
-`docker-compose up -d couch // to launch only the db`  
+### Build and launch the couchbase using docker-compose
+`docker-compose up -d couch // to launch only the db`
 
-### To build and launch only the app without dependencies  
-`docker-compose -f docker-compose.yml up -d --no-deps --build app`
+### Launch all docker-compose services
+`docker-compose up  `
 
-#### List all images
-`docker images`  
+### To launch the db
 
+#### Either you launch a new container with a couchbase and do all that  
 
-To launch the integration tests, either you launch a new container with a couchbase and do all that : 
 create cluster   
-create bucket  
-create index : 
+create bucket named 'test'  
+create index  
+
 ```
-CREATE PRIMARY INDEX ON 'test'  
+CREATE PRIMARY INDEX ON `test`  
 ```
+
 create user 'test' with password = 'password'  
 
-Or just run the test db:  
+#### Or you just   
 ```
 docker-compose up -d couchtest  
-```
 
-### to stop only one service
-```
 docker-compose stop couchtest  
-```
 
-### tail the logs of couchbase inside a docker
-```
 docker exec -ti couch-test /bin/bash  
 tail -f /opt/couchbase/var/lib/couchbase/logs/http_access_internal.log  
 ```
-or using docker-compose:  
+#### Or  
 ```
 docker-compose -f docker-compose-prod.yml exec couch bash
-```
 
-### to clean your volumes and images: 
-```
 docker image prune
 docker volume prune
-docker-compose -f docker-compose-prod.yml rm 
 docker-compose -f docker-compose-prod.yml rm -v
 ```
 
-# make sure that the db is correctly started  
-`docker-compose logs couchtest  `  
+### Generate the javadoc  
+```
+./mvnw javadoc:javadoc
+```
 
+### Maven deploy
+```
+./mvnw clean package source:jar javadoc:jar deploy
+```
 
-#### Generate the javadoc:  
+### Maven build and push the docker  
+```
+./mvnw dockerfile:build dockerfile:push 
+```
 
-`./mvnw javadoc:javadoc`  
+### List all containers
 
-#### List all containers
 ```
 docker-compose ps  
 docker ps --all
 ```
 
-#### Delete all containers
-`docker rm $(docker ps -a -q)`  
+### Delete all containers
+```
+docker rm $(docker ps -a -q)
+```
 
-#### Delete all images
-`docker rmi $(docker images -q)`  
+### Delete all images
+```
+docker rmi $(docker images -q)
+```
 
 
 
 
-#### Some GraphQl queries
+### Some examples of GraphQl queries
+
 ```
 // all jouneys  
 query {
@@ -160,13 +182,5 @@ mutation {
     }
 }
 
-// update an existing Journey  
-mutation {
-    updateJourney(input:{ id: "1" price:"yaaa" destination:"yooo" }){
-        id
-        price
-        destination
-    }
-}
 ```
 
